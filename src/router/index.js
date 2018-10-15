@@ -8,7 +8,7 @@ import Article from '@/components/Article'
 import ShoppingMall from '@/components/ShoppingMall'
 import Cart from '@/components/Cart'
 import PersonalCenter from '@/components/PersonalCenter'
-
+import Forget from '@/components/Forget'
 
 Vue.use(Router)
 
@@ -55,6 +55,10 @@ export default new Router({
       name: 'PersonalCenter',
       component: PersonalCenter,
     },
-
+    {
+      path: '/forget',
+      name: 'Forget',
+      component: Forget,
+    },
   ]
 })
