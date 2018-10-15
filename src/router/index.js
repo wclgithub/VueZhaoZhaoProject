@@ -9,6 +9,7 @@ import ShoppingMall from '@/components/ShoppingMall'
 import Cart from '@/components/Cart'
 import PersonalCenter from '@/components/PersonalCenter'
 
+
 Vue.use(Router)
 
 export default new Router({
@@ -54,5 +55,6 @@ export default new Router({
       name: 'PersonalCenter',
       component: PersonalCenter,
     },
+
   ]
 })
