@@ -9,6 +9,8 @@ import ShoppingMall from '@/components/ShoppingMall'
 import Cart from '@/components/Cart'
 import PersonalCenter from '@/components/PersonalCenter'
 import Forget from '@/components/Forget'
+import ChangePwd from '@/components/ChangePwd'
+import House from '@/components/House'
 
 Vue.use(Router)
 
@@ -59,6 +61,16 @@ export default new Router({
       path: '/forget',
       name: 'Forget',
       component: Forget,
+    },
+    {
+      path: '/changepwd',
+      name: 'ChangePwd',
+      component: ChangePwd,
+    },
+    {
+      path: '/house',
+      name: 'House',
+      component: House,
     },
   ]
 })

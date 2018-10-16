@@ -5,9 +5,9 @@
         <p>登录朝朝优选</p>
         <form action="">
           <div>
-            <input type="text" required placeholder=" 请输入您的手机号码" v-model="u_tel" >
+            <input type="text" required placeholder=" 请输入您的手机号码" v-model.trim="u_tel" >
             <!--value="15776554504"-->
-            <input type="password" required placeholder=" 请输入您的密码" v-model="u_pwd" >
+            <input type="password" required placeholder=" 请输入您的密码" v-model.trim="u_pwd" >
             <!--value="175436"-->
             <p v-text="u_err" class="err"></p>
 
@@ -66,46 +66,52 @@ export default {
 
   methods: {
     checklogin: function () {
-      var user = {
-        "telephone": this.u_tel,
-        "password": this.u_pwd,
-      }
-      console.log(user)
-      var that=this
-      axios.post('http://127.0.0.1:8000/user/login/',user )
-        .then(function (response) {
-          // vm.list = response.data;
-          console.log(response.data)
-          console.log(response)
-          console.log(response.data.statusCode)
-          console.log(response.headers.token)
-          if (response&&response.data.statusCode=='202') {
+      var reg=/^1[3456789]\d{9}$/;
+      if (reg.test(this.u_tel)){
+        var user = {
+          "telephone": this.u_tel,
+          "password": this.u_pwd,
+        }
+        console.log(user)
+        var that=this
+        axios.post('http://127.0.0.1:8000/user/login/',user )
+          .then(function (response) {
+            // vm.list = response.data;
+            console.log(response.data)
+            console.log(response)
+            console.log(response.data.statusCode)
+            console.log(response.headers.token)
+            if (response&&response.data.statusCode=='202') {
 
-            sessionStorage.setItem('telephone', that.u_tel);
-            sessionStorage.setItem('token',response.headers.token);
-            var from = sessionStorage.getItem('from');
-            if (from) {
-              // location.href = from;
-              that.$router.push({path: from});
-            } else {
-              that.$router.push({path:"/"});
+              sessionStorage.setItem('telephone', that.u_tel);
+              sessionStorage.setItem('token',response.headers.token);
+              var from = sessionStorage.getItem('from');
+              if (from) {
+                // location.href = from;
+                that.$router.push({path: from});
+              } else {
+                that.$router.push({path:"/"});
+              }
+            }if (response&&response.data.statusCode=='403') {
+              // location.href='regist.html';
+              that.$router.push({path: "/register"});
+              sessionStorage.setItem('notregtel',that.u_tel);
+              console.log(that.u_tel)
+
             }
-          }if (response&&response.data.statusCode=='403') {
-            // location.href='regist.html';
-            that.$router.push({path: "/register"});
-            sessionStorage.setItem('notregtel',that.u_tel);
-            console.log(that.u_tel)
+            else {
 
-          }
-          else {
+              that.u_err='用户名或密码错误';
+            }
 
-            that.u_err='用户名或密码错误';
-          }
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+      }else {
+        this.u_err='请输入正确的手机号'
+      }
 
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
     },
     remember:function () {
       if (!this.checked) {

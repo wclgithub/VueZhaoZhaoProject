@@ -29,13 +29,11 @@ nav{
 .index-nav a:visited{
   color:white;
 }
-
 .index-logo img{
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-
 .index-nav>div{
   flex: 1;
   height: 65px;
@@ -82,41 +80,101 @@ nav{
   border-bottom: 5px solid white;
   background: rgba(0, 0, 0, 0.26);
   /*登录者结束*/
-}
+}.clear{
+   clear: both;
+ }
 /*搜索部分*/
-
+.index-search-background{
+  height: 400px;
+  background: url("../../src/assets/images/index_search_background.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 /*搜索框*/
-
-.index-search div{
+.index-search-background div{
   display: flex;
 }
-.index-search .input-search{
-  height: 70px;
-  width: 79%;
+.index-search-background .input-group .input-search{
+  height: 50px;
+  width: 500px;
+  margin-top: 260px;
+  margin-left: 320px;
   font-size: 30px;
   border: none;
-
 }
-
+.index-search-background .input-group-btn #input-submit{
+  height: 50px;
+  width: 100px;
+  margin-top: 260px;
+  margin-left: -10px;
+  background: #42b47a;
+  outline: none;
+  font-size: 18px;
+}
+.input-search{
+  outline: none;
+}
 /*公寓展示部分*/
-
+.cost{
+  font-size: 40px;
+  color: chocolate;
+  margin-left: 0;
+  padding-left: 0;
+}
+.main-cost{
+  width: 330px;
+  height: 50px;
+  text-align: center;
+  line-height: 50px;
+  margin-left: 0;
+  padding-left: 0;
+}
+.cost-icon{
+  font-size: 20px;
+  margin-left: 0;
+  padding-left: 0;
+}
+.index-rooms-list{
+  margin-top: 50px;
+  margin-left: 100px;
+}
+.index-rooms-back{
+  margin: 0 auto;
+  margin-top: 30px;
+}
+#better{
+  width: 250px;
+  height: 60px;
+  text-align: center;
+  border: 1px solid #51fe6a;
+  font-size: 20px;
+  background: #42b47a;
+  margin: auto;
+  line-height: 60px;
+  box-shadow: 2px 2px 5px #696e86;
+}
 .single-room img{
   width: 100%;
   height: 50%;
   object-fit: cover;
 }
-
-.single-room .room-p01 a{
+.single-room{
+  height: 370px;
+  width: 370px;
+}
+.single-room .room-p01 router-link{
   font-size: 20px;
 }
-.single-room a:visited, .room-p02 a:visited{
+.single-room a:visited, .room-p02 router-link:visited{
   color: black;
 }
-.single-room .room-p02 a:link{
+.single-room .room-p02 router-link:link{
   font-size: 14px;
   color: #bbbbbb;
 }
-
+.room-p01{
+  font-size: 30px;
+}
 /*footer*/
 footer{
   width: 100%;
@@ -130,38 +188,18 @@ footer ul li{
   font-size: 20px;
   color: white;
 }
-.index-footer a:link{
+.index-footer router-link:link{
   font-size: 16px;
   color: #fff2e3;
 }
-.index-footer a:visited{
+.index-footer router-link:visited{
   color: white;
 }
-.index-footer a:hover{
+.index-footer router-link:hover{
   color: #00cc66;
   text-decoration: #00cc66;
 }
-
-
-.login-background{
-  margin: 0 auto;
-  margin-top: 20px;
-  width: 1200px;
-  height: 800px;
-  background: url("../../src/assets/images/login_background.jpg");
-  background-size: cover;
-}
 /*登录界面*/
-#login{
-  width: 400px;
-  height: 500px;
-  position: relative;
-  left:55%;
-  top: 20%;
-  background: #e5e5e5;
-  text-align: center;
-  opacity: 0.9;
-}
 #login p:first-child{
   font-size: 30px;
   position: relative;
@@ -177,9 +215,6 @@ footer ul li{
   border: none;
   margin-top: 30px;
   font-size: 20px;
-  color: black;
-
-
 }
 #login button{
   width: 200px;
@@ -192,31 +227,20 @@ footer ul li{
   top: 310px;
   left:100px;
 }
-.fpwd a{
-  position: relative;
-  left: 900px;
-  top: -38px;
-}
-.fpwd a:hover{
-  text-decoration: none;
-  color: black;
-}
-
 .lg-rg p{
-  position: relative;
-  left: 780px;
-  top: 60px;
+  position: absolute;
+  left: 1025px;
+  top: 680px;
 }
-.lg-rg a{
-  position: relative;
-  left: 875px;
-  top: 30px;
+.lg-rg router-link{
+  position: absolute;
+  left: 1115px;
+  top: 695px;
 }
-.lg-rg a:link{
+.lg-rg router-link:link{
   color: #0BC165;
-  text-decoration: none;
 }
-.lg-rg a:visited{
+.lg-rg router-link:visited{
   color: #0BC165;
 }
 #login #reg-btn{
@@ -228,46 +252,11 @@ footer ul li{
   top: 60px;
   left: 50px;
 }
-#reg-pwd{
-  position: absolute;
-  top: 165px;
-  left: 50px;
-}
-#conf-pwd{
-  position: absolute;
-  top: 270px;
-  left: 50px;
-
-}
 #loginform .tel-reg-err{
   position: absolute;
   top: 100px;
   left: 70px;
   color: red;
-}
-.reg-err{
-  position: absolute;
-  top: 360px;
-  left: 55px;
-  color: red;
-}
-.pwd-im{
-  position: absolute;
-  top: 260px;
-  left: 55px;
-  color: grey;
-}
-#loginform  .ret-log .err-p{
-  width: 100px;
-  position: relative;
-  top: 247px;
-  left: 130px;
-}
-#loginform  .ret-log .err-a{
-  width: 100px;
-  position: relative;
-  top: 270px;
-  left: 80px;
 }
 #loginform .ret-log p{
   font-size: 15px;
@@ -276,7 +265,7 @@ footer ul li{
   top: 352px;
   left: 150px;
 }
-#loginform .ret-log a{
+#loginform .ret-log router-link{
   font-size: 15px;
   color: #0AC165;
   position: absolute;
@@ -291,7 +280,6 @@ footer ul li{
   height: 1000px;
   background: #292929;
 }
-
 .index-phone-arr div{
   width: 100%;
   height: 60px;
@@ -317,7 +305,6 @@ footer ul li{
 
 
 /*积分商城*/
-
 .intergral-ads img{
   width: 100%;
   height: 120px;
@@ -336,7 +323,6 @@ footer ul li{
   top: 240px;
   font-size: 18px;
   color: #00cc66;
-
 }
 .intergral-content-middle div{
   width: 250px;
@@ -378,7 +364,6 @@ footer ul li{
   background: #fdb814;
   font-size: 14px;
 }
-
 .intergral-nextpage div{
   height: 48px;
   width: 48px;
