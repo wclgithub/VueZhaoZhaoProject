@@ -9,9 +9,9 @@ import ShoppingMall from '@/components/ShoppingMall'
 import Cart from '@/components/Cart'
 import PersonalCenter from '@/components/PersonalCenter'
 import Forget from '@/components/Forget'
+import House from '@/components/House'
 
 Vue.use(Router)
-
 export default new Router({
   routes: [
     // 将组件添加到路由
@@ -34,6 +34,11 @@ export default new Router({
       path: '/apart',
       name: 'Apart',
       component: Apart,
+    },
+    {
+      path: '/house',
+      name: 'House',
+      component: House,
     },
     {
       path: '/article',
@@ -60,5 +65,5 @@ export default new Router({
       name: 'Forget',
       component: Forget,
     },
-  ]
+  ],
 })

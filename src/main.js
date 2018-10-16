@@ -14,6 +14,8 @@ import MyColl from './components/MyColl'
 import MyState from './components/MyState'
 // 引用第三方模块
 import 'bootstrap/dist/css/bootstrap.min.css'
+
+import VDistpicker from 'v-distpicker'
 Vue.config.productionTip = false;
 // 注册全局组件
 Vue.component('nav-main',NavMain);
@@ -24,10 +26,11 @@ Vue.component('my-oldinfo',MyOldInfo);
 Vue.component('my-order',MyOrder);
 Vue.component('my-coll',MyColl);
 Vue.component('my-state',MyState);
+Vue.component('v-distpicker',VDistpicker);
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
-  components: { App },
+  components: { App,VDistpicker },
   template: '<App/>'
 });

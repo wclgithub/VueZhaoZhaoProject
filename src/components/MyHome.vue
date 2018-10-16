@@ -35,7 +35,7 @@
               <div class="row">
                 <div class="col-md-4  my-img-centet">
                   <!--头像(left)-->
-                  <!--<img class="img-circle my-img" src="./images/user.png" alt="" id="user">-->
+                  <img class="img-circle my-img" src="../assets/images/user.png" alt="" id="user">
                   <button class="btn btn-danger my-img-btn"><p>修改头像</p><input type="file" id="xdaTanFileImg" onchange="xmTanUploadImg(this)" ></button>
                 </div>
                 <div class="col-md-8">
@@ -97,6 +97,7 @@
            this.user_info.points+=1;
            this.signtext='已签到';
            this.flag=false;
+           localStorage.setItem('flag',this.flag);
            var vm = this;
            // axios.post('http://127.0.0.1:8000/user/xxx',user_info )
            //   .then(function (response) {
@@ -123,6 +124,16 @@
         //   .catch(function (error) {
         //     console.log(error)
         //   })
+        if(localStorage.getItem('flag')){
+          if(localStorage.getItem('flag')==false){
+
+            this.flag=false;
+            this.signtext='已签到';
+            alert(this.flag)
+          }
+        }
+
+
       }
     }
 </script>

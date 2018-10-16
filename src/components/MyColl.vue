@@ -22,12 +22,12 @@
             <div class="row my-coll-house mcoll" v-if="bhstate">
               <div class="col-sm-4 col-md-4 " v-for="b in bh_info">
                 <div class="thumbnail">
-                  <!--<img src="../assets/images/nav-logo.png" alt="...">-->
+                  <img src="../assets/images/det2.jpg" alt="...">
                   <div class="caption">
                     <h4><strong v-text="b.name"></strong></h4>
                     <p>公寓</p>
                     <p><a href="#" class="btn btn-success" role="button">详情</a> <a href="#" class="btn btn-default"
-                                                                                   role="button" @click="delColl(b.id)">取消</a></p>
+                                                                                   role="button" @click="delColl(b.id,1)">取消</a></p>
                   </div>
                 </div>
               </div>
@@ -38,12 +38,12 @@
             <div class="row my-coll-room mcoll" v-if="roomstate">
               <div class="col-sm-4 col-md-4" v-for="r in room_info">
                 <div class="thumbnail">
-                  <!--<img src="./images/det3.jpg" alt="...">-->
+                  <img src="../assets/images/det2.jpg" alt="...">
                   <div class="caption">
                     <h4><strong v-text="r.room__name"></strong></h4>
                     <p v-text="r.room__beadhouse__name"></p>
                     <p><a href="#" class="btn btn-success" role="button">详情</a> <a href="#" class="btn btn-default"
-                                                                                   role="button" @click="delColl(r.room_id)">取消</a></p>
+                                                                                   role="button" @click="delColl(r.room_id,2)">取消</a></p>
                   </div>
                 </div>
               </div>
@@ -54,12 +54,12 @@
             <div class="row my-coll-set mcoll" v-for="a in art_info" v-if="artstate">
               <div class="col-sm-4 col-md-4">
                 <div class="thumbnail">
-                  <!--<img src="./images/det4.jpg" alt="...">-->
+                  <img src="../assets/images/det2.jpg" alt="...">
                   <div class="caption">
                     <h4><strong v-text=""></strong></h4>
                     <p v-text=""></p>
                     <p><a href="#" class="btn btn-success" role="button">详情</a> <a href="#" class="btn btn-default"
-                                                                                   role="button" @click="delColl(a.id)">取消</a></p>
+                                                                                   role="button" @click="delColl(a.id,3)">取消</a></p>
                   </div>
                 </div>
               </div>
@@ -141,6 +141,7 @@
       }
     },
     methods: {
+      //选择公寓收藏，获取公寓信息
       getBhInfo: function () {
         // var vm = this;
         // axios.post('http://localhost:8000/')
@@ -151,6 +152,7 @@
         //     console.log(error)
         //   })
       },
+      //选择房间收藏，获取房间信息
       getRoomInfo: function () {
         // var vm = this;
         // axios.post('http://localhost:8000/')
@@ -161,6 +163,7 @@
         //     console.log(error)
         //   })
       },
+      //选择文章收藏，获取文章信息
       getArtInfo: function () {
         // var vm = this;
         // axios.post('http://localhost:8000/')
@@ -171,7 +174,8 @@
         //     console.log(error)
         //   })
       },
-      delColl:function (id) {
+      //删除收藏
+      delColl:function (id,type) {
         // axios.post('http://127.0.0.1:8000/user/xxx',id )
         //   .then(function (response) {
         //     console.log(response.data)
@@ -183,13 +187,14 @@
         // if(response.data.statuscode=='202'){
         //     alert('取消成功');
         // }
+        alert(id+' '+type)
       }
     },
     mounted: {
       // var vm = this;
       // axios.post('http://localhost:8000/')
       //   .then(function (response) {
-      //     vm.bhinfo = response.data;
+      //     vm.bh_info = response.data;
       //   })
       //   .catch(function (error) {
       //     console.log(error)
