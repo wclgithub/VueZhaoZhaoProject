@@ -40,7 +40,7 @@
           <div class="my-nopay-order or-model">
             <div class="panel-body my-every row my-order-room " v-if="nopaystate||allstate" v-for="nopay in nopay_order">
               <div class="col-md-2" v-text="nopay.id"></div>
-              <!--<div class="col-md-2 order-img"><img src="./images/det1.jpg" alt=""></div>-->
+              <div class="col-md-2 order-img"><img src="../assets/images/det2.jpg" alt=""></div>
               <div class="col-md-3">{{nopay.room__beadhouse__name}} {{nopay.room__name}} {{nopay.setmeal__name}}</div>
               <div class="col-md-1" v-text="nopay.price">￥2500</div>
               <div class="col-md-1" v-text="nopay.set_meal_cyc">2月</div>
@@ -51,7 +51,7 @@
           <div class="my-ing-order or-model">
             <div class="panel-body my-every row " v-if="ingstate||allstate" v-for="ing in ing_order">
               <div class="col-md-2" v-text="ing.id"></div>
-              <!--<div class="col-md-2 order-img"><img src="./images/det3.jpg" alt=""></div>-->
+              <div class="col-md-2 order-img"><img src="../assets/images/det2.jpg" alt=""></div>
               <div class="col-md-3">{{ing.room__beadhouse__name}} {{ing.room__name}} {{ing.setmeal__name}}</div>
               <div class="col-md-1"  v-text="ing.price">￥2500</div>
               <div class="col-md-1" v-text="ing.set_meal_cyc">4月</div>
@@ -62,7 +62,7 @@
           <div class="my-success-order or-model">
             <div class="panel-body my-every row my-order-set " v-if="successstate||allstate" v-for="success in success_order">
               <div class="col-md-2" v-text="success.id">1232341466</div>
-              <!--<div class="col-md-2 order-img"><img src="./images/setmeal0101.jpg" alt=""></div>-->
+              <div class="col-md-2 order-img"><img src="../assets/images/det2.jpg" alt=""></div>
               <div class="col-md-3">{{success.room__beadhouse__name}} {{success.room__name}} {{success.setmeal__name}}</div>
               <div class="col-md-1"  v-text="success.price">￥2500</div>
               <div class="col-md-1" v-text="success.set_meal_cyc">5月</div>
@@ -73,7 +73,7 @@
           <div class="my-bad-order or-model">
             <div class="panel-body my-every row my-order-set " v-if="badstate||allstate" v-for="bad in bad_order">
               <div class="col-md-2" v-text="bad.id">12364565126</div>
-              <!--<div class="col-md-2 order-img"><img src="./images/setmeal0201.jpg" alt=""></div>-->
+              <div class="col-md-2 order-img"><img src="../assets/images/det2.jpg" alt=""></div>
               <div class="col-md-3">{{bad.room__beadhouse__name}} {{bad.room__name}} {{bad.setmeal__name}}</div>
               <div class="col-md-1"  v-text="bad.price">￥2500</div>
               <div class="col-md-1" v-text="bad.set_meal_cyc">6月</div>

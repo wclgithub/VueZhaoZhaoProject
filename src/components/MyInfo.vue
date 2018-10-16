@@ -104,9 +104,7 @@
       //   .catch(function (error) {
       //     console.log(error)
       //   })
-      // if(response.data.statuscode=='202'){
-      //     alert('保存成功');
-      // }
+
     }
   }
 </script>
