@@ -53,9 +53,10 @@ export default {
       this.u_tel=sessionStorage.getItem('hav_reg_tel');
       this.u_pwd=sessionStorage.getItem('hav_reg_pwd');
 
-    }if (sessionStorage.getItem('tel')) {
-      this.u_tel=sessionStorage.getItem('tel');
-      this.u_pwd=sessionStorage.getItem('pwd');
+
+    }if (localStorage.getItem('tel')) {
+      this.u_tel=localStorage.getItem('tel');
+      this.u_pwd=localStorage.getItem('pwd');
       this.checked=true
     }else {
       this.checked=false
@@ -72,19 +73,19 @@ export default {
           "telephone": this.u_tel,
           "password": this.u_pwd,
         }
-        console.log(user)
         var that=this
         axios.post('http://127.0.0.1:8000/user/login/',user )
           .then(function (response) {
             // vm.list = response.data;
-            console.log(response.data)
+            // console.log(response.data.id)
             console.log(response)
-            console.log(response.data.statusCode)
-            console.log(response.headers.token)
-            if (response&&response.data.statusCode=='202') {
+            // console.log(response.data.statusCode)
+            // console.log(response.headers.token)
+            if (response&&response.data.id) {
 
               sessionStorage.setItem('telephone', that.u_tel);
               sessionStorage.setItem('token',response.headers.token);
+              sessionStorage.setItem('u_id',response.data.id);
               var from = sessionStorage.getItem('from');
               if (from) {
                 // location.href = from;
@@ -92,14 +93,14 @@ export default {
               } else {
                 that.$router.push({path:"/"});
               }
-            }if (response&&response.data.statusCode=='403') {
+            }if (response&&response.data.statuscode=='403') {
               // location.href='regist.html';
               that.$router.push({path: "/register"});
               sessionStorage.setItem('notregtel',that.u_tel);
               console.log(that.u_tel)
 
             }
-            else {
+            if (response&&response.data.statuscode=='409') {
 
               that.u_err='用户名或密码错误';
             }
@@ -116,14 +117,14 @@ export default {
     remember:function () {
       if (!this.checked) {
         this.checked=true;
-        sessionStorage.setItem('tel',this.u_tel);
-        sessionStorage.setItem('pwd',this.u_pwd);
+        localStorage.setItem('tel',this.u_tel);
+        localStorage.setItem('pwd',this.u_pwd);
 
 
       }else {
         this.checked=false;
-        sessionStorage.setItem('tel','');
-        sessionStorage.setItem('pwd','');
+        localStorage.setItem('tel','');
+        localStorage.setItem('pwd','');
 
       }
     }

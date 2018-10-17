@@ -512,14 +512,20 @@
 
     mounted() {
       var vm = this;
-      // axios.get('http://192.168.2.32:8000/beadhouse/gethouseby/////')
-      //   .then(function (response) {
-      //     vm.bh_info = response.data;
-      //     console.log(vm.bh_info)
-      //   })
-      //   .catch(function (error) {
-      //     console.log(error)
-      //   })
+      axios.get('http://192.168.2.32:8000/beadhouse/gethouseby/////')
+        .then(function (response) {
+          vm.bh_info = response.data;
+          console.log(vm.bh_info)
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+
+      var already_searched=sessionStorage.getItem('already_searched');
+      if(already_searched){
+        vm.search_data=already_searched;
+        vm.$options.methods.Search()
+      }
       this.CountPage();
       this.ShowBhInfo();
     }
