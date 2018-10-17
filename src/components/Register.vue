@@ -71,11 +71,11 @@ export default {
                   "telephone": this.reg_tel,
                   "password": this.reg_pwd,
                 };
-                axios.post('http://127.0.0.1:8000/user/regist/',user )
+                axios.post('http://127.0.0.1:8000/user/register/',user )
                   .then(function (response) {
-                    console.log(response.data.statusCode)
+                    console.log(response.data.statuscode)
                     // console.log(response.headers.token)
-                    if (response&&response.data.statusCode=='201') {
+                    if (response&&response.data.statuscode=='202') {
 
                       sessionStorage.setItem('telephone', that.reg_tel);
                       sessionStorage.setItem('token',response.headers.token);
@@ -90,7 +90,7 @@ export default {
                         that.$router.push({path: "/"});
                         console.log('4')
                       }
-                    }if (response&&response.data.statusCode=='401'){
+                    }if (response&&response.data.statuscode=='401'){
 
                       that.r_err='您已注册';
                       that.r_errim='现在去登录?';
@@ -99,7 +99,10 @@ export default {
                       sessionStorage.setItem('hav_reg_pwd', that.reg_pwd);
                       console.log(sessionStorage.getItem('hav_reg_tel'));
                       // location.href = 'login.html'
-                      that.$router.push({path: "/login"});
+                      // that.$router.push({path: "/login"});
+                    }if (response&&response.data.statuscode=='409'){
+
+                      that.r_err='注册失败，请稍后重试';
                     }
 
                   })
