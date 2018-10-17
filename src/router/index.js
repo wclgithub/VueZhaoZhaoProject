@@ -4,7 +4,7 @@ import Index from '@/components/Index'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
 import Apart from '@/components/Apart'
-import Article from '@/components/Article'
+import ArticleList from '@/components/ArticleList'
 import ShoppingMall from '@/components/ShoppingMall'
 import Cart from '@/components/Cart'
 import PersonalCenter from '@/components/PersonalCenter'
@@ -43,9 +43,9 @@ export default new Router({
       component: House,
     },
     {
-      path: '/article',
-      name: 'Article',
-      component: Article,
+      path: '/articlelist',
+      name: 'ArticleList',
+      component: ArticleList,
     },
     {
       path: '/shoppingmall',

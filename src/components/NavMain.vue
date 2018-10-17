@@ -15,7 +15,7 @@
             <router-link to="./apart"><a href="javascript:void 0">养老院</a></router-link>
           </li>
           <li role="presentation">
-            <router-link to="./article"><a href="javascript:void 0">社区</a></router-link>
+            <router-link to="./articlelist"><a href="javascript:void 0">社区</a></router-link>
           </li>
           <li role="presentation">
             <router-link to="./shoppingmall"><a href="javascript:void 0">积分商城</a></router-link>
