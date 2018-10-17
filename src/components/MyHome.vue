@@ -41,7 +41,7 @@
                 <div class="col-md-8">
                   <!--头像right-->
                   <h4 class="glyphicon glyphicon-user">
-                    <span class="user-name" v-text="user_info.name">可爱小宝贝</span> LV<span>2</span>
+                    <span class="user-name" v-text="user_info.user_name">可爱小宝贝</span> LV<span>2</span>
                   </h4>
                   <div class="progress">
                     <div class="progress-bar progress-bar-warning active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
@@ -74,40 +74,58 @@
 </template>
 
 <script>
+  import axios from 'axios'
     export default {
         name: "",
         data(){
           return{
             alldata: [],
             signtext:'签到+1',
-            flag:true,
+            flag:'',
             user_info:{
               "telephone": "18846463366",
               "id": "1",
               "regist_time": "2018-09-15",
               "sex": "0",
-              "name": "猫咪",
+              "user_name": "猫咪",
               "user_img": "./images/user.png",
-              "points": 50
+              "points": 50,
+              "a":0,
+
             },
           }
     },
       methods:{
+         // 签到
          Sign:function () {
            this.user_info.points+=1;
            this.signtext='已签到';
            this.flag=false;
            localStorage.setItem('flag',this.flag);
+           var user_id=sessionStorage.getItem('u_id');
+           var data={
+             "user_id":sessionStorage.getItem('u_id'),
+             "points":this.user_info.points
+           }
+           var token=sessionStorage.getItem('token');
            var vm = this;
-           // axios.post('http://127.0.0.1:8000/user/xxx',user_info )
-           //   .then(function (response) {
-           //     vm.state = response.data;
-           //     console.log(response.data)
-           //     console.log(response)
-           //   })
-           //   .catch(function (error) {
-           //     console.log(error)
-           //   })
+           //更新积分
+           axios.post('http://127.0.0.1:8000/user/updatepoints/',data,{
+             headers:{
+               "token":token
+             }
+           })
+             .then(function (response) {
+               vm.state = response.data;
+               if(vm.state.code=='202'){
+                 alert('签到成功')
+               }
+               console.log(response.data)
+               console.log(response)
+             })
+             .catch(function (error) {
+               console.log(error)
+             })
 
          },
         changeInfo:function () {
@@ -116,21 +134,38 @@
         }
       },
       mounted() {
-        var vm = this;
-        // axios.post('http://localhost:8000/')
-        //   .then(function (response) {
-        //     vm.user_info = response.data;
-        //   })
-        //   .catch(function (error) {
-        //     console.log(error)
-        //   })
-        if(localStorage.getItem('flag')){
-          if(localStorage.getItem('flag')==false){
 
+        var vm = this;
+        var token=sessionStorage.getItem('token');
+        var user_id=sessionStorage.getItem('u_id');
+        var data={
+          "user_id":user_id
+        }
+        if(token){
+          axios.post('http://127.0.0.1:8000/user/getuserinfo/',data,{
+            headers:{
+              "token":token
+            }
+          })
+            .then(function (response) {
+              // config.headers.common['token']=token
+              vm.user_info = response.data;
+              console.log(vm.user_info )
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+          if(localStorage.getItem('flag')==null){
+            this.flag=1;
+          }else{
             this.flag=false;
             this.signtext='已签到';
-            alert(this.flag)
           }
+
+        }
+        else {
+          alert('请先登录！')
+          this.$router.push({path: "/login"});
         }
 
 

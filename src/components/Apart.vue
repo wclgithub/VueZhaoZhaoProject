@@ -166,186 +166,186 @@
     data() {
       return {
         bh_info: [
-          {
-            "id": "136562594217244",
-            "name": "江苏省苏州市吴江市滨湖乐龄公寓",
-            "address": "江苏省苏州市创意产业园",
-            "built_time": "2010年12月",
-            "ground_size": "10000",
-            "score": "4",
-            "min_price": 1800,
-            "staff": "120人",
-            "property": "民营机构",
-
-          },
-          {
-            "id": "13655930231068",
-            "name": "江苏省苏州市相城区社会福利中心",
-            "address": "江苏省苏州市创意产业园",
-            "built_time": "2005.12.1",
-            "ground_size": "300亩",
-            "score": "4",
-            "min_price": 500,
-            "staff": "-",
-            "property": "国营机构",
-
-          },
-          {
-            "id": "136562614317350",
-            "name": "逸和源湘家荡颐养中心苏州接待处",
-            "address": "江苏省苏州市创意产业园",
-            "built_time": "2013年03月",
-            "ground_size": "380",
-            "score": "4",
-            "min_price": 2000,
-            "staff": "300人",
-            "property": "民营机构",
-
-          },
-          {
-            "id": "136562614317350",
-            "name": "江苏省苏州市常熟市梅李镇敬老院",
-            "address": "江苏省苏州市创意产业园",
-            "built_time": "2010年01月",
-            "ground_size": "35000平方米",
-            "score": "4",
-            "min_price": 660,
-            "staff": "37人",
-            "property": "国营机构",
-
-          },
-          {
-            "id": "136562613817344",
-            "name": "江苏省苏州市金阊区博爱乐龄院",
-            "address": "江苏省苏州市创意产业园",
-            "built_time": "2007",
-            "ground_size": "-",
-            "score": "4",
-            "min_price": 1600,
-            "staff": "-",
-            "property": "民营机构",
-
-          },
-          {
-            "id": "136562600217275",
-            "name": "江苏省苏州市沧浪区银色家园老年公寓",
-            "address": "江苏省苏州市创意产业园",
-            "built_time": "2005.10.11",
-            "ground_size": "13亩多",
-            "score": "4",
-            "min_price": 500,
-            "staff": "-",
-            "property": "国营机构",
-
-          },
-          {
-            "id": "1365592102576",
-            "name": "江苏省苏州市红十字会老年康复医院",
-            "address": "江苏省苏州市创意产业园",
-            "built_time": "-",
-            "ground_size": "8500",
-            "score": "4",
-            "min_price": 500,
-            "staff": "-",
-            "property": "国营机构",
-
-          },
-          {
-            "id": "1365591886463",
-            "name": "江苏省苏州市平江区好心人护理院",
-            "address": "江苏省苏州市创意产业园",
-            "built_time": "2006.8.1",
-            "ground_size": "3500",
-            "score": "4",
-            "min_price": 500,
-            "staff": "-",
-            "property": "国营机构",
-
-          },
-          {
-            "id": "136562375616211",
-            "name": "江苏省苏州市吴江市社会福利院",
-            "address": "江苏省苏州市创意产业园",
-            "built_time": "1966.9",
-            "ground_size": "9000",
-            "score": "4",
-            "min_price": 500,
-            "staff": "-",
-            "property": "国营机构",
-
-          },
-          {
-            "id": "13655945371703",
-            "name": "江苏省苏州市吴中区爱心护理院",
-            "address": "江苏省苏州市创意产业园",
-            "built_time": "-",
-            "ground_size": "10000",
-            "score": "4",
-            "min_price": 500,
-            "staff": "-",
-            "property": "国营机构",
-
-          },
-          {
-            "id": "136562611917335",
-            "name": "江苏省苏州市太仓市社会福利服务中心",
-            "address": "江苏省苏州市创意产业园",
-            "built_time": "1982",
-            "ground_size": "25000",
-            "score": "4",
-            "min_price": 800,
-            "staff": "-",
-            "property": "国营机构",
-
-          },
-          {
-            "id": "136562622217389",
-            "name": "江苏省苏州市平江区夕阳红老年公寓",
-            "address": "江苏省苏州市创意产业园",
-            "built_time": "-",
-            "ground_size": "6.5亩",
-            "score": "4",
-            "min_price": 500,
-            "staff": "-",
-            "property": "国营机构",
-
-          },
-          {
-            "id": "136562608317318",
-            "name": "江苏省苏州市昆山市福利院",
-            "address": "江苏省苏州市创意产业园",
-            "built_time": "1984",
-            "ground_size": "20000",
-            "score": "4",
-            "min_price": 500,
-            "staff": "-",
-            "property": "国营机构",
-
-          },
-          {
-            "id": "136562375316208",
-            "name": "江苏省苏州市吴中区甪直镇社会养老中心",
-            "address": "江苏省苏州市创意产业园",
-            "built_time": "1977(2011.12.28)",
-            "ground_size": "15亩",
-            "score": "4",
-            "min_price": 500,
-            "staff": "-",
-            "property": "国营机构",
-
-          },
-          {
-            "id": "136562379216228",
-            "name": "江苏省苏州市吴江市震泽镇敬老院",
-            "address": "江苏省苏州市创意产业园",
-            "built_time": "2012",
-            "ground_size": "30亩",
-            "score": "4",
-            "min_price": 500,
-            "staff": "-",
-            "property": "国营机构",
-
-          }
+          // {
+          //   "id": "136562594217244",
+          //   "name": "江苏省苏州市吴江市滨湖乐龄公寓",
+          //   "address": "江苏省苏州市创意产业园",
+          //   "built_time": "2010年12月",
+          //   "ground_size": "10000",
+          //   "score": "4",
+          //   "min_price": 1800,
+          //   "staff": "120人",
+          //   "property": "民营机构",
+          //
+          // },
+          // {
+          //   "id": "13655930231068",
+          //   "name": "江苏省苏州市相城区社会福利中心",
+          //   "address": "江苏省苏州市创意产业园",
+          //   "built_time": "2005.12.1",
+          //   "ground_size": "300亩",
+          //   "score": "4",
+          //   "min_price": 500,
+          //   "staff": "-",
+          //   "property": "国营机构",
+          //
+          // },
+          // {
+          //   "id": "136562614317350",
+          //   "name": "逸和源湘家荡颐养中心苏州接待处",
+          //   "address": "江苏省苏州市创意产业园",
+          //   "built_time": "2013年03月",
+          //   "ground_size": "380",
+          //   "score": "4",
+          //   "min_price": 2000,
+          //   "staff": "300人",
+          //   "property": "民营机构",
+          //
+          // },
+          // {
+          //   "id": "136562614317350",
+          //   "name": "江苏省苏州市常熟市梅李镇敬老院",
+          //   "address": "江苏省苏州市创意产业园",
+          //   "built_time": "2010年01月",
+          //   "ground_size": "35000平方米",
+          //   "score": "4",
+          //   "min_price": 660,
+          //   "staff": "37人",
+          //   "property": "国营机构",
+          //
+          // },
+          // {
+          //   "id": "136562613817344",
+          //   "name": "江苏省苏州市金阊区博爱乐龄院",
+          //   "address": "江苏省苏州市创意产业园",
+          //   "built_time": "2007",
+          //   "ground_size": "-",
+          //   "score": "4",
+          //   "min_price": 1600,
+          //   "staff": "-",
+          //   "property": "民营机构",
+          //
+          // },
+          // {
+          //   "id": "136562600217275",
+          //   "name": "江苏省苏州市沧浪区银色家园老年公寓",
+          //   "address": "江苏省苏州市创意产业园",
+          //   "built_time": "2005.10.11",
+          //   "ground_size": "13亩多",
+          //   "score": "4",
+          //   "min_price": 500,
+          //   "staff": "-",
+          //   "property": "国营机构",
+          //
+          // },
+          // {
+          //   "id": "1365592102576",
+          //   "name": "江苏省苏州市红十字会老年康复医院",
+          //   "address": "江苏省苏州市创意产业园",
+          //   "built_time": "-",
+          //   "ground_size": "8500",
+          //   "score": "4",
+          //   "min_price": 500,
+          //   "staff": "-",
+          //   "property": "国营机构",
+          //
+          // },
+          // {
+          //   "id": "1365591886463",
+          //   "name": "江苏省苏州市平江区好心人护理院",
+          //   "address": "江苏省苏州市创意产业园",
+          //   "built_time": "2006.8.1",
+          //   "ground_size": "3500",
+          //   "score": "4",
+          //   "min_price": 500,
+          //   "staff": "-",
+          //   "property": "国营机构",
+          //
+          // },
+          // {
+          //   "id": "136562375616211",
+          //   "name": "江苏省苏州市吴江市社会福利院",
+          //   "address": "江苏省苏州市创意产业园",
+          //   "built_time": "1966.9",
+          //   "ground_size": "9000",
+          //   "score": "4",
+          //   "min_price": 500,
+          //   "staff": "-",
+          //   "property": "国营机构",
+          //
+          // },
+          // {
+          //   "id": "13655945371703",
+          //   "name": "江苏省苏州市吴中区爱心护理院",
+          //   "address": "江苏省苏州市创意产业园",
+          //   "built_time": "-",
+          //   "ground_size": "10000",
+          //   "score": "4",
+          //   "min_price": 500,
+          //   "staff": "-",
+          //   "property": "国营机构",
+          //
+          // },
+          // {
+          //   "id": "136562611917335",
+          //   "name": "江苏省苏州市太仓市社会福利服务中心",
+          //   "address": "江苏省苏州市创意产业园",
+          //   "built_time": "1982",
+          //   "ground_size": "25000",
+          //   "score": "4",
+          //   "min_price": 800,
+          //   "staff": "-",
+          //   "property": "国营机构",
+          //
+          // },
+          // {
+          //   "id": "136562622217389",
+          //   "name": "江苏省苏州市平江区夕阳红老年公寓",
+          //   "address": "江苏省苏州市创意产业园",
+          //   "built_time": "-",
+          //   "ground_size": "6.5亩",
+          //   "score": "4",
+          //   "min_price": 500,
+          //   "staff": "-",
+          //   "property": "国营机构",
+          //
+          // },
+          // {
+          //   "id": "136562608317318",
+          //   "name": "江苏省苏州市昆山市福利院",
+          //   "address": "江苏省苏州市创意产业园",
+          //   "built_time": "1984",
+          //   "ground_size": "20000",
+          //   "score": "4",
+          //   "min_price": 500,
+          //   "staff": "-",
+          //   "property": "国营机构",
+          //
+          // },
+          // {
+          //   "id": "136562375316208",
+          //   "name": "江苏省苏州市吴中区甪直镇社会养老中心",
+          //   "address": "江苏省苏州市创意产业园",
+          //   "built_time": "1977(2011.12.28)",
+          //   "ground_size": "15亩",
+          //   "score": "4",
+          //   "min_price": 500,
+          //   "staff": "-",
+          //   "property": "国营机构",
+          //
+          // },
+          // {
+          //   "id": "136562379216228",
+          //   "name": "江苏省苏州市吴江市震泽镇敬老院",
+          //   "address": "江苏省苏州市创意产业园",
+          //   "built_time": "2012",
+          //   "ground_size": "30亩",
+          //   "score": "4",
+          //   "min_price": 500,
+          //   "staff": "-",
+          //   "property": "国营机构",
+          //
+          // }
         ],
         min_price: 0,
         max_price: 50000,
@@ -405,16 +405,6 @@
         var min_max_price = {};
         min_max_price["min_price"] = this.min_price,
           min_max_price["max_price"] = this.max_price
-          // var vm = this;
-          // axios.post('http://127.0.0.1:8000/user/xxx',this.min_max_price )
-          //   .then(function (response) {
-          //     console.log(response.data)
-          //     console.log(response)
-          //   })
-          //   .catch(function (error) {
-          //     console.log(error)
-          //   })
-          // alert(this.min_price + ' ' + this.max_price);
       },
       //地区筛选
       getAddress: function (event) {
@@ -442,16 +432,6 @@
         var min_max_score = {};
         min_max_score["min_score"] = this.min_score,
           min_max_score["max_score"] = this.max_score
-          // var vm = this;
-          // axios.post('http://127.0.0.1:8000/user/xxx',this.min_max_score )
-          //   .then(function (response) {
-          //     console.log(response.data)
-          //     console.log(response)
-          //   })
-          //   .catch(function (error) {
-          //     console.log(error)
-          //   })
-          // alert(this.min_score + ' ' + this.max_score);
       },
       //跳转详情页
       saveBhId:function (id) {
@@ -512,14 +492,20 @@
 
     mounted() {
       var vm = this;
-      // axios.get('http://192.168.2.32:8000/beadhouse/gethouseby/////')
-      //   .then(function (response) {
-      //     vm.bh_info = response.data;
-      //     console.log(vm.bh_info)
-      //   })
-      //   .catch(function (error) {
-      //     console.log(error)
-      //   })
+      var already_searched=sessionStorage.getItem('already_searched');
+      if(already_searched){
+        vm.search_data=already_searched;
+      }else {
+        vm.search_data=''
+      }
+      axios.get('http://127.0.0.1:8000/beadhouse/gethouseby//'+vm.search_data+'///')
+        .then(function (response) {
+          vm.bh_info = response.data;
+          console.log(vm.bh_info)
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
       this.CountPage();
       this.ShowBhInfo();
     }

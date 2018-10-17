@@ -353,33 +353,48 @@
       }
     },
     mounted() {
-      // var vm = this;
-      // axios.post('http://localhost:8000/')
-      //   .then(function (response) {
-      //     vm.userorder = response.data;
-      //   })
-      //   .catch(function (error) {
-      //     console.log(error)
-      //   })
-      // var success_order=[];
-      // var ing_order=[];
-      // var nopay_order=[];
-      // var bad_order=[];
-      //
-      // for (let i=0;i<userorder.length;i++){
-      //   if (userorder[i]['order_state_id']==1){
-      //     success_order.push(userorder[i]);
-      //   }
-      //   else if (userorder[i]['order_state_id']==2){
-      //     ing_order.push(userorder[i]);
-      //   }
-      //   else if (userorder[i]['order_state_id']==3){
-      //     nopay_order.push(userorder[i]);
-      //   }
-      //   else {
-      //     bad_order.push(userorder[i]);
-      //   }
-      // }
+      var vm = this;
+      var token=sessionStorage.getItem('token');
+      if(token){
+        var vm = this;
+        axios.post('http://localhost:8000/',{
+          headers:{
+            "token":token
+          }
+        })
+          .then(function (response) {
+            vm.userorder = response.data;
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+        var success_order=[];
+        var ing_order=[];
+        var nopay_order=[];
+        var bad_order=[];
+
+        for (let i=0;i<userorder.length;i++){
+          if (userorder[i]['order_state_id']==1){
+            success_order.push(userorder[i]);
+          }
+          else if (userorder[i]['order_state_id']==2){
+            ing_order.push(userorder[i]);
+          }
+          else if (userorder[i]['order_state_id']==3){
+            nopay_order.push(userorder[i]);
+          }
+          else {
+            bad_order.push(userorder[i]);
+          }
+        }
+      }
+      else {
+        alert('请先登录！')
+        this.$router.push({path: "/login"});
+      }
+
+
+
     }
   }
 </script>

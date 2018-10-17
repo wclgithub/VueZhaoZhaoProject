@@ -142,8 +142,9 @@ export default {
     search:function () {
       if (this.ser_word){
         sessionStorage.setItem('already_searched',this.ser_word)
+        this.$router.push({path:"/apart"});
       }else {
-        // this.$router.push({path:"/apart"});
+        this.$router.push({path:"/apart"});
       }
     }
   }

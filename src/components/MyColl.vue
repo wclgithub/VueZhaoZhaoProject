@@ -24,7 +24,7 @@
                 <div class="thumbnail">
                   <img src="../assets/images/det2.jpg" alt="...">
                   <div class="caption">
-                    <h4><strong v-text="b.name"></strong></h4>
+                    <h4><strong v-text="b.beadhouse__name"></strong></h4>
                     <p>公寓</p>
                     <p><a href="#" class="btn btn-success" role="button">详情</a> <a href="#" class="btn btn-default"
                                                                                    role="button" @click="delColl(b.id,1)">取消</a></p>
@@ -56,10 +56,10 @@
                 <div class="thumbnail">
                   <img src="../assets/images/det2.jpg" alt="...">
                   <div class="caption">
-                    <h4><strong v-text=""></strong></h4>
-                    <p v-text=""></p>
+                    <h4 :id=a.article_id><strong v-text="a.article__title"></strong></h4>
+                    <p v-text="a.article__beadhouse__name"></p>
                     <p><a href="#" class="btn btn-success" role="button">详情</a> <a href="#" class="btn btn-default"
-                                                                                   role="button" @click="delColl(a.id,3)">取消</a></p>
+                                                                                   role="button" @click="delColl(a.article_id,3)">取消</a></p>
                   </div>
                 </div>
               </div>
@@ -75,6 +75,7 @@
 </template>
 
 <script>
+  import axios from 'axios'
   export default {
     name: "",
     data() {
@@ -84,23 +85,13 @@
         artstate: false,
         bh_info: [
           {
-            "id": 66000,
-            "name": '江苏省苏州市吴江市滨湖乐龄公寓',
+            "beadhouse__id": 66000,
+            "beadhouse__name": '江苏省苏州市吴江市滨湖乐龄公寓',
             "bh_img": './images/det1.jpg'
           },
           {
-            "id": 66001,
-            "name": '江苏省苏州市相城区社会福利中心',
-            "bh_img": './images/det2.jpg'
-          },
-          {
-            "id": 66002,
-            "name": '逸和源湘家荡颐养中心苏州接待处',
-            "bh_img": './images/det1.jpg'
-          },
-          {
-            "id": 66003,
-            "name": '江苏省苏州市常熟市梅李镇敬老院',
+            "beadhouse__id": 66001,
+            "beadhouse__name": '江苏省苏州市相城区社会福利中心',
             "bh_img": './images/det2.jpg'
           },
         ],
@@ -117,25 +108,15 @@
             "room__name": '大床房',
             "room_img": './images/det2.jpg'
           },
-          {
-            "room__beadhouse__name": '逸和源湘家荡颐养中心苏州接待处',
-            "room_id": 3,
-            "room__name": '豪华双人房',
-            "room_img": './images/det2.jpg'
-          },
-          {
-            "room__beadhouse__name": '江苏省苏州市常熟市梅李镇敬老院',
-            "room_id": 4,
-            "room__name": '家庭房',
-            "room_img": './images/det1.jpg'
-          },
+
         ],
         art_info: [
           {
-            "id": 111,
-            "title": '怎样变年轻',
-            "bh_name":'小太阳养老院',
-            "sub_time":'18-10 -8'
+            "article_id": 111,
+            "article__title": '怎样变年轻',
+            "article__beadhouse__name":'小太阳养老院',
+            "article__date":'2018-09-21',
+            "article__beadhouse__id":1,
           }
         ]
       }
@@ -154,25 +135,45 @@
       },
       //选择房间收藏，获取房间信息
       getRoomInfo: function () {
-        // var vm = this;
-        // axios.post('http://localhost:8000/')
-        //   .then(function (response) {
-        //     vm.roominfo = response.data;
-        //   })
-        //   .catch(function (error) {
-        //     console.log(error)
-        //   })
+        var vm = this;
+        var token=sessionStorage.getItem('token');
+        var user_id=sessionStorage.getItem('u_id');
+        var data={
+          "user_id":user_id
+        }
+        axios.post('http://127.0.0.1:8000/beadhouse/getroombyuserid/ ',data,{
+          headers:{
+            "token":token
+          }
+        })
+          .then(function (response) {
+            vm.room_info = response.data;
+            console.log(vm.room_info)
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
       },
       //选择文章收藏，获取文章信息
       getArtInfo: function () {
-        // var vm = this;
-        // axios.post('http://localhost:8000/')
-        //   .then(function (response) {
-        //     vm.artinfo = response.data;
-        //   })
-        //   .catch(function (error) {
-        //     console.log(error)
-        //   })
+        var vm = this;
+        var token=sessionStorage.getItem('token');
+        var user_id=sessionStorage.getItem('u_id');
+        var data={
+          "user_id":user_id
+        }
+        axios.post('http://127.0.0.1:8000/article/getarticlebyuserid/ ',data,{
+          headers:{
+            "token":token
+          }
+        })
+          .then(function (response) {
+            vm.art_info = response.data;
+            console.log(vm.art_info)
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
       },
       //删除收藏
       delColl:function (id,type) {
@@ -190,15 +191,33 @@
         alert(id+' '+type)
       }
     },
-    mounted: {
-      // var vm = this;
-      // axios.post('http://localhost:8000/')
-      //   .then(function (response) {
-      //     vm.bh_info = response.data;
-      //   })
-      //   .catch(function (error) {
-      //     console.log(error)
-      //   })
+    mounted() {
+      var vm = this;
+      var token=sessionStorage.getItem('token');
+      var user_id=sessionStorage.getItem('u_id');
+      var data={
+        "user_id":user_id
+      }
+      if(token){
+        axios.post('http://127.0.0.1:8000/beadhouse/gethousebyuserid/',data,{
+          headers:{
+            "token":token
+          }
+        })
+          .then(function (response) {
+            vm.bh_info = response.data;
+            console.log(vm.bh_info)
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+
+      }
+      else {
+        alert('请先登录！')
+        this.$router.push({path: "/login"});
+      }
+
     }
   }
 </script>

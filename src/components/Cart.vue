@@ -2,8 +2,8 @@
   <div class="cart-container">
     <div class="cart-con-header">
       <div>
-        <input type="checkbox" id="chk_all">
-        <label for="chk_all">全选</label>
+        <input type="checkbox" id="checkbox" v-model="checked" @click="changeAllChecked()">
+        <label for="checkbox">全选</label>
       </div>
       <div>商品</div>
       <div>公寓</div>
@@ -16,13 +16,13 @@
     <div class="cart-con-goods" v-for="c in cart_info" v-if="c.number>=0">
       <div class="cart-con-header cart-good-item" :id=c.id>
         <div class="cart-goodsimg">
-          <input  type="checkbox" v-model="check_all_data">
+          <input type="checkbox" :id=c.cart_set_id :value=c.set_meal_name v-model="checkedNames">
           <a href="#"><img src="../assets/images/det2.jpg" alt=""></a>
         </div>
         <div v-text="c.set_meal_name"></div>
         <div v-text="c.bh_name"></div>
         <div class="cart-opt">
-          <input type="text" name="check_in" list="ci_info_name" required="required" >
+          <input type="text" name="check_in" list="ci_info_name" required="required">
           <datalist id="ci_info_name">
             <option value="妈妈">王小翠</option>
             <option value="爸爸">刘大壮</option>
@@ -93,38 +93,54 @@
             "number": 5
           }
         ],
-        check_all_data:false,
+        checked: false,
+        checkedNames: [],
 
       }
     },
     methods: {
-
-      },
-      computed: {
-        sum() {
-          let sum = 0;
-          for (let i of this.cart_info) {
-            if (i.number > 0)
-              sum += i.set_meal_price * i.number;
-          }
-          return sum;
+      changeAllChecked: function() {
+        if (this.checked) {
+          this.checkedNames = this.cart_info
+        } else {
+          this.checkedNames = []
         }
-      },
-      mounted: {
-        // var vm = this;
-        // axios.post('http://localhost:8000/')
-        //   .then(function (response) {
-        //     vm.cart_info = response.data;
-        //   })
-        //   .catch(function (error) {
-        //     console.log(error)
-        //   })
-      },
+      }
+    },
+    watch: {
+      "checkedNames": function() {
+        if (this.checkedNames.length != this.cart_info.length) {
+          this.checked = false
+        }
+        else {
+          this.checked = true
+        }
+      }
+    },
+
+    computed: {
+      sum() {
+        let sum = 0;
+        for (let i of this.cart_info) {
+          if (i.number > 0)
+            sum += i.set_meal_price * i.number;
+        }
+        return sum;
+      }
+    },
+    mounted: {
+      // var vm = this;
+      // axios.post('http://localhost:8000/')
+      //   .then(function (response) {
+      //     vm.cart_info = response.data;
+      //   })
+      //   .catch(function (error) {
+      //     console.log(error)
+      //   })
+    },
 
 
-
-
-    }
+  }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
