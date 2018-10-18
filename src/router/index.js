@@ -11,6 +11,7 @@ import PersonalCenter from '@/components/PersonalCenter'
 import Forget from '@/components/Forget'
 import House from '@/components/House'
 import ChangePwd from '@/components/ChangePwd'
+import Modal from '@/components/Modal'
 
 Vue.use(Router)
 
@@ -72,5 +73,11 @@ export default new Router({
       name: 'ChangePwd',
       component: ChangePwd,
     },
+    {
+      path: '/modal',
+      name: 'Modal',
+      component: Modal,
+    },
+
   ]
 })

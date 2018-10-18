@@ -73,33 +73,33 @@
 </template>
 
 <script>
+  import axios from 'axios'
   export default {
     name: "",
     data() {
       return {
         old_info: [
           {
-            "ci_info_id": 1,
-            "ci_info_telephone": "18846463123",
-            "ci_info_name": "张小明",
-            "ci_info_birth": "1970-1-2",
-            "ci_info_sex": '男',
-            "ci_info_urg_tel": "18846463366",
-            "ci_info_address": "江苏省苏州市工业园区",
-            "ci_info_img": "./images/user.png"
-
+            "user_id":7,
+            "telephone": "18846463366",
+            "name": "赵大爷",
+            "birthday": "1998-8-8",
+            "sex": '男',
+            "ec_telephone": "18845454444",
+            "ec_address": "江苏省苏州市工业园区",
+            "img": "./images/mymom.png"
           },
           {
-            "ci_info_id": 2,
-            "ci_info_telephone": "18846464567",
-            "ci_info_name": "赵小丽",
-            "ci_info_birth": "1971-2-3",
-            "ci_info_sex": '女' +
-              '',
-            "ci_info_urg_tel": "18846463935",
-            "ci_info_address": "江苏省苏州市吴中",
-            "ci_info_img": "./images/user.png"
+            "user_id":7,
+            "telephone": "18846445645",
+            "name": "翠花奶奶",
+            "birthday": "1997-8-8",
+            "sex": '女',
+            "ec_telephone": "18845454444",
+            "ec_address": "江苏省苏州市工业园区",
+            "img": "./images/mydad.png"
           }
+
 
         ]
       }
@@ -130,32 +130,88 @@
 
 
       },
+      //添加入住人信息
       addOldInfo: function () {
+        for(i in this.old_info.length){
+          if(this.old_info[i].name==null){
+            alert('姓名不能为空！')
+            break;
+          }
+        }
         this.old_info.push(
           [
             {
-              "ci_info_telephone": "",
-              "ci_info_name": "",
-              "ci_info_birth": "",
-              "ci_info_sex": '',
-              "ci_info_urg_tel": "",
-              "ci_info_address": "",
-              "ci_info_img": ""
+              "telephone": "",
+              "name": "",
+              "birthday": "",
+              "sex": '',
+              "ec_telephone": "",
+              "ec_address": "",
+              "img": ""
             }
           ]
         )
+        var vm = this;
+        var token=sessionStorage.getItem('token');
+        var user_id=sessionStorage.getItem('u_id');
+        var data={
+          "user_id":this.user_id,
+          "telephone":this.telephone,
+          "ec_telephone":this.ec_telephone,
+          "birthday":this.birthday,
+          "ec_address":this.ec_address,
+          "name":this.name,
+          "sex":this.sex
+        }
+        if(token){
+          axios.post('http://127.0.0.1:8000/user/addcheckinfo/',data,{
+            headers:{
+              "token":token
+            }
+          })
+            .then(function (response) {
+              vm.old_info=response.data
+              console.log(response.data)
+              console.log(response)
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        }
+        else {
+          alert('请先登录！')
+          this.$router.push({path: "/login"});
+        }
       }
     },
     mounted() {
-      // axios.post('http://127.0.0.1:8000/user/xxx')
-      //   .then(function (response) {
-      //       old_info=response.data
-      //     console.log(response.data)
-      //     console.log(response)
-      //   })
-      //   .catch(function (error) {
-      //     console.log(error)
-      //   })
+
+      var vm = this;
+      var token=sessionStorage.getItem('token');
+      var user_id=sessionStorage.getItem('u_id');
+      var data={
+        "user_id":user_id
+      }
+      if(token){
+        axios.post('http://127.0.0.1:8000/user/getcheckinfo/',data,{
+        headers:{
+          "token":token
+        }
+      })
+          .then(function (response) {
+              vm.old_info=response.data
+            console.log(response.data)
+            console.log(response)
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+      }
+      else {
+        alert('请先登录！')
+        this.$router.push({path: "/login"});
+      }
+
 
     }
   }

@@ -58,6 +58,7 @@
 </template>
 
 <script>
+  import axios from 'axios'
   export default {
     name: "",
     data() {
@@ -65,45 +66,79 @@
         user_info: {
           "telephone": "18846463366",
           "id": "1",
-          "regist_time": "2018-09-15",
+          "register_time": "2018-09-15",
           "sex": "女",
           "user_name": "猫咪",
-          "user_img": "./images/user.png",
+          "img": "./images/user.png",
           "points": 50
         },
       }
     },
     methods: {
+      //保存用户信息
       saveUserInfo:function(){
         if(this.user_info.telephone==''){
           alert('电话号码不能为空！');
         }else {
-          // axios.post('http://127.0.0.1:8000/user/xxx',user_info )
-          //   .then(function (response) {
-          //     console.log(response.data)
-          //     console.log(response)
-          //   })
-          //   .catch(function (error) {
-          //     console.log(error)
-          //   })
-          // if(response.data.statuscode=='202'){
-          //     alert('保存成功');
-          // }
+          var token=sessionStorage.getItem('token');
+          var user_id=sessionStorage.getItem('u_id');
+          var data={
+            "user_id":user_id,
+            "user_name":this.user_info.user_name,
+            "sex":this.user_info.sex,
+            "telephone":this.user_info.telephone,
+          };
+          axios.post('http://127.0.0.1:8000/user/changeinfo/',data,{
+            headers:{
+              "token":token
+            }
+          })
+            .then(function (response) {
+              if(response.data.code=='202'){
+                alert('保存成功');
+              }
+              console.log(response.data)
+              console.log(response)
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+
           console.log(this.user_info.telephone);
-          alert('ok');
         }
       }
     },
     mounted(){
-      // axios.post('http://127.0.0.1:8000/user/xxx')
-      //   .then(function (response) {
-      //       user_info=response.data
-      //     console.log(response.data)
-      //     console.log(response)
-      //   })
-      //   .catch(function (error) {
-      //     console.log(error)
-      //   })
+      var vm = this;
+      var token=sessionStorage.getItem('token');
+      var user_id=sessionStorage.getItem('u_id');
+      console.log(user_id);
+      console.log(typeof(user_id));
+      var data={
+        "user_id":user_id
+      };
+      console.log(data['user_id']);
+      console.log(typeof(data['user_id']));
+      if(token){
+        axios.post('http://127.0.0.1:8000/user/getuserinfo/',data,{
+          headers:{
+            "token":token
+          }
+        })
+          .then(function (response) {
+            // config.headers.common['token']=token
+            vm.user_info = response.data;
+            console.log(vm.user_info )
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+
+      }
+      else {
+        alert('请先登录！');
+        this.$router.push({path: "/login"});
+      }
 
     }
   }

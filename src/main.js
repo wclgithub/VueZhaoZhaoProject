@@ -15,7 +15,7 @@ import MyState from './components/MyState'
 import PageList from './components/PageList'
 // 引用第三方模块
 import 'bootstrap/dist/css/bootstrap.min.css'
-
+import $ from 'jquery'
 import VDistpicker from 'v-distpicker'
 Vue.config.productionTip = false;
 // 注册全局组件
