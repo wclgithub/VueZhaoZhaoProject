@@ -100,7 +100,7 @@
                 <div class="col-md-8"></div>
               </div>
             </div>
-            <div class="panel-body bh-info" v-for="b in bh_info" v-if="b.min_price>=min_price&&b.min_price<=max_price&&b.score>=min_score&&b.score<=max_score">
+            <div class="panel-body bh-info" v-for="b in result_list" v-if="b.min_price>=min_price&&b.min_price<=max_price&&b.score>=min_score&&b.score<=max_score">
               <div class="bh-border-bottom" :id="b.id">
                 <div class="row">
                   <div class="col-md-3 bhimg">
@@ -129,27 +129,8 @@
       </div>
       <!--公寓展示end-->
       <!--页码-->
-      <div class="row">
-        <div class="col-md-4"></div>
-        <div class="col-md-4">
-          <nav aria-label="Page navigation">
-            <ul class="pagination">
-              <li>
-                <a href="#" aria-label="Previous" @click.prevent="changePage(0)">
-                  <span aria-hidden="true"  >&laquo;</span>
-                </a>
-              </li>
-              <li><a href="#" v-if="pagenum+i-1<=show_page_count" v-text="pagenum+i-1" v-for="i in show_page_count">1</a></li>
-              <li>
-                <a href="#" aria-label="Next"  @click.prevent="changePage(1)">
-                  <span aria-hidden="true" >&raquo;</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-        <div class="col-md-4"></div>
-      </div>
+      <page-list :page_size="page_size" @indexclick="getIndex" @lastindexclick="lastPage" @nextindexclick="nextPage"></page-list>
+
       <!--页码end-->
     </div>
     <!--中间内容end-->
@@ -165,188 +146,7 @@
     name: 'Apart',
     data() {
       return {
-        bh_info: [
-          // {
-          //   "id": "136562594217244",
-          //   "name": "江苏省苏州市吴江市滨湖乐龄公寓",
-          //   "address": "江苏省苏州市创意产业园",
-          //   "built_time": "2010年12月",
-          //   "ground_size": "10000",
-          //   "score": "4",
-          //   "min_price": 1800,
-          //   "staff": "120人",
-          //   "property": "民营机构",
-          //
-          // },
-          // {
-          //   "id": "13655930231068",
-          //   "name": "江苏省苏州市相城区社会福利中心",
-          //   "address": "江苏省苏州市创意产业园",
-          //   "built_time": "2005.12.1",
-          //   "ground_size": "300亩",
-          //   "score": "4",
-          //   "min_price": 500,
-          //   "staff": "-",
-          //   "property": "国营机构",
-          //
-          // },
-          // {
-          //   "id": "136562614317350",
-          //   "name": "逸和源湘家荡颐养中心苏州接待处",
-          //   "address": "江苏省苏州市创意产业园",
-          //   "built_time": "2013年03月",
-          //   "ground_size": "380",
-          //   "score": "4",
-          //   "min_price": 2000,
-          //   "staff": "300人",
-          //   "property": "民营机构",
-          //
-          // },
-          // {
-          //   "id": "136562614317350",
-          //   "name": "江苏省苏州市常熟市梅李镇敬老院",
-          //   "address": "江苏省苏州市创意产业园",
-          //   "built_time": "2010年01月",
-          //   "ground_size": "35000平方米",
-          //   "score": "4",
-          //   "min_price": 660,
-          //   "staff": "37人",
-          //   "property": "国营机构",
-          //
-          // },
-          // {
-          //   "id": "136562613817344",
-          //   "name": "江苏省苏州市金阊区博爱乐龄院",
-          //   "address": "江苏省苏州市创意产业园",
-          //   "built_time": "2007",
-          //   "ground_size": "-",
-          //   "score": "4",
-          //   "min_price": 1600,
-          //   "staff": "-",
-          //   "property": "民营机构",
-          //
-          // },
-          // {
-          //   "id": "136562600217275",
-          //   "name": "江苏省苏州市沧浪区银色家园老年公寓",
-          //   "address": "江苏省苏州市创意产业园",
-          //   "built_time": "2005.10.11",
-          //   "ground_size": "13亩多",
-          //   "score": "4",
-          //   "min_price": 500,
-          //   "staff": "-",
-          //   "property": "国营机构",
-          //
-          // },
-          // {
-          //   "id": "1365592102576",
-          //   "name": "江苏省苏州市红十字会老年康复医院",
-          //   "address": "江苏省苏州市创意产业园",
-          //   "built_time": "-",
-          //   "ground_size": "8500",
-          //   "score": "4",
-          //   "min_price": 500,
-          //   "staff": "-",
-          //   "property": "国营机构",
-          //
-          // },
-          // {
-          //   "id": "1365591886463",
-          //   "name": "江苏省苏州市平江区好心人护理院",
-          //   "address": "江苏省苏州市创意产业园",
-          //   "built_time": "2006.8.1",
-          //   "ground_size": "3500",
-          //   "score": "4",
-          //   "min_price": 500,
-          //   "staff": "-",
-          //   "property": "国营机构",
-          //
-          // },
-          // {
-          //   "id": "136562375616211",
-          //   "name": "江苏省苏州市吴江市社会福利院",
-          //   "address": "江苏省苏州市创意产业园",
-          //   "built_time": "1966.9",
-          //   "ground_size": "9000",
-          //   "score": "4",
-          //   "min_price": 500,
-          //   "staff": "-",
-          //   "property": "国营机构",
-          //
-          // },
-          // {
-          //   "id": "13655945371703",
-          //   "name": "江苏省苏州市吴中区爱心护理院",
-          //   "address": "江苏省苏州市创意产业园",
-          //   "built_time": "-",
-          //   "ground_size": "10000",
-          //   "score": "4",
-          //   "min_price": 500,
-          //   "staff": "-",
-          //   "property": "国营机构",
-          //
-          // },
-          // {
-          //   "id": "136562611917335",
-          //   "name": "江苏省苏州市太仓市社会福利服务中心",
-          //   "address": "江苏省苏州市创意产业园",
-          //   "built_time": "1982",
-          //   "ground_size": "25000",
-          //   "score": "4",
-          //   "min_price": 800,
-          //   "staff": "-",
-          //   "property": "国营机构",
-          //
-          // },
-          // {
-          //   "id": "136562622217389",
-          //   "name": "江苏省苏州市平江区夕阳红老年公寓",
-          //   "address": "江苏省苏州市创意产业园",
-          //   "built_time": "-",
-          //   "ground_size": "6.5亩",
-          //   "score": "4",
-          //   "min_price": 500,
-          //   "staff": "-",
-          //   "property": "国营机构",
-          //
-          // },
-          // {
-          //   "id": "136562608317318",
-          //   "name": "江苏省苏州市昆山市福利院",
-          //   "address": "江苏省苏州市创意产业园",
-          //   "built_time": "1984",
-          //   "ground_size": "20000",
-          //   "score": "4",
-          //   "min_price": 500,
-          //   "staff": "-",
-          //   "property": "国营机构",
-          //
-          // },
-          // {
-          //   "id": "136562375316208",
-          //   "name": "江苏省苏州市吴中区甪直镇社会养老中心",
-          //   "address": "江苏省苏州市创意产业园",
-          //   "built_time": "1977(2011.12.28)",
-          //   "ground_size": "15亩",
-          //   "score": "4",
-          //   "min_price": 500,
-          //   "staff": "-",
-          //   "property": "国营机构",
-          //
-          // },
-          // {
-          //   "id": "136562379216228",
-          //   "name": "江苏省苏州市吴江市震泽镇敬老院",
-          //   "address": "江苏省苏州市创意产业园",
-          //   "built_time": "2012",
-          //   "ground_size": "30亩",
-          //   "score": "4",
-          //   "min_price": 500,
-          //   "staff": "-",
-          //   "property": "国营机构",
-          //
-          // }
-        ],
+        bh_info: [],
         min_price: 0,
         max_price: 50000,
         city_address: '',
@@ -359,12 +159,9 @@
         search_city:'',
         sort_type_one:0,
         sort_type_two:0,
-        pagenum:1,
-        page_count:0,
-        show_page_count:0,
-        bh_start:0,
-        bh_end:1,
-        new_bh_info:[]
+        page_index : 1,
+        page_size : 1,
+        result_list:[]
       }
     },
     methods: {
@@ -448,46 +245,31 @@
           this.sort_type_two=0;
         }
       },
-      //计算总页数
-      CountPage:function () {
-        this.page_count=Math.ceil(this.bh_info.length/5);
-        if(this.page_count<=5){
-          this.show_page_count= this.page_count;
-        }
-        else {
-          this.show_page_count=5;
+      showContent:function () {
+        let start = (this.page_index-1) * 10;
+        let end = this.bh_info.length<=this.page_index*10-1?this.bh_info.length:this.page_index*10-1;
+        this.result_list = [];
+        for (let i = start;i<=end;i++){
+          this.result_list.push(this.bh_info[i]);
         }
       },
-      //获取当前页数据
-      ShowBhInfo:function(){
-        this.bh_start=(this.pagenum - 1) * 5;
-        this.bh_end=(this.pagenum *5);
-
+      getIndex: function (i) {
+        this.page_index = i;
+        this.showContent();
       },
-      //上下页改变页码
-      changePage:function(i){
-        if(i===0){
-          console.log(this.pagenum)
-          if (this.pagenum  > 1){
-            this.pagenum -= 1;
-            this.$options.methods.ShowBhInfo();
-          }
-          else{
-            alert('已经是第一页了');
-          }
+      lastPage: function () {
+        if (this.page_index > 1) {
+          this.page_index -= 1;
+          this.showContent();
         }
-        else {
-          console.log(this.pagenum)
-          if (this.pagenum  < this.page_count){
-            this.pagenum += 1;
-            this.$options.methods.ShowBhInfo();
-          }
-          else{
-            alert('已经是最后一页了');
-          }
+      },
+      nextPage: function () {
+        if (this.page_size > this.page_index) {
+          this.page_index += 1;
+          this.showContent();
         }
+      },
 
-      }
     },
 
     mounted() {
@@ -501,13 +283,17 @@
       axios.get('http://127.0.0.1:8000/beadhouse/gethouseby//'+vm.search_data+'///')
         .then(function (response) {
           vm.bh_info = response.data;
+          vm.showContent();
+          if(vm.bh_info.length/10 == 0){
+            vm.page_size = vm.bh_info.length/10;
+          } else{
+            vm.page_size = Math.ceil(vm.bh_info.length/10);
+          }
           console.log(vm.bh_info)
         })
         .catch(function (error) {
           console.log(error)
         })
-      this.CountPage();
-      this.ShowBhInfo();
     }
   }
 </script>

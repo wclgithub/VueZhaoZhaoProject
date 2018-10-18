@@ -51,8 +51,8 @@
             </div>
             <!--房间收藏内容end-->
             <!--文章收藏内容-->
-            <div class="row my-coll-set mcoll" v-for="a in art_info" v-if="artstate">
-              <div class="col-sm-4 col-md-4">
+            <div class="row my-coll-set mcoll"  v-if="artstate">
+              <div class="col-sm-4 col-md-4" v-for="a in art_info">
                 <div class="thumbnail">
                   <img src="../assets/images/det2.jpg" alt="...">
                   <div class="caption">
@@ -83,42 +83,9 @@
         bhstate: true,
         roomstate: false,
         artstate: false,
-        bh_info: [
-          {
-            "beadhouse__id": 66000,
-            "beadhouse__name": '江苏省苏州市吴江市滨湖乐龄公寓',
-            "bh_img": './images/det1.jpg'
-          },
-          {
-            "beadhouse__id": 66001,
-            "beadhouse__name": '江苏省苏州市相城区社会福利中心',
-            "bh_img": './images/det2.jpg'
-          },
-        ],
-        room_info: [
-          {
-            "room__beadhouse__name": '江苏省苏州市吴江市滨湖乐龄公寓',
-            "room_id": 1,
-            "room__name": '标准单人间',
-            "room_img": './images/det1.jpg'
-          },
-          {
-            "room__beadhouse__name": '江苏省苏州市相城区社会福利中心',
-            "room_id": 2,
-            "room__name": '大床房',
-            "room_img": './images/det2.jpg'
-          },
-
-        ],
-        art_info: [
-          {
-            "article_id": 111,
-            "article__title": '怎样变年轻',
-            "article__beadhouse__name":'小太阳养老院',
-            "article__date":'2018-09-21',
-            "article__beadhouse__id":1,
-          }
-        ]
+        bh_info: [],
+        room_info: [],
+        art_info: []
       }
     },
     methods: {

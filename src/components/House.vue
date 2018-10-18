@@ -138,7 +138,7 @@
 
         var vm = this;
         vm.bh_id=sessionStorage.getItem('bhid');
-        axios.get('http://192.168.2.32:8000/beadhouse/getroomsbyhouseid/'+vm.bh_id+'/')
+        axios.get('http://127.0.0.1:8000/beadhouse/getroomsbyhouseid/'+vm.bh_id+'/')
           .then(function (response) {
             vm.rooms_info = response.data;
           })

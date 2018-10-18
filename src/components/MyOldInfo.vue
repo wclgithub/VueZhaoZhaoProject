@@ -7,7 +7,7 @@
             <h3 class="panel-title glyphicon glyphicon-user">我的信息</h3>
           </div>
           <!--第1个人的信息区-->
-          <div class="panel-body old_info" v-for=" old in old_info">
+          <div class="panel-body old_info" v-for=" old in old_info" :id=old.id v-if="old.id||old.sex">
             <!--第1.1行-->
             <div class="row">
               <div class="col-md-4 my-img-centet">
@@ -17,37 +17,39 @@
               </div>
               <div class="col-md-8">
                 <div class="row">
-                  <div class="col-md-11">
+                  <div class="col-md-10">
                     <div class="input-group my-input">
                       <span class="input-group-addon " id="basic-addon1"><p>姓名：</p></span>
-                      <input type="text" class="form-control" placeholder="Username：王小翠" v-model="old.ci_info_name">
+                      <input type="text" class="form-control" placeholder="Username：王小翠" v-model="old.name">
                     </div>
                     <div class="input-group my-input">
                       <span class="input-group-addon " id="basic-addon2"><p>性别：</p></span>
-                      <input type="text" class="form-control" placeholder="Sex：女" v-model="old.ci_info_sex">
+                      <input type="text" class="form-control" placeholder="Sex：女" v-model="old.sex">
                     </div>
                     <div class="input-group my-input">
                       <span class="input-group-addon " id="basic-addon3"><p>出生日期：</p></span>
-                      <input type="text" class="form-control" placeholder="Birth：1998-7-7" v-model="old.ci_info_birth">
+                      <input type="text" class="form-control" placeholder="Birth：1998-7-7" v-model="old.birthday">
                     </div>
                     <div class="input-group my-input">
                       <span class="input-group-addon " id="basic-addon4"><p>联系电话：</p></span>
                       <input type="text" class="form-control" placeholder="Tel：18842421515"
-                             v-model="old.ci_info_telephone">
+                             v-model="old.telephone" @blur.prevent="checkTel(old.telephone)">
                     </div>
                     <div class="input-group my-input">
                       <span class="input-group-addon " id="basic-addon5"><p>紧急联系人电话：</p></span>
                       <input type="text" class="form-control" placeholder="Ftel：18845454444"
-                             v-model="old.ci_info_urg_tel">
+                             v-model="old.ec_telephone">
                     </div>
                     <div class="input-group my-input">
                       <span class="input-group-addon " id="basic-addon6"><p>紧急联系地址：</p></span>
                       <input type="text" class="form-control" placeholder="Address：江苏省苏州市星湖街创意产业园4栋b202"
-                             v-model="old.ci_info_address">
+                             v-model="old.ec_address">
                     </div>
                     <hr>
                   </div>
-                  <div class="col-md-1"></div>
+                  <div class="col-md-2">
+                    <button class="btn btn-danger glyphicon glyphicon-remove" @click="delOldInfo(old.id)"></button>
+                  </div>
                 </div>
                 <!--第1.2行end-->
               </div>
@@ -74,13 +76,15 @@
 
 <script>
   import axios from 'axios'
+
   export default {
     name: "",
     data() {
       return {
         old_info: [
           {
-            "user_id":7,
+            "id": 2,
+            "user_id": 7,
             "telephone": "18846463366",
             "name": "赵大爷",
             "birthday": "1998-8-8",
@@ -90,7 +94,8 @@
             "img": "./images/mymom.png"
           },
           {
-            "user_id":7,
+            "id": 3,
+            "user_id": 7,
             "telephone": "18846445645",
             "name": "翠花奶奶",
             "birthday": "1997-8-8",
@@ -101,76 +106,160 @@
           }
 
 
-        ]
+        ],
+        len:0
       }
     },
     methods: {
+      //保存全部入住人信息
       saveOldInfo: function () {
-        for (let i = 0,j=0; i < this.old_info.length; i++) {
-          if (!this.old_info[i].ci_info_name) {
+        var j = 0;
+        for (let i of this.old_info) {
+          if (i.name == '') {
             alert('姓名不能为空！');
             break;
           }
           j++;
-          if(j==this.old_info.length) {
-            // axios.post('http://127.0.0.1:8000/user/xxx',old_info )
-            //   .then(function (response) {
-            //     console.log(response.data)
-            //     console.log(response)
-            //   })
-            //   .catch(function (error) {
-            //     console.log(error)
-            //   })
-            // if(response.data.statuscode=='202'){
-            //     alert('保存成功');
-            // }
-            alert('ok');
+        }
+        if (j == this.old_info.length) {
+          var vm = this;
+          var token = sessionStorage.getItem('token');
+          var user_id = sessionStorage.getItem('u_id');
+          var data = {
+            "user_id": user_id,
+            "check_infos": this.old_info
+          }
+          if (token) {
+            axios.post('http://127.0.0.1:8000/user/addcheckinfo/', data, {
+              headers: {
+                "token": token
+              }
+            })
+              .then(function (response) {
+                if (response.data.statuscode == '201') {
+                  alert('保存成功！')
+                  var token = sessionStorage.getItem('token');
+                  var user_id = sessionStorage.getItem('u_id');
+                  var data = {
+                    "user_id": user_id
+                  }
+                  if (token) {
+                    axios.post('http://127.0.0.1:8000/user/getcheckinfo/', data, {
+                      headers: {
+                        "token": token
+                      }
+                    })
+                      .then(function (response) {
+                        vm.old_info = response.data
+                        console.log(response.data)
+                        console.log(response)
+                      })
+                      .catch(function (error) {
+                        console.log(error)
+                      })
+                  }
+                  else {
+                    alert('请先登录！')
+                    this.$router.push({path: "/login"});
+                  }
+                } else {
+                  alert('保存失败！')
+                }
+                console.log(response.data)
+                console.log(response)
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+          }
+          else {
+            alert('请先登录！')
+            this.$router.push({path: "/login"});
           }
         }
-
-
       },
       //添加入住人信息
       addOldInfo: function () {
-        for(i in this.old_info.length){
-          if(this.old_info[i].name==null){
+        var k = 0
+        for (let i of this.old_info) {
+          if (i.name =='') {
             alert('姓名不能为空！')
             break;
           }
+          else {
+            k = k + 1;
+          }
         }
-        this.old_info.push(
-          [
+        //如果当前填写用户名的入住人字典列表的长度等于当前入住人长度:证明所有当前入住人信息均填写了姓名
+        //添加新空的入住人资料框
+        if (k == this.old_info.length) {
+          this.old_info.push(
             {
+              "id": '',
               "telephone": "",
               "name": "",
               "birthday": "",
-              "sex": '',
+              "sex": '女',
               "ec_telephone": "",
               "ec_address": "",
               "img": ""
             }
-          ]
-        )
-        var vm = this;
-        var token=sessionStorage.getItem('token');
-        var user_id=sessionStorage.getItem('u_id');
-        var data={
-          "user_id":this.user_id,
-          "telephone":this.telephone,
-          "ec_telephone":this.ec_telephone,
-          "birthday":this.birthday,
-          "ec_address":this.ec_address,
-          "name":this.name,
-          "sex":this.sex
+          )
         }
-        if(token){
-          axios.post('http://127.0.0.1:8000/user/addcheckinfo/',data,{
-            headers:{
-              "token":token
+      },
+      //删除入住人信息
+      delOldInfo: function (id) {
+        var vm = this;
+        var token = sessionStorage.getItem('token');
+        var user_id = sessionStorage.getItem('u_id');
+        var data = {
+          "user_id": user_id,
+          "id": id
+        }
+        if (token) {
+          axios.post('http://127.0.0.1:8000/user/deletecheckinfo/', data, {
+            headers: {
+              "token": token
             }
           })
             .then(function (response) {
-              vm.old_info=response.data
+              if (response.data.statuscode == '202') {
+                for (let i in vm.old_info) {
+                  if (vm.old_info[i].id == id) {
+                    delete vm.old_info[i]
+                  }
+                }
+                alert('删除成功！')
+                var token = sessionStorage.getItem('token');
+                var user_id = sessionStorage.getItem('u_id');
+                var data = {
+                  "user_id": user_id
+                }
+                if (token) {
+                  axios.post('http://127.0.0.1:8000/user/getcheckinfo/', data, {
+                    headers: {
+                      "token": token
+                    }
+                  })
+                    .then(function (response) {
+                      vm.old_info = response.data
+                      console.log(response.data)
+                      console.log(response)
+                    })
+                    .catch(function (error) {
+                      console.log(error)
+                    })
+                }
+                else {
+                  alert('请先登录！')
+                  this.$router.push({path: "/login"});
+                }
+
+
+              }
+              else {
+                alert('删除失败！')
+              }
               console.log(response.data)
               console.log(response)
             })
@@ -179,27 +268,35 @@
             })
         }
         else {
-          alert('请先登录！')
+          alert('请先登录！'
+          )
           this.$router.push({path: "/login"});
         }
-      }
+      },
+      //验证手机号
+      checkTel: function (tel) {
+        var reg = /^1[3456789]\d{9}$/;
+        if (!reg.test(tel)) {
+          alert('手机号码格式错误！')
+        }
+      },
     },
     mounted() {
 
       var vm = this;
-      var token=sessionStorage.getItem('token');
-      var user_id=sessionStorage.getItem('u_id');
-      var data={
-        "user_id":user_id
+      var token = sessionStorage.getItem('token');
+      var user_id = sessionStorage.getItem('u_id');
+      var data = {
+        "user_id": user_id
       }
-      if(token){
-        axios.post('http://127.0.0.1:8000/user/getcheckinfo/',data,{
-        headers:{
-          "token":token
-        }
-      })
+      if (token) {
+        axios.post('http://127.0.0.1:8000/user/getcheckinfo/', data, {
+          headers: {
+            "token": token
+          }
+        })
           .then(function (response) {
-              vm.old_info=response.data
+            vm.old_info = response.data
             console.log(response.data)
             console.log(response)
           })
