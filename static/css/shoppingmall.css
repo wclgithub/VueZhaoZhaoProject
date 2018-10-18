@@ -261,6 +261,7 @@ footer ul li{
 }
 .intergral-content{
   width: 1200px;
+  height: 950px;
   margin: 0 auto;
   padding: 0;
   box-sizing: border-box;
@@ -334,25 +335,28 @@ footer ul li{
 
 }
 .mygoods{
-  margin-right: 30px;
+  margin-left: 32px;
+  margin-bottom: 30px;
+  background: white;
+  height: 370px;
+  width: 260px;
+  border-radius: 10px;
+
 }
 .intergral-content-middle div{
   width: 250px;
   height: 350px;
-  display: table-cell;
+  /*!*display: table-cell;*!*/
   text-align: center;
   margin-bottom: 20px;
   background: white;
   border-radius: 10px;
 }
-.intergral-content-middle div:hover{
-  box-shadow: 5px 5px 10px #717171;
-  margin-top: -5px;
-}
+
 /*设置图片属性*/
-.intergral-content-middle div img{
-  width: 70%;
-  height:180px;
+.newlist div img{
+  width: 240px;
+  height:200px;
   object-fit: cover;
   margin: 0 auto;
 }
@@ -405,3 +409,41 @@ footer ul li{
 .apart-footer .apart-footer-content ul .li-img-right{
   border: none;
 }
+.newlist{
+  margin-left: 1px;
+  margin-top: 120px;
+  width: 1200px;
+  height: 500px;
+
+}
+.g_name{
+  position: absolute;
+  top: 225px;
+  left: 30px;
+  font-size: 18px;
+}
+.g_intr{
+  position: absolute;
+  top: 250px;
+  left: 30px;
+  font-size: 13px;
+  color: grey;
+}
+.g_p{
+  position: absolute;
+  top: 280px;
+  left: 30px;
+}
+.g_b{
+  position: absolute;
+  top: 315px;
+  left: 30px;
+  background: rgba(225, 129, 34, 0.68);
+}
+
+
+
+
+
+
+

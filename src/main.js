@@ -13,6 +13,7 @@ import MyOrder from './components/MyOrder'
 import MyColl from './components/MyColl'
 import MyState from './components/MyState'
 import PageList from './components/PageList'
+import Modal from './components/Modal'
 // 引用第三方模块
 import 'bootstrap/dist/css/bootstrap.min.css'
 import $ from 'jquery'
@@ -29,6 +30,7 @@ Vue.component('my-coll',MyColl);
 Vue.component('my-state',MyState);
 Vue.component('v-distpicker',VDistpicker);
 Vue.component('page-list',PageList);
+Vue.component('modal',Modal);
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

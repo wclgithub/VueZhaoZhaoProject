@@ -19,41 +19,22 @@
         </div>
       </div>
 
-      <div class=" newlist  row">
-        <div class="col-xs-6 col-md-3 mygoods" v-for="good in result_list">
-          <a href="#" class="thumbnail"><img src="../assets/images/anmoqi.png" alt="..."></a><br>
-          <a href="#" v-text="good.name" class="g_name"></a><br>
-          <p v-text="good.introduce" class="g_intr"></p>
-          <p style="font-size: 20px;color: #ff4d15" v-text="good.price" class="g_p"></p>
+      <div class="intergral-content-middle row">
+        <div class="col-lg-4 mygoods" v-for="good in result_list">
+          <a href="#"><img src="../assets/images/anmoqi.png" alt=""></a><br>
+          <a href="#" v-text="good.name"></a><br>
+          <p v-text="good.introduce"></p>
+          <p style="font-size: 20px;color: #ff4d15" v-text="good.price"></p>
           <!--<button v-bind:id="good.good_id" v-on:click="exchange(good.price)">-->
           <!--兑换 class="btn btn-primary btn-lg"-->
           <!--</button>-->
           <div id="app">
-            <button type="button" class="btn g_b" @click="showModal(good.price)" >兑换</button>
+            <button type="button" class="btn" @click="showModal(good.price)" >兑换</button>
             <modal v-show="isModalVisible" @close="closeModal" :good_poins="fa_goodnum"/>
           </div>
+
         </div>
       </div>
-
-
-
-
-      <!--<div class="intergral-content-middle row">-->
-        <!--<div class="col-lg-4 mygoods" v-for="good in result_list">-->
-          <!--<a href="#"><img src="../assets/images/anmoqi.png" alt=""></a><br>-->
-          <!--<a href="#" v-text="good.name"></a><br>-->
-          <!--<p v-text="good.introduce"></p>-->
-          <!--<p style="font-size: 20px;color: #ff4d15" v-text="good.price"></p>-->
-          <!--&lt;!&ndash;<button v-bind:id="good.good_id" v-on:click="exchange(good.price)">&ndash;&gt;-->
-          <!--&lt;!&ndash;兑换 class="btn btn-primary btn-lg"&ndash;&gt;-->
-          <!--&lt;!&ndash;</button>&ndash;&gt;-->
-          <!--<div id="app">-->
-            <!--<button type="button" class="btn" @click="showModal(good.price)" >兑换</button>-->
-            <!--<modal v-show="isModalVisible" @close="closeModal" :good_poins="fa_goodnum"/>-->
-          <!--</div>-->
-
-        <!--</div>-->
-      <!--</div>-->
     </div>
     <page-list :page_size="page_size" @indexclick="getIndex" @lastindexclick="lastPage" @nextindexclick="nextPage"></page-list>
     <!--<modal good_poins:good.price></modal>-->
@@ -136,10 +117,10 @@
                 // console.log(item.fields)
                 that.goods_list.push(item.fields)
                 that.showContent();
-                if(that.goods_list.length/8 == 0){
-                  that.page_size = that.goods_list.length/8;
+                if(that.goods_list.length/10 == 0){
+                  that.page_size = that.goods_list.length/10;
                 } else{
-                  that.page_size = Math.ceil(that.goods_list.length/8);
+                  that.page_size = Math.ceil(that.goods_list.length/10);
                 }
               })
               console.log(that.goods_list[0].name)
@@ -184,9 +165,9 @@
         }
       },
       showContent:function () {
-        let start = (this.page_index-1) * 8;
+        let start = (this.page_index-1) * 10;
         console.log(start)
-        let end = this.goods_list.length<=this.page_index*8-1?this.goods_list.length:this.page_index*8-1;
+        let end = this.goods_list.length<=this.page_index*10-1?this.goods_list.length:this.page_index*10-1;
         console.log(end)
         this.result_list = [];
         for (let i = start;i<=end;i++){
