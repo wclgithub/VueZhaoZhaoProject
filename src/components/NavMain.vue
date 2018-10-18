@@ -6,7 +6,7 @@
       <div class="col-md-5">
         <ul class="nav nav-pills my-nav">
           <li role="presentation">
-            <router-link to="./login"><a href="javascript:void 0" v-if="true">登录</a></router-link>
+            <router-link to="./login"><a href="javascript:void 0" v-show="login_token">登录</a></router-link>
           </li>
           <li role="presentation">
             <router-link to="./register"><a href="javascript:void 0">注册</a></router-link>
@@ -24,10 +24,10 @@
             <router-link to="./cart"><a href="javascript:void 0">购物车</a></router-link>
           </li>
           <li role="presentation">
-            <router-link to="./personalcenter"><a href="javascript:void 0">个人中心</a></router-link>
+            <router-link to="./personalcenter"><a href="javascript:void 0" v-show="!login_token">个人中心</a></router-link>
           </li>
           <li role="presentation" v-show="true">
-            <a href="javascript:void 0">退出</a>
+            <a href="javascript:void 0" @click = logOut v-show="!login_token">退出</a>
           </li>
         </ul>
       </div>
@@ -41,7 +41,15 @@ export default {
   name: 'NavMain',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+    }
+  },
+  mounted:function () {
+
+  },
+  methods:{
+    logOut:function () {
+      sessionStorage.clear();
+      this.$router.push({path:"/login"});
     }
   }
 }
