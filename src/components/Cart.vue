@@ -1,6 +1,6 @@
 <template>
-  <div class="cart-container">
-    <div class="cart-con-header">
+  <div class="cart-container panel panel-success">
+    <div class="cart-con-header panel-heading">
       <div>
         <input type="checkbox" id="checkbox" v-model="checked" @click="changeAllChecked()">
         <label for="checkbox">全选</label>
@@ -42,9 +42,10 @@
     <div class="cart-con-count">
       <div>总计:<span v-text="sum"></span>元<input type="submit" value="结算"></div>
     </div>
-    <div class="cart-groom">
-      <div class="cart-groom-title"><h2>已选公寓推荐套餐</h2></div>
-      <div class="cart-groom-set-meal">
+
+    <div class="cart-groom panel panel-success">
+      <div class="cart-groom-title panel-heading"><h4>该公寓推荐套餐</h4></div>
+      <div class="cart-groom-set-meal panel-body">
         <div><img src="../assets/images/det2.jpg" alt="">
           <p>标准套餐</p></div>
         <div><img src="../assets/images/det2.jpg" alt="">
@@ -148,13 +149,14 @@
   .cart-container, .cart-groom {
     width: 1000px;
     margin: auto;
+    margin-top: 20px;
+    border-bottom: 2px solid gainsboro;
   }
 
   .cart-con-header {
     width: 100%;
     height: 50px;
     line-height: 50px;
-    background: #ffe77d;
     display: flex;
   }
 
@@ -180,9 +182,8 @@
 
   .cart-good-item {
     height: 100px;
-    background: #e1f0f7;
     box-sizing: border-box;
-    border: white solid 2px;
+    border: #ebebeb solid 1px;
     line-height: 100px;
     font-size: 15px;
   }
@@ -190,6 +191,7 @@
   .cart-good-item img {
     width: 100px;
     height: 70px;
+    border-radius: 5px;
   }
 
   .cart-goodsimg div {
@@ -243,7 +245,6 @@
 
   .cart-groom-title {
     width: 100%;
-    background: #ffe77d;
   }
 
   .cart-groom-set-meal {
@@ -254,8 +255,8 @@
   .cart-groom-set-meal div {
     flex: 1;
     width: 200px;
-    height: 200px;
-    background: #e9fff8;
+    height: 150px;
+
     box-sizing: border-box;
     border: white solid 3px;
     text-align: center;
@@ -263,7 +264,9 @@
 
   .cart-groom-set-meal div img {
     width: 200px;
-    height: 150px;
+    height: 130px;
+    border-radius: 5px;
 
   }
+
 </style>
