@@ -2,7 +2,7 @@
   <div class="cart-container panel panel-success">
     <div class="cart-con-header panel-heading">
       <div>
-        <input type="checkbox" id="checkbox" v-model="checked" @click="changeAllChecked()">
+        <input type="checkbox" id="checkbox" v-model="checked" @click="changeAllChecked">
         <label for="checkbox">全选</label>
       </div>
       <div>商品</div>
@@ -13,10 +13,10 @@
       <div>小计</div>
       <div>操作</div>
     </div>
-    <div class="cart-con-goods" v-for="c in cart_info" v-if="c.number>=0">
+    <div class="cart-con-goods" v-for="c in cart_info" v-if="c.number>=0" :key="c.id">
       <div class="cart-con-header cart-good-item" :id=c.id>
         <div class="cart-goodsimg">
-          <input type="checkbox" :id=c.cart_set_id :value=c.set_meal_name v-model="checkedNames">
+          <input type="checkbox" :id=c.id :value=c.id v-model="checkedBoxList">
           <a href="#"><img src="../assets/images/det2.jpg" alt=""></a>
         </div>
         <div v-text="c.set_meal_name"></div>
@@ -69,7 +69,7 @@
           {
             "id": 1,
             "cart_set_id": 1,
-            "ci_info_name": "王小花",
+            "ci_info_name": "王小八",
             "set_meal_name": "标准营养套餐",
             "bh_name": "南京易发红日养老院",
             "set_meal_price": 500,
@@ -77,70 +77,60 @@
           },
           {
             "id": 2,
-            "cart_set_id": 2,
-            "ci_info_name": "钱大志",
-            "set_meal_name": "无糖套餐",
-            "bh_name": "张家口市春雷老年公寓",
-            "set_meal_price": 900,
-            "number": 3
-          },
-          {
+            "cart_set_id": 1,
+            "ci_info_name": "八小王",
+            "set_meal_name": "标准营养套餐",
+            "bh_name": "南京易发红日养老院",
+            "set_meal_price": 500,
+            "number": 2
+          }, {
             "id": 3,
-            "cart_set_id": 3,
-            "ci_info_name": "赵华华",
-            "set_meal_name": "洗护特护套餐",
-            "bh_name": "桂林夕阳红养老中心",
-            "set_meal_price": 1300,
-            "number": 5
-          }
+            "cart_set_id": 1,
+            "ci_info_name": "小王八",
+            "set_meal_name": "标准营养套餐",
+            "bh_name": "南京易发红日养老院",
+            "set_meal_price": 500,
+            "number": 2
+          },
         ],
         checked: false,
-        checkedNames: [],
-
+        checkedBoxList: [],
       }
     },
     methods: {
-      changeAllChecked: function() {
-        if (this.checked) {
-          this.checkedNames = this.cart_info
-        } else {
-          this.checkedNames = []
+      changeAllChecked: function () {
+        if (this.checked) {//实现反选
+          this.checkedBoxList = [];
+        } else { //实现全选
+          this.checkedBoxList = [];
+          this.cart_info.forEach((item) => {
+            this.checkedBoxList.push(item.id);
+          });
         }
       }
     },
-    watch: {
-      "checkedNames": function() {
-        if (this.checkedNames.length != this.cart_info.length) {
+    watch:{
+      "checkedBoxList": function() {
+        alert('ok');
+        if (this.checkedBoxList.length != this.cart_info.length) {
           this.checked = false
         }
         else {
           this.checked = true
         }
-      }
+      },
+      deep:true,
     },
-
     computed: {
       sum() {
         let sum = 0;
         for (let i of this.cart_info) {
           if (i.number > 0)
             sum += i.set_meal_price * i.number;
+          }
+          return sum;
         }
-        return sum;
-      }
-    },
-    mounted: {
-      // var vm = this;
-      // axios.post('http://localhost:8000/')
-      //   .then(function (response) {
-      //     vm.cart_info = response.data;
-      //   })
-      //   .catch(function (error) {
-      //     console.log(error)
-      //   })
-    },
-
-
+      },
   }
 </script>
 
