@@ -74,7 +74,7 @@
             response.data.forEach((item, index) => {
 
               if (item.score === 5) {
-                console.log(item)
+                // console.log(item)
                 that.house_list.push(item)
                 // console.log(this.house_list)
               }

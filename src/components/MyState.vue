@@ -6,6 +6,8 @@
         <div class="row">
           <h3 class=" col-md-8 panel-title">
             <ul class="nav nav-tabs oldtitle">
+              <!--<li role="presentation" class="my-active"><a href="#"  @click="showCheckData(checked)">默认</a>-->
+              <!--</li>-->
               <li role="presentation" class="my-active" v-for="c in old_info"><a href="#" v-text="c.name"
                                                                                  @click="showCheckData(c)">王小翠</a>
               </li>
@@ -25,7 +27,7 @@
               <div class="col-md-4 my-img-centet eat-img">
                 <!--头像(left)-->
                 <img class="img-circle my-img" src="../assets/images/mydad.png" alt="">
-                <p v-text="check_info_name">王小翠</p>
+                <p v-text="checked.check_info_name">王小翠</p>
               </div>
               <div class="col-md-8">
                 <div class="row">
@@ -64,7 +66,7 @@
               <div class="col-md-4 my-img-centet doctor-img">
                 <!--头像(left)-->
                 <img class="img-circle my-img" src="../assets/images/mymom.png" alt="">
-                <p v-text="check_info_name">王小翠</p>
+                <p v-text="checked.check_info_name">王小翠</p>
               </div>
               <div class="col-md-8">
                 <div class="row">
@@ -104,7 +106,7 @@
               <div class="col-md-4 my-img-centet active-img">
                 <!--头像(left)-->
                 <img class="img-circle my-img" src="../assets/images/mydad.png" alt="">
-                <p v-text="check_info_name">王小翠</p>
+                <p v-text="checked.check_info_name">王小翠</p>
               </div>
               <div class="col-md-8 ">
                 <div class="row">
@@ -223,14 +225,18 @@
             "person_name": '王小翠'
           },
         ],
-        check_info_id: '',
-        check_info_name: '',
+        checked:{
+          "check_info_id": '',
+          "check_info_name": '',
+        }
+
       }
     },
     methods: {
       //显示当前入住人状态信息
       showCheckData(c) {
-        this.check_info_name=c.name;
+        this.checked.check_info_name=c.name;
+        this.checked.check_info_id=c.id;
         var vm = this;
         var token=sessionStorage.getItem('token');
         var user_id=sessionStorage.getItem('u_id');
@@ -239,7 +245,7 @@
           "checkinfo_id": c.id,
           "dyn_type": ''
         }
-        axios.post('http://192.168.2.32:8000/user/getdynlistbycheckinfoid/', data, {
+        axios.post('http://127.0.0.1:8000/user/getdynlistbycheckinfoid/', data, {
           headers: {
             "token": token
           }
@@ -271,32 +277,36 @@
         })
           .then(function (response) {
             vm.old_info = response.data
+            vm.checked.check_info_name = response.data[0].name;
+            vm.checked.check_info_id = response.data[0].id;
             console.log(response.data)
             console.log(response)
+            let data = {
+              "user_id": user_id,
+              "checkinfo_id": vm.old_info[0].id,
+              "dyn_type": ''
+            }
+            axios.post('http://192.168.2.32:8000/user/getdynlistbycheckinfoid/', data, {
+              headers: {
+                "token": token
+              }
+            })
+              .then(function (response) {
+                vm.check_info = response.data
+                console.log(response.data)
+                console.log(response)
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
           })
           .catch(function (error) {
             console.log(error)
           })
-        vm.check_info_name = this.old_info[0].name;
+
+
         //取到当前用户默认的第一个入住人的状态信息
-        let data = {
-          "user_id": user_id,
-          "checkinfo_id": this.old_info[0].id,
-          "dyn_type": ''
-        }
-        axios.post('http://192.168.2.32:8000/user/getdynlistbycheckinfoid/', data, {
-          headers: {
-            "token": token
-          }
-        })
-          .then(function (response) {
-            vm.check_info = response.data
-            console.log(response.data)
-            console.log(response)
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
+
 
       }
       else {
@@ -379,16 +389,6 @@
   .my-nav-size ul li {
     font-size: 14px;
 
-  }
-
-  #xdaTanFileImg {
-    opacity: 0;
-    filter: alpha(opacity=0);
-  }
-
-  .my-img-btn {
-    width: 85px;
-    height: 35px;
   }
 
   .my-img-btn p {
