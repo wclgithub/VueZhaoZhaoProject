@@ -1,5 +1,4 @@
 <template>
-
     <div class="col-md-9">
       <div class="row">
         <div class="col-md-6">
@@ -35,8 +34,15 @@
               <div class="row">
                 <div class="col-md-4  my-img-centet">
                   <!--头像(left)-->
-                  <img class="img-circle my-img" src="../assets/images/user.png" alt="" id="user">
-                  <button class="btn btn-danger my-img-btn"><p>修改头像</p><input type="file" id="xdaTanFileImg" onchange="xmTanUploadImg(this)" ></button>
+                  <img class="img-circle my-img" v-bind:src="user_info.img" style="object-fit: cover;width: 150px;height: 150px;border: 1px solid">
+                  <form id="iconform">
+                    <button class="btn btn-danger my-img-btn">
+                      <p>选择头像</p>
+                      <input type="file" name="user_icon" id="user-pic" style="width: 30px">
+                    </button>
+                    <input name="usericonid" type="text"  v-show="false"  v-model.lazy="useridicon">
+                    <button class="btn btn-danger" v-on:click="upLoadIcon">修改头像</button>
+                  </form>
                 </div>
                 <div class="col-md-8">
                   <!--头像right-->
@@ -83,16 +89,8 @@
             signtext:'签到+1',
             flag:'',
             user_info:{
-              "telephone": "18846463366",
-              "id": "1",
-              "regist_time": "2018-09-15",
-              "sex": "0",
-              "user_name": "猫咪",
-              "user_img": "./images/user.png",
-              "points": 50,
-              "a":0,
-
             },
+            useridicon : sessionStorage.getItem('u_id')
           }
     },
       methods:{
@@ -102,13 +100,12 @@
            this.signtext='已签到';
            this.flag=false;
            localStorage.setItem('flag',this.flag);
-           var user_id=sessionStorage.getItem('u_id');
-           var data={
+           let data={
              "user_id":sessionStorage.getItem('u_id'),
              "points":this.user_info.points
-           }
-           var token=sessionStorage.getItem('token');
-           var vm = this;
+           };
+           let token=sessionStorage.getItem('token');
+           let vm = this;
            //更新积分
            axios.post('http://127.0.0.1:8000/user/updatepoints/',data,{
              headers:{
@@ -131,16 +128,33 @@
         changeInfo:function () {
           this.$emit('changeinfoclick')
 
+        },
+        upLoadIcon:function () {
+          let formdata = new FormData(document.querySelector("#iconform"));
+          axios.post('http://127.0.0.1:8000/user/uploadicon/',formdata)
+            .then(function (response) {
+              if(response.data.statuscode=='202')
+                setTimeout(1);
+                axios.post('http://127.0.0.1:8000/user/getuserinfo/',data,{
+                  headers:{
+                    "token":token
+                  }
+                })
+                  .then(function (response) {
+                    // config.headers.common['token']=token
+                    vm.user_info = response.data;
+                    console.log(vm.user_info )
+                  })
+            })
         }
       },
       mounted() {
 
-        var vm = this;
-        var token=sessionStorage.getItem('token');
-        var user_id=sessionStorage.getItem('u_id');
-        var data={
-          "user_id":user_id
-        }
+        let vm = this;
+        let token=sessionStorage.getItem('token');
+        let data={
+          "user_id":sessionStorage.getItem('u_id')
+        };
         if(token){
           axios.post('http://127.0.0.1:8000/user/getuserinfo/',data,{
             headers:{
@@ -154,7 +168,7 @@
             })
             .catch(function (error) {
               console.log(error)
-            })
+            });
           if(localStorage.getItem('flag')==null){
             this.flag=1;
           }else{
@@ -164,7 +178,7 @@
 
         }
         else {
-          alert('请先登录！')
+          alert('请先登录！');
           this.$router.push({path: "/login"});
         }
 
@@ -235,7 +249,7 @@
     font-size: 14px;
 
   }
-  #xdaTanFileImg{
+  #user-pic{
     opacity:0;
     filter:alpha(opacity=0);
   }
