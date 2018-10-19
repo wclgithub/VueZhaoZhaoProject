@@ -182,7 +182,7 @@
         var vm = this;
         axios.get('http://192.168.2.32:8000/beadhouse/gethouseby/' + vm.search_city + '/' + vm.search_data + '/'+ vm.sort_type_one+'/'+ vm.sort_type_two+'/')
           .then(function (response) {
-            vm.bh_info = response.data;
+            vm.result_list = response.data;
           })
           .catch(function (error) {
             console.log(error)
