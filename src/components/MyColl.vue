@@ -26,8 +26,10 @@
                   <div class="caption">
                     <h4><strong v-text="b.beadhouse__name"></strong></h4>
                     <p>公寓</p>
-                    <p><a href="#" class="btn btn-success" role="button">详情</a> <a href="#" class="btn btn-default"
-                                                                                   role="button" @click="delColl(b.id,1)">取消</a></p>
+                    <p><a href="#" class="btn btn-success" role="button" @click="goToBhiInfo(b.beadhouse__id)">详情</a> <a href="#" class="btn btn-default"
+                                                                                   role="button"
+                                                                                   @click="delBhColl(b.beadhouse__id)">取消</a>
+                    </p>
                   </div>
                 </div>
               </div>
@@ -38,12 +40,14 @@
             <div class="row my-coll-room mcoll" v-if="roomstate">
               <div class="col-sm-4 col-md-4" v-for="r in room_info">
                 <div class="thumbnail">
-                  <img src="../assets/images/det2.jpg" alt="...">
+                  <img src="../assets/images/det2.jpg" :title=r.long_room__beadhouse__name>
                   <div class="caption">
                     <h4><strong v-text="r.room__name"></strong></h4>
                     <p v-text="r.room__beadhouse__name"></p>
-                    <p><a href="#" class="btn btn-success" role="button">详情</a> <a href="#" class="btn btn-default"
-                                                                                   role="button" @click="delColl(r.room_id,2)">取消</a></p>
+                    <p><a href="#" class="btn btn-success" role="button" @click="goToRoomInfo(r.room_id)">详情</a> <a href="#" class="btn btn-default"
+                                                                                   role="button"
+                                                                                   @click="delRoomColl(r.room_id)">取消</a>
+                    </p>
                   </div>
                 </div>
               </div>
@@ -51,15 +55,17 @@
             </div>
             <!--房间收藏内容end-->
             <!--文章收藏内容-->
-            <div class="row my-coll-set mcoll"  v-if="artstate">
+            <div class="row my-coll-set mcoll" v-if="artstate">
               <div class="col-sm-4 col-md-4" v-for="a in art_info">
                 <div class="thumbnail">
-                  <img src="../assets/images/det2.jpg" alt="...">
+                  <img src="../assets/images/det2.jpg" :title=a.long_article__title+a.long_article__beadhouse__name>
                   <div class="caption">
                     <h4 :id=a.article_id><strong v-text="a.article__title"></strong></h4>
-                    <p v-text="a.article__beadhouse__name"></p>
-                    <p><a href="#" class="btn btn-success" role="button">详情</a> <a href="#" class="btn btn-default"
-                                                                                   role="button" @click="delColl(a.article_id,3)">取消</a></p>
+                    <p v-text="a.article__beadhouse__name" ></p>
+                    <p><a href="#" class="btn btn-success" role="button" @click="goToArtInfo(a.article_id)">详情</a> <a href="#" class="btn btn-default"
+                                                                                   role="button"
+                                                                                   @click="delArtColl(a.article_id)">取消</a>
+                    </p>
                   </div>
                 </div>
               </div>
@@ -76,6 +82,7 @@
 
 <script>
   import axios from 'axios'
+
   export default {
     name: "",
     data() {
@@ -85,36 +92,69 @@
         artstate: false,
         bh_info: [],
         room_info: [],
-        art_info: []
+        art_info: [],
+
       }
     },
     methods: {
       //选择公寓收藏，获取公寓信息
       getBhInfo: function () {
-        // var vm = this;
-        // axios.post('http://localhost:8000/')
-        //   .then(function (response) {
-        //     vm.bhinfo = response.data;
-        //   })
-        //   .catch(function (error) {
-        //     console.log(error)
-        //   })
+        var vm = this;
+        var token = sessionStorage.getItem('token');
+        var user_id = sessionStorage.getItem('u_id');
+        var data = {
+          "user_id": user_id
+        }
+        if (token) {
+          axios.post('http://127.0.0.1:8000/beadhouse/gethousebyuserid/', data, {
+            headers: {
+              "token": token
+            }
+          })
+            .then(function (response) {
+              vm.bh_info = response.data;
+              if(vm.bh_info.statuscode=='409'){
+                vm.bhstate=false;
+              }
+              console.log(vm.bh_info)
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+
+        }
+        else {
+          alert('请先登录！')
+          this.$router.push({path: "/login"});
+        }
       },
       //选择房间收藏，获取房间信息
       getRoomInfo: function () {
         var vm = this;
-        var token=sessionStorage.getItem('token');
-        var user_id=sessionStorage.getItem('u_id');
-        var data={
-          "user_id":user_id
+        var token = sessionStorage.getItem('token');
+        var user_id = sessionStorage.getItem('u_id');
+        var data = {
+          "user_id": user_id
         }
-        axios.post('http://127.0.0.1:8000/beadhouse/getroombyuserid/ ',data,{
-          headers:{
-            "token":token
+        axios.post('http://127.0.0.1:8000/beadhouse/getroombyuserid/ ', data, {
+          headers: {
+            "token": token
           }
         })
           .then(function (response) {
             vm.room_info = response.data;
+            if(vm.room_info.statuscode=='409'){
+              vm.roomstate=false;
+            }
+            else {
+              for(let i of vm.room_info){
+                i.long_room__beadhouse__name=i.room__beadhouse__name;
+                if (i.room__beadhouse__name.length>9){
+                  i.room__beadhouse__name=i.room__beadhouse__name.substring(0,9)+'...'
+                }
+
+              }
+            }
             console.log(vm.room_info)
           })
           .catch(function (error) {
@@ -124,55 +164,210 @@
       //选择文章收藏，获取文章信息
       getArtInfo: function () {
         var vm = this;
-        var token=sessionStorage.getItem('token');
-        var user_id=sessionStorage.getItem('u_id');
-        var data={
-          "user_id":user_id
+        var token = sessionStorage.getItem('token');
+        var user_id = sessionStorage.getItem('u_id');
+        var data = {
+          "user_id": user_id
         }
-        axios.post('http://127.0.0.1:8000/article/getarticlebyuserid/ ',data,{
-          headers:{
-            "token":token
+        axios.post('http://127.0.0.1:8000/article/getarticlebyuserid/ ', data, {
+          headers: {
+            "token": token
           }
         })
           .then(function (response) {
             vm.art_info = response.data;
+            if(vm.art_info.statuscode=='409'){
+              vm.artstate=false;
+            }
+            else{
+              for(let i of vm.art_info){
+                i.long_article__beadhouse__name=i.article__beadhouse__name;
+                if (i.article__beadhouse__name.length>9){
+                  i.article__beadhouse__name=i.article__beadhouse__name.substring(0,9)+'...'
+                }
+                i.long_article__title=i.article__title;
+                if (i.article__title.length>9){
+                  i.article__title=i.article__title.substring(0,9)+'...'
+                }
+              }
+            }
             console.log(vm.art_info)
           })
           .catch(function (error) {
             console.log(error)
           })
       },
-      //删除收藏
-      delColl:function (id,type) {
-        // axios.post('http://127.0.0.1:8000/user/xxx',id )
-        //   .then(function (response) {
-        //     console.log(response.data)
-        //     console.log(response)
-        //   })
-        //   .catch(function (error) {
-        //     console.log(error)
-        //   })
-        // if(response.data.statuscode=='202'){
-        //     alert('取消成功');
-        // }
-        alert(id+' '+type)
+      //删除公寓收藏
+      delBhColl: function (bhid) {
+        var vm = this;
+        var user_id = sessionStorage.getItem('u_id');
+        if (user_id) {
+          var token = sessionStorage.getItem('token')
+          var data = {
+            "user_id": user_id,
+            "house_id": bhid,
+          }
+          console.log(bhid)
+          axios.post('http://127.0.0.1:8000/beadhouse/cancelhousecollect/', data, {
+            headers: {
+              "token": token
+            }
+          })
+            .then(function (response) {
+              if (response.data.statuscode == '202') {
+
+                alert('取消成功')
+                axios.post('http://127.0.0.1:8000/beadhouse/gethousebyuserid/', data, {
+                  headers: {
+                    "token": token
+                  }
+                })
+                  .then(function (response) {
+                    vm.bh_info = response.data;
+                    if(vm.bh_info.statuscode=='409'){
+                      vm.bhstate=false;
+                    }
+                  })
+                  .catch(function (error) {
+                    console.log(error)
+                  })
+
+              } else {
+                vm.bhstate=false;
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        }
+        else {
+          alert('请先登录！')
+        }
+      },
+      delRoomColl: function (roomid) {
+        var vm = this;
+        var user_id = sessionStorage.getItem('u_id');
+        if (user_id) {
+          var token = sessionStorage.getItem('token')
+          var data = {
+            "user_id": user_id,
+            "room_id": roomid,
+          }
+          axios.post('http://127.0.0.1:8000/beadhouse/cancelroomcollect/', data, {
+            headers: {
+              "token": token
+            }
+          })
+            .then(function (response) {
+              if (response.data.statuscode == '202') {
+                alert('取消成功');
+                axios.post('http://127.0.0.1:8000/beadhouse/getroombyuserid/', data, {
+                  headers: {
+                    "token": token
+                  }
+                })
+                  .then(function (response) {
+                    vm.room_info = response.data;
+                    if(vm.room_info.statuscode=='409'){
+                      vm.roomstate=false;
+                    }
+                  })
+                  .catch(function (error) {
+                    console.log(error)
+                  })
+
+              } else {
+                vm.roomstate=false;
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        }
+        else {
+          alert('请先登录！')
+        }
+      },
+      //删除文章收藏
+      delArtColl: function (articleid) {
+        var vm = this;
+        var user_id = sessionStorage.getItem('u_id');
+        if (user_id) {
+          var token = sessionStorage.getItem('token')
+          var data = {
+            "user_id": user_id,
+            "article_id": articleid,
+          }
+          console.log(articleid)
+          axios.post('http://127.0.0.1:8000/article/cancelarticlecollect/', data, {
+            headers: {
+              "token": token
+            }
+          })
+            .then(function (response) {
+              if (response.data.statuscode == '202') {
+
+                alert('取消成功')
+                axios.post('http://127.0.0.1:8000/article/getarticlebyuserid/', data, {
+                  headers: {
+                    "token": token
+                  }
+                })
+                  .then(function (response) {
+                    vm.art_info = response.data;
+                    if(vm.art_info.statuscode=='409'){
+                      vm.artstate=false;
+                    }
+                  })
+                  .catch(function (error) {
+                    console.log(error)
+                  })
+
+              } else {
+                vm.artstate=false;
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        }
+        else {
+          alert('请先登录！')
+        }
+      },
+      //跳转公寓详情页
+      goToBhiInfo:function (bhid) {
+        sessionStorage.setItem('bhid',bhid);
+        this.$router.push({path: "/house"});
+      },
+      goToRoomInfo:function (roomid) {
+        sessionStorage.setItem('roomid',roomid);
+        this.$router.push({path: "/house"});
+      },
+      goToArtiInfo:function (artid) {
+        sessionStorage.setItem('artid',artid);
+        this.$router.push({path: "/house"});
       }
     },
+
     mounted() {
       var vm = this;
-      var token=sessionStorage.getItem('token');
-      var user_id=sessionStorage.getItem('u_id');
-      var data={
-        "user_id":user_id
+      var token = sessionStorage.getItem('token');
+      var user_id = sessionStorage.getItem('u_id');
+      var data = {
+        "user_id": user_id
       }
-      if(token){
-        axios.post('http://127.0.0.1:8000/beadhouse/gethousebyuserid/',data,{
-          headers:{
-            "token":token
+      if (token) {
+        axios.post('http://127.0.0.1:8000/beadhouse/gethousebyuserid/', data, {
+          headers: {
+            "token": token
           }
         })
           .then(function (response) {
             vm.bh_info = response.data;
+            if(vm.bh_info.statuscode=='409'){
+              vm.bhstate=false;
+            }
             console.log(vm.bh_info)
           })
           .catch(function (error) {

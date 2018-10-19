@@ -175,14 +175,14 @@
         this.mask = false;
         this.addInp = false;
         this.city = data.province.value + ' ' + data.city.value + ' ' + data.area.value;
-       this.search_city=data.city.value
+        this.search_city=data.city.value
       },
       //根据地址+关键字搜索
       Search: function () {
         var vm = this;
-        axios.get('http://192.168.2.32:8000/beadhouse/gethouseby/' + vm.search_city + '/' + vm.search_data + '/'+ vm.sort_type_one+'/'+ vm.sort_type_two+'/')
+        axios.get('http://127.0.0.1:8000/beadhouse/gethouseby/' + vm.search_city + '/' + vm.search_data + '/'+ vm.sort_type_one+'/'+ vm.sort_type_two+'/')
           .then(function (response) {
-            vm.bh_info = response.data;
+            vm.result_list = response.data;
           })
           .catch(function (error) {
             console.log(error)

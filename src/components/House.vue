@@ -11,15 +11,16 @@
         <div class="col-md-12 ">
           <div class="jumbotron">
             <div class="row">
-              <div class="col-md-7">
-
+              <div class="col-md-7 title-img">
               </div>
               <div class="col-md-5">
-                <span class="house-title"></span>
+                <span class="house-title">
+
+                </span>
                 <p>让您的父母得到最温暖的关怀！</p>
                 <div class="row">
                   <div class="col-md-4">
-                    <a class="btn btn-success btn-lg" href="#" role="button">公寓简介</a>
+                    <a class="btn btn-success btn-lg" href="#" role="button" @click="goToBhiInfo()">公寓简介</a>
                   </div>
                   <div class="col-md-6">
                     <a class="btn btn-success btn-lg" href="#" role="button">增值套餐</a>
@@ -52,7 +53,7 @@
               <div class="col-md-4">
               <div class="row">
               <div class="col-md-6 houseimg">
-              <!--<img src="./images/det2.jpg" alt="">-->
+              <img src="../assets/images/det2.jpg" alt="">
               </div>
               <div class="col-md-6"><h4 class="houselineheight" v-text="r.name">标准豪华单人间</h4></div>
               </div>
@@ -61,7 +62,7 @@
               <div class="col-md-2"><h4 class="houselineheight text-orange" v-text="r.price">500元/月</h4></div>
               <div class="col-md-2"><h4 class="houselineheight">20张</h4></div>
               <div class="col-md-2 houselineheight">
-              <button type="button" class="btn btn-sm btn-success">详情</button>
+              <button type="button" class="btn btn-sm btn-success" @click="goToDetails(r.id)">详情</button>
               </div>
               </div>
               </div>
@@ -113,26 +114,20 @@
       data(){
           return{
             rooms_info : [
-              // {
-              //   "name":"单人间",
-              //   "price":1599,
-              //   "bednum":1,
-              //   "id":"003",
-              // },
-              // {
-              //   "name":"豪华单人间",
-              //   "price":1799,
-              //   "bednum":1,
-              //   "id":"002",
-              // },
-              // {
-              //   "name":"豪华双人间",
-              //   "price":2599,
-              //   "bednum":2,
-              //   "id":"001",
-              // },
-            ]
+            ],
+            bh_id:''
           }
+      },
+      methods:{
+        //跳转公寓详情页
+        goToBhiInfo:function(){
+          this.$router.push({path: "/apartinfo"});
+        },
+        //跳转房间详情页
+        goToDetails:function (roomid) {
+          sessionStorage.setItem('roomid',roomid);
+          this.$router.push({path: "/details"});
+        },
       },
       mounted() {
 
@@ -141,6 +136,8 @@
         axios.get('http://127.0.0.1:8000/beadhouse/getroomsbyhouseid/'+vm.bh_id+'/')
           .then(function (response) {
             vm.rooms_info = response.data;
+            sessionStorage.setItem('rooms_info',vm.rooms_info )
+            console.log(vm.rooms_info)
           })
           .catch(function (error) {
             console.log(error)
@@ -171,9 +168,7 @@
     color: white;
     text-shadow:black 1px 1px ;
   }
-  .house-black{
-    background: rgba(0, 0, 0, 0.09);
-  }
+
   .house-title{
     font-size: 35px;
   }
@@ -182,20 +177,11 @@
     height: 65px;
 
   }
-  .my-nav{
-    height: 65px;
-    line-height: 40px;
-  }
-  .my-nav a,.my-footer{
+
+  .my-nav a{
     color: white;
   }
-  .my-every{
-    display: flex;
-  }
-  .my-every-btn {
-    flex: 1;
-    text-align: center;
-  }
+
   .my-every-btn button{
     color: white;
     width: 80px;
@@ -208,14 +194,7 @@
     padding-top: 20px;
     min-height: 600px;
   }
-  .my-img{
-    width: 150px;
-    height: 150px;
-    margin: 5px;
-  }
-  .bg-orange{
-    background: #f0ad4e;
-  }
+
   .panel-primary > .panel-heading,.bg-green{
     background: #40a170;
   }
@@ -223,49 +202,14 @@
   .nav > li > a:focus {
     color: black;
   }
-  .list-group-item.active,
-  .list-group-item.active:hover,
-  .list-group-item.active:focus {
-    z-index: 2;
-    color: #fff;
-    background-color: #40a170;
-    border-color: #40a170;
-  }
-  .my-footer{
-    padding-top: 15px;
-    font-size: 13px;
-  }
-  .my-change{
-    margin-left: 15px;
-  }
-  .my-input{
-    margin-bottom: 10px;
-  }
+
   .my-input span p{
     margin: 0;
     padding: 0;
     width: 150px;
   }
-  .my-img-centet{
-    text-align: center;
-  }
-  .my-old-change{
-    margin: 10px 25px;
-  }
-  .my-active{
-    background: #40a170;
-    border: white solid 1px;
-    border-radius: 4px 4px 0px 0px;
-    margin-right: 5px;
-  }
   .my-active a{
     color: white;
-  }
-  .disnone,.iframe_info,.iframe_old_info,.iframe_coll,.iframe_order,.iframe_state{
-    display: none;
-  }
-  .disblock{
-    display: block;
   }
   .order-img img{
     width: 100px;
@@ -275,37 +219,8 @@
     font-size: 14px;
 
   }
-  #xdaTanFileImg{
-    opacity:0;
-    filter:alpha(opacity=0);
-  }
-  .my-img-btn{
-    width: 85px;
-    height: 35px;
-  }
   .my-img-btn p{
     position:absolute;
-  }
-  .ifream_body{
-    overflow:hidden;
-    background: rgba(222,239,216,0.39);
-  }
-  iframe{
-    border: 0px;
-    min-height: 500px;
-    margin: 0;padding: 0;
-    width: 100%;
-
-  }
-  .iframe_index{
-    height: 700px;
-  }
-  .iframe_info{
-    height: 500px;
-  }
-
-  .iframe_state{
-    height: 1000px;
   }
 
 
