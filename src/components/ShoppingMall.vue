@@ -21,7 +21,7 @@
       <div class="intergral-content-middle row">
         <div class="col-lg-4 mygoods" v-for="good in goods_list">
           <a href="#"><img src="../assets/images/anmoqi.png" alt=""></a><br>
-          <a href="#" v-text="good.goods_name"></a>名称<br>
+          <a href="#" v-text="good.goods_name"></a><br>
           <p v-text="good.describe">描述</p>
           <p style="font-size: 20px;color: #ff4d15" v-text="good.price">价格</p>
           <!--<button v-bind:id="good.good_id" v-on:click="exchange(good.price)">-->

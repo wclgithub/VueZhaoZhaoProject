@@ -6,7 +6,7 @@
       <div class="col-md-5">
         <ul class="nav nav-pills my-nav">
           <li role="presentation">
-            <router-link to="./login"><a href="javascript:void 0" v-show="login_token">登录</a></router-link>
+            <router-link to="./login"><a href="javascript:void 0" v-show="!login_token">登录</a></router-link>
           </li>
           <li role="presentation">
             <router-link to="./register"><a href="javascript:void 0">注册</a></router-link>
