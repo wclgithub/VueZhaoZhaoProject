@@ -12,6 +12,7 @@ import Forget from '@/components/Forget'
 import House from '@/components/House'
 import ChangePwd from '@/components/ChangePwd'
 import Modal from '@/components/Modal'
+import ArticleDetails from '@/components/ArticleDetails'
 
 Vue.use(Router)
 
@@ -77,6 +78,11 @@ export default new Router({
       path: '/modal',
       name: 'Modal',
       component: Modal,
+    },
+    {
+      path: '/articledetails',
+      name: 'ArticleDetails',
+      component: ArticleDetails,
     },
 
   ]

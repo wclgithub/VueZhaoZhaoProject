@@ -23,12 +23,12 @@
             <div class="article-body row" v-for="article in result_list" v-if="article.beadhouse__name==keyword||flag">
               <div class="article-info col-md-8 col-sm-8 col-xs-8" :key="result_list.id">
                 <div class="article-title" id="articlelist.id">
-                  <a href="javascript:void 0"><span v-text="article.title"></span></a>
+                  <router-link :to="{path:'/articledetails',query:{article_id:article.id}}" v-text="article.title"></router-link>
                 </div>
                 <div class="article-author" :id="result_list.beadhouse_id">
-                  <a href="javascript:void 0"><span>作者:</span><span v-text="article.beadhouse__name"></span></a>
+                  <a  v-text="article.beadhouse__name" v-on:click="toapaertinfo(article.beadhouse_id)"></a>
                 </div>
-                <div class="article-time"><span>发表时间:</span><span v-text="article.date"></span></div>
+                <div class="article-time"><span></span><span v-text="article.date"></span></div>
               </div>
               <div class="article-pic col-md-4 col-sm-4 col-xs-4 "><img src="../assets/images/article_picture_01.jpg"
                                                                         alt=""></div>
@@ -65,6 +65,7 @@
       let that = this;
       axios.get("http://127.0.0.1:8000/article/getarticles/").then(function (response) {
         that.articlelist = response.data;
+        console.log(that.articlelist)
         that.showContent();
         if (that.articlelist.length / 10 == 0) {
           that.page_size = that.articlelist.length / 10;
@@ -103,6 +104,9 @@
       getkeyWord:function (event) {
         this.flag=false
         this.keyword=event.target.innerText;
+      },
+      toapaertinfo:function (id) {
+        sessionStorage.setItem('bhid',id)
       }
     },
     computed: {}
@@ -142,23 +146,25 @@
   .article-author {
     margin-top: 4px;
     height: 30px;
-    font-size: 18px;
+    font-size: 14px;
     line-height: 30px;
   }
 
   .article-author a {
-    color: black;
+    color: gray;
   }
 
   .article-time {
     margin-top: 4px;
     height: 30px;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 30px;
+    color: gray;
   }
 
   .article-info span {
-    margin-left: 5px;
+    margin-left: 1px;
+
   }
 
   .article-pic {

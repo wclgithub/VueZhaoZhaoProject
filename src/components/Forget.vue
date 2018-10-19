@@ -16,6 +16,7 @@
 </template>
 
 <script>
+  import axios from 'axios'
 export default {
   name: 'NavMain',
   data: function () {
@@ -43,23 +44,20 @@ export default {
     sendMessage:function(){
       var reg=/^1[3456789]\d{9}$/;
       if (reg.test(this.f_tel)) {
-        var user = {
-          "telephone": this.f_tel,
-        }
-        console.log(user)
+        var user = this.f_tel
         var that = this
-        // axios.post('http://127.0.0.1:8000/getcode/', user)
-        //     .then(function (response) {
-        //         // vm.list = response.data;
-        //         console.log(response)
-        //     })
-        //     .catch(function (error) {
-        //         console.log(error)
-        //     })
-        // this.curCount=this.count;
-        // this.dis_flag=true;
-        // this.code_word=+this.curCount+'秒';
-        // setInterval(this.$options.methods.SetRemainTime,1000);
+        axios.get('http://127.0.0.1:8000/user/sendmessage/'+user+'/')
+          .then(function (response) {
+            // vm.list = response.data;
+            console.log(response)
+            if (response.data=='202') {
+              this.$options.methods.next()
+            }
+
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
         this.sendAuthCode = false;
         this.code_word = 60;
         var auth_timetimer =  setInterval(()=>{
@@ -81,14 +79,25 @@ export default {
     next: function () {
 
       if (this.f_code){
-        var code = this.f_code
-        console.log(code)
-        var that=this
+        var user={
+          "v_code":this.f_code,
+          "telephone":this.f_tel
+        }
+        axios.post('http://127.0.0.1:8000/user/forgetpassword/',user)
+          .then(function (response) {
+            // vm.list = response.data;
+            console.log(response)
+
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+        // var that=this
         // axios.post('http://127.0.0.1:8000/getcode/', code)
         //   .then(function (response){
         //     console.log(response.data)
         //     if (response.data=='203'){
-              this.$router.push({path: "/changepwd"});
+        //       this.$router.push({path: "/changepwd"});
         //     }else {
         //       that.f_err='验证码错误'
         //     }

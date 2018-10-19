@@ -59,6 +59,7 @@
         //下拉列表
         isShowSelect: false,
         dataList: [
+          {'name':'请选择入住人'}
           // {key: -1, value: "请选择"},
           // {key: 0, value: "苹果"},
           // {key: 1, value: "香蕉"},
@@ -86,11 +87,17 @@
         var int_points=parseInt(u_points)
         var int_good_points=parseInt(this.good_poins)
         if (int_points>=int_good_points){
-          var now_points=int_points-int_good_points
-          sessionStorage.setItem('u_points',now_points)
-          this.$options.methods.changepoints(now_points);
-          this.$emit('close',0);
-        }else {
+          if (this.unitName==='请选择入住人'){
+            this.err_im='请选择入住人'
+          }else {
+            var now_points=int_points-int_good_points
+            sessionStorage.setItem('u_points',now_points)
+            this.$options.methods.changepoints(now_points);
+            this.$emit('close',0);
+          }
+
+        }
+        else {
           this.err_im='您的积分不足'
         }
       },
@@ -105,7 +112,12 @@
         }
       },
       arrowDown() {
-        this.isShowSelect = !this.isShowSelect;
+        if (sessionStorage.getItem('u_points')) {
+          this.isShowSelect = !this.isShowSelect;
+        } else {
+          this.showinterl = '请先登录'
+        }
+
       },
       select(item, index) {
         this.isShowSelect = false;
@@ -130,8 +142,9 @@
             // console.log(response.data[0])
             response.data.forEach((item, index) => {
               that.dataList.push(item)
+
             })
-            console.log(that.dataList)
+
           })
           .catch(function (error) {
             console.log(error)

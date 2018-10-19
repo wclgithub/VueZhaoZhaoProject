@@ -35,8 +35,8 @@
 .modal-header {
   /*border-bottom: 1px solid #eee;*/
   height: 60px;
-  background:chocolate;
-  color: #4aae9b;
+  background:#4aae9b;
+  color: white;
   justify-content: space-between;
   /*padding: 0;*/
 }
@@ -79,6 +79,8 @@
 }
 .f-l{
   list-style: none;
+  width: 200px;
+  margin-left: 140px;
 }
 .modal-body {
   position: relative;

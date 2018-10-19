@@ -20,8 +20,8 @@
       </div>
 
       <div class=" newlist  row">
-        <div class="col-xs-6 col-md-3 mygoods" v-for="good in result_list">
-          <a href="#" class="thumbnail"><img src="../assets/images/anmoqi.png" alt="..."></a><br>
+        <div class="col-xs-6 col-md-3 mygoods" v-for="good in result_list ">
+          <a href="#" class="thumbnail"><img :src="'../../static/images/'+good.img"   :alt="good.name" :title="good.long_name"></a><br>
           <a href="#" v-text="good.name" class="g_name"></a><br>
           <p v-text="good.introduce" class="g_intr"></p>
           <p style="font-size: 20px;color: #ff4d15" v-text="good.price" class="g_p"></p>
@@ -131,9 +131,12 @@
         var that = this
         axios.get('http://127.0.0.1:8000/goods/getallgoods/')
             .then(function (response){
-              console.log(response)
               response.data.forEach((item, index) => {
-                // console.log(item.fields)
+                item.fields.long_name=item.fields.name;
+                if (item.fields.name.length>11){
+                  item.fields.name=item.fields.name.substring(0,11)+'...'
+
+                }
                 that.goods_list.push(item.fields)
                 that.showContent();
                 if(that.goods_list.length/8 == 0){
@@ -142,7 +145,6 @@
                   that.page_size = Math.ceil(that.goods_list.length/8);
                 }
               })
-              console.log(that.goods_list[0].name)
 
                 // if (response.data=='203'){
                 //     that.goods_list=response
@@ -185,9 +187,9 @@
       },
       showContent:function () {
         let start = (this.page_index-1) * 8;
-        console.log(start)
+        // console.log(start)
         let end = this.goods_list.length<=this.page_index*8-1?this.goods_list.length:this.page_index*8-1;
-        console.log(end)
+        // console.log(end)
         this.result_list = [];
         for (let i = start;i<=end;i++){
           this.result_list.push(this.goods_list[i]);
