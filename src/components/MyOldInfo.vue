@@ -12,7 +12,7 @@
             <div class="row">
               <div class="col-md-4 my-img-centet">
                 <!--头像(left)-->
-                <img class="img-circle my-img" :src="old.img" alt="">
+                <img class="img-circle my-img" :src="old.img">
                 <button class="btn btn-danger ">修改头像</button>
               </div>
               <div class="col-md-8">
@@ -82,7 +82,7 @@
     data() {
       return {
         old_info: [
-          {
+        /* {
             "id": 2,
             "user_id": 7,
             "telephone": "18846463366",
@@ -92,19 +92,7 @@
             "ec_telephone": "18845454444",
             "ec_address": "江苏省苏州市工业园区",
             "img": "./images/mymom.png"
-          },
-          {
-            "id": 3,
-            "user_id": 7,
-            "telephone": "18846445645",
-            "name": "翠花奶奶",
-            "birthday": "1997-8-8",
-            "sex": '女',
-            "ec_telephone": "18845454444",
-            "ec_address": "江苏省苏州市工业园区",
-            "img": "./images/mydad.png"
-          }
-
+          },*/
 
         ],
         len:0
@@ -296,8 +284,8 @@
           }
         })
           .then(function (response) {
-            vm.old_info = response.data
-            console.log(response.data)
+            vm.old_info = response.data;
+            console.log(response.data);
             console.log(response)
           })
           .catch(function (error) {
