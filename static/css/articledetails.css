@@ -338,12 +338,13 @@ body,ul,li,h1,h2,h3,h4,p{
   border: white solid 2px;
 }
 .select-art-left img{
-  /*margin-top: 30px;*/
+  margin-top: 20px;
+  margin-left: 20px;
   width: 150px;
   height: 150px;
   display: block;
-  margin: auto;
   border: white solid 3px;
+  border-radius: 50%;
 }
 .select-art-left p{
   text-align: center;
@@ -351,6 +352,7 @@ body,ul,li,h1,h2,h3,h4,p{
 }
 .select-art-right{
   /*margin-top: 30px;*/
+  /*margin-bottom: 30px;*/
   flex: 4;
   background: rgba(64, 161, 112, 0.21);
   padding: 20px;
@@ -362,7 +364,6 @@ body,ul,li,h1,h2,h3,h4,p{
 .select-art-right p{
   width: 95%;
   height: 120px;
-
   margin: auto;
   font-size: 14px;
   line-height: 25px;
@@ -406,7 +407,7 @@ body,ul,li,h1,h2,h3,h4,p{
   height: 100px;
   background: #e1f0f7;
   box-sizing: border-box;
-  border: white solid 2px;
+  /*border: white solid 2px;*/
   line-height: 100px;
   font-size: 15px;
 }
@@ -467,7 +468,7 @@ body,ul,li,h1,h2,h3,h4,p{
   height: 200px;
   background: #e9fff8;
   box-sizing: border-box;
-  border: white solid 3px;
+  /*border: white solid 3px;*/
   text-align: center;
 }
 .cart-groom-set-meal div img{
@@ -555,6 +556,7 @@ body,ul,li,div{
   width: 25px;
   height: 25px;
   margin-right: 5px;
+  margin-left: 20px;
   border: none;
   background: #40A170;
   color: white;
@@ -577,3 +579,26 @@ body,ul,li,div{
 .m_re{
   margin-top: 100px;
 }
+.liked{
+  background: chocolate;
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
+  margin-left: 20px;
+  border: none;
+  color: white;
+}
+.huifu{
+  position: relative;
+  top: -55px;
+  left: 120px;
+  width: 300px;
+}
+.n_likes{
+  color:#40A170 ;
+  position: relative;
+  left: 80px;
+  top: -23px;
+  font-size: 20px;
+}
+
