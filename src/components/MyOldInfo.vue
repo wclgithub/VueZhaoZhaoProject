@@ -12,7 +12,7 @@
             <div class="row">
               <div class="col-md-4 my-img-centet">
                 <!--头像(left)-->
-                <!--<img class="img-circle my-img" src="./images/mydad.png" alt="">-->
+                <img class="img-circle my-img" :src="old.img" alt="">
                 <button class="btn btn-danger ">修改头像</button>
               </div>
               <div class="col-md-8">
@@ -76,41 +76,40 @@
 
 <script>
   import axios from 'axios'
-
   export default {
     name: "",
     data() {
       return {
-        old_info: [
-          {
-            "id": 2,
-            "user_id": 7,
-            "telephone": "18846463366",
-            "name": "赵大爷",
-            "birthday": "1998-8-8",
-            "sex": '男',
-            "ec_telephone": "18845454444",
-            "ec_address": "江苏省苏州市工业园区",
-            "img": "./images/mymom.png"
-          },
-          {
-            "id": 3,
-            "user_id": 7,
-            "telephone": "18846445645",
-            "name": "翠花奶奶",
-            "birthday": "1997-8-8",
-            "sex": '女',
-            "ec_telephone": "18845454444",
-            "ec_address": "江苏省苏州市工业园区",
-            "img": "./images/mydad.png"
-          }
-
-
-        ],
+        old_info: [],
         len:0
       }
     },
     methods: {
+      //获取用户信息
+      getOldInfo:function(){
+        var vm = this;
+        var token = sessionStorage.getItem('token');
+        var user_id = sessionStorage.getItem('u_id');
+        var data = {
+          "user_id": user_id
+        }
+        if (token) {
+          axios.post('http://127.0.0.1:8000/user/getcheckinfo/', data, {headers: {"token": token}
+          })
+            .then(function (response) {
+              vm.old_info = response.data
+              console.log(response.data)
+              console.log(response)
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        }
+        else {
+          alert('请先登录！')
+          this.$router.push({path: "/login"});
+        }
+      },
       //保存全部入住人信息
       saveOldInfo: function () {
         var j = 0;
@@ -130,39 +129,13 @@
             "check_infos": this.old_info
           }
           if (token) {
-            axios.post('http://127.0.0.1:8000/user/addcheckinfo/', data, {
-              headers: {
-                "token": token
-              }
-            })
+            axios.post('http://127.0.0.1:8000/user/addcheckinfo/', data, {headers: {"token": token}})
               .then(function (response) {
-                if (response.data.statuscode == '201') {
+                if (response.data.statuscode == '202') {
                   alert('保存成功！')
-                  var token = sessionStorage.getItem('token');
-                  var user_id = sessionStorage.getItem('u_id');
-                  var data = {
-                    "user_id": user_id
-                  }
-                  if (token) {
-                    axios.post('http://127.0.0.1:8000/user/getcheckinfo/', data, {
-                      headers: {
-                        "token": token
-                      }
-                    })
-                      .then(function (response) {
-                        vm.old_info = response.data
-                        console.log(response.data)
-                        console.log(response)
-                      })
-                      .catch(function (error) {
-                        console.log(error)
-                      })
-                  }
-                  else {
-                    alert('请先登录！')
-                    this.$router.push({path: "/login"});
-                  }
+                  vm.getOldInfo();
                 } else {
+                  alert(response.data.statuscode)
                   alert('保存失败！')
                 }
                 console.log(response.data)
@@ -217,55 +190,36 @@
           "id": id
         }
         if (token) {
-          axios.post('http://127.0.0.1:8000/user/deletecheckinfo/', data, {
-            headers: {
-              "token": token
-            }
-          })
-            .then(function (response) {
-              if (response.data.statuscode == '202') {
-                for (let i in vm.old_info) {
-                  if (vm.old_info[i].id == id) {
-                    delete vm.old_info[i]
-                  }
-                }
-                alert('删除成功！')
-                var token = sessionStorage.getItem('token');
-                var user_id = sessionStorage.getItem('u_id');
-                var data = {
-                  "user_id": user_id
-                }
-                if (token) {
-                  axios.post('http://127.0.0.1:8000/user/getcheckinfo/', data, {
-                    headers: {
-                      "token": token
+          var result;
+          result=confirm("您确定要解除与该入住人的关联吗?注：解除关联将删除包含该入住人的状态、订单，此操作不可逆！"); //在页面上弹出对话框
+          if(result==true){
+
+            axios.post('http://127.0.0.1:8000/user/deletecheckinfo/', data, {headers: {"token": token}})
+              .then(function (response) {
+                if (response.data.statuscode == '202') {
+                  for (let i in vm.old_info) {
+                    if (vm.old_info[i].id == id) {
+                      delete vm.old_info[i]
                     }
-                  })
-                    .then(function (response) {
-                      vm.old_info = response.data
-                      console.log(response.data)
-                      console.log(response)
-                    })
-                    .catch(function (error) {
-                      console.log(error)
-                    })
+                  }
+                  alert('删除成功！')
+                  vm.getOldInfo();
+
                 }
                 else {
-                  alert('请先登录！')
-                  this.$router.push({path: "/login"});
+                  alert('删除失败！')
                 }
+                console.log(response.data)
+                console.log(response)
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+          }
+          else{
+            alert("您已取消操作！");
+          }
 
-
-              }
-              else {
-                alert('删除失败！')
-              }
-              console.log(response.data)
-              console.log(response)
-            })
-            .catch(function (error) {
-              console.log(error)
-            })
         }
         else {
           alert('请先登录！'
@@ -282,34 +236,7 @@
       },
     },
     mounted() {
-
-      var vm = this;
-      var token = sessionStorage.getItem('token');
-      var user_id = sessionStorage.getItem('u_id');
-      var data = {
-        "user_id": user_id
-      }
-      if (token) {
-        axios.post('http://127.0.0.1:8000/user/getcheckinfo/', data, {
-          headers: {
-            "token": token
-          }
-        })
-          .then(function (response) {
-            vm.old_info = response.data
-            console.log(response.data)
-            console.log(response)
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
-      }
-      else {
-        alert('请先登录！')
-        this.$router.push({path: "/login"});
-      }
-
-
+      this.getOldInfo();
     }
   }
 </script>
@@ -394,12 +321,6 @@
     margin: 10px 25px;
   }
 
-  .my-active {
-    background: #40a170;
-    border: white solid 1px;
-    border-radius: 4px 4px 0px 0px;
-    margin-right: 5px;
-  }
 
   .my-active a {
     color: white;

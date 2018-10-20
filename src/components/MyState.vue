@@ -26,14 +26,14 @@
             <div class="row">
               <div class="col-md-4 my-img-centet eat-img">
                 <!--头像(left)-->
-                <img class="img-circle my-img" src="../assets/images/mydad.png" alt="">
+                <img class="img-circle my-img" :src="checked.check_info_img" alt="">
                 <p v-text="checked.check_info_name">王小翠</p>
               </div>
               <div class="col-md-8">
                 <div class="row">
                   <div class="col-md-1"></div>
                   <div class="col-md-10  my-info eat-info">
-                    <div class="input-group my-input" v-for="e in check_info.eat_dyn">
+                    <div class="input-group my-input"  v-for="(e,index) in check_info.eat_dyn" v-if="index<3||eatflag ">
                       <span class="input-group-addon "><p v-text="e.update_time">早饭：</p></span>
                       <input type="text" class="form-control" value="标准营养套餐" disabled="disabled"
                              v-model="e.content">
@@ -44,7 +44,7 @@
                 <div class="row">
                   <div class="col-md-3"></div>
                   <div class="col-md-5 my-old-change">
-                    <button class="btn btn-danger" download="downImg">历史报表</button>
+                    <button class="btn btn-danger" download="downImg" @click="history(1)">查看更多</button>
                   </div>
                   <div class="col-md-4"></div>
                 </div>
@@ -65,15 +65,15 @@
             <div class="row">
               <div class="col-md-4 my-img-centet doctor-img">
                 <!--头像(left)-->
-                <img class="img-circle my-img" src="../assets/images/mymom.png" alt="">
-                <p v-text="checked.check_info_name">王小翠</p>
+
+                <!--<p v-text="checked.check_info_name">王小翠</p>-->
               </div>
               <div class="col-md-8">
                 <div class="row">
                   <div class="col-md-1"></div>
                   <div class="col-md-10  my-info doctor-info">
-                    <div class="input-group my-input" v-for="d in check_info.medicine_dyn">
-                      <span class="input-group-addon "><p v-text="d.update_time">7:00</p></span>
+                    <div class="input-group my-input" v-for="(d,index) in check_info.medicine_dyn" v-if="index<3||docflag ">
+                      <span class="input-group-addon" ><p v-text="d.update_time">7:00</p></span>
                       <input type="text" class="form-control" value="罗红霉素胶囊2粒(随餐服用)" disabled="disabled"
                              v-model="d.content">
                     </div>
@@ -84,7 +84,7 @@
                 <div class="row">
                   <div class="col-md-3"></div>
                   <div class="col-md-5 my-old-change">
-                    <button class="btn btn-danger" download="downImg">历史报表</button>
+                    <button class="btn btn-danger" download="downImg" @click="history(2)">查看更多</button>
                   </div>
                   <div class="col-md-4"></div>
                 </div>
@@ -105,14 +105,13 @@
             <div class="row">
               <div class="col-md-4 my-img-centet active-img">
                 <!--头像(left)-->
-                <img class="img-circle my-img" src="../assets/images/mydad.png" alt="">
-                <p v-text="checked.check_info_name">王小翠</p>
+                <!--<p v-text="checked.check_info_name">王小翠</p>-->
               </div>
               <div class="col-md-8 ">
                 <div class="row">
                   <div class="col-md-1"></div>
                   <div class="col-md-10  my-info active-info">
-                    <div class="input-group my-input" v-for="a in check_info.active_dyn">
+                    <div class="input-group my-input" v-for="(a,index) in check_info.active_dyn" v-if="index<3||artflag ">
                       <span class="input-group-addon "><p v-text="a.update_time">7:00-7:30</p></span>
                       <input type="text" class="form-control" value="晨练太极拳" disabled="disabled" v-model="a.content">
                     </div>
@@ -124,7 +123,7 @@
                   <div class="col-md-3"></div>
                   <div class="col-md-5 my-old-change">
 
-                    <button class="btn btn-danger" download="downImg">历史报表</button>
+                    <button class="btn btn-danger" download="downImg" @click="history(3)">查看更多</button>
                   </div>
                   <div class="col-md-4"></div>
                 </div>
@@ -159,88 +158,37 @@
         ],
         check_info: [
           {
-            "eat_dyn": [
-              {
-                "ci_info_name": "王小翠",
-                "ci_info_id": 2,
-                "ci_info_img": "./images/user.png",
-                "update_time": '2018-09-11 06:12:03',
-                "content": '牛肉汤',
-              },
-              {
-                "ci_info_name": "王小翠",
-                "ci_info_id": 2,
-                "ci_info_img": "./images/user.png",
-                "update_time": '2018-09-11 07:12:03',
-                "content": '汤',
-              },
-              {
-                "ci_info_name": "王小翠",
-                "ci_info_id": 2,
-                "ci_info_img": "./images/user.png",
-                "update_time": '2018-09-11 08:12:03',
-                "content": '肉汤',
-              },
-              {
-                "ci_info_name": "王小翠",
-                "ci_info_id": 2,
-                "ci_info_img": "./images/user.png",
-                "update_time": '2018-09-11 09:12:03',
-                "content": '牛肉',
-              },
-            ],
-            "medicine_dyn": [
-              {
-                "ci_info_name": "王小翠",
-                "ci_info_id": 2,
-                "ci_info_img": "./images/user.png",
-                "update_time": '2018-09-11 06:12:03',
-                "content": '药1',
-              },
-              {
-                "ci_info_name": "王小翠",
-                "ci_info_id": 2,
-                "ci_info_img": "./images/user.png",
-                "update_time": '2018-09-11 07:12:03',
-                "content": '药2',
-              },
-            ],
-            "active_dyn": [
-              {
-                "ci_info_name": "王小翠",
-                "ci_info_id": 2,
-                "ci_info_img": "./images/user.png",
-                "update_time": '2018-09-11 08:12:03',
-                "content": '麻将',
-              },
-              {
-                "ci_info_name": "王小翠",
-                "ci_info_id": 2,
-                "ci_info_img": "./images/user.png",
-                "update_time": '2018-09-11 09:12:03',
-                "content": '散步',
-              },
-            ],
+            "eat_dyn": [],
+            "medicine_dyn": [],
+            "active_dyn": [],
             "person_id": 1,
             "person_name": '王小翠'
           },
         ],
-        checked:{
+        checked: {
           "check_info_id": '',
           "check_info_name": '',
-        }
-
+        },
+        num: 0,
+        flag: false,
+        eatflag:false,
+        docflag:false,
+        artflag:false,
       }
     },
     methods: {
       //显示当前入住人状态信息
       showCheckData(c) {
-        this.checked.check_info_name=c.name;
-        this.checked.check_info_id=c.id;
+        this.eatflag=false,
+        this.docflag=false,
+        this.artflag=false,
+        this.checked.check_info_name = c.name;
+        this.checked.check_info_id = c.id;
+        this.checked.check_info_img = c.img;
         var vm = this;
-        var token=sessionStorage.getItem('token');
-        var user_id=sessionStorage.getItem('u_id');
-        var data={
+        var token = sessionStorage.getItem('token');
+        var user_id = sessionStorage.getItem('u_id');
+        var data = {
           "user_id": user_id,
           "checkinfo_id": c.id,
           "dyn_type": ''
@@ -253,12 +201,47 @@
           .then(function (response) {
             vm.check_info = response.data
             console.log(response.data)
-            console.log(response)
           })
           .catch(function (error) {
             console.log(error)
           })
       },
+      //查看更多
+      history: function (type) {
+        var vm = this;
+        var token = sessionStorage.getItem('token');
+        var user_id = sessionStorage.getItem('u_id');
+        var data = {
+          "user_id": user_id,
+          "checkinfo_id": this.checked.check_info_id,
+          "dyn_type": type
+        }
+        axios.post('http://127.0.0.1:8000/user/getdynlistbycheckinfoid/', data, {
+          headers: {
+            "token": token
+          }
+        })
+          .then(function (response) {
+            console.log(response.data)
+            if (type == 1) {
+              vm.check_info.eat_dyn = response.data.dyn
+              vm.eatflag = true
+            }
+            else if (type == 2) {
+              vm.check_info.medicine_dyn = response.data.dyn
+              vm.docflag = true
+            }
+            else {
+              vm.check_info.active_dyn = response.data.dyn
+              vm.artflag = true
+            }
+
+            console.log(response.data)
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+      }
     },
     mounted() {
       var vm = this;
@@ -279,26 +262,26 @@
             vm.old_info = response.data
             vm.checked.check_info_name = response.data[0].name;
             vm.checked.check_info_id = response.data[0].id;
+            vm.checked.check_info_img= response.data[0].img;
             console.log(response.data)
-            console.log(response)
             let data = {
               "user_id": user_id,
               "checkinfo_id": vm.old_info[0].id,
-              "dyn_type": ''
+              "dyn_type": null
             }
-            axios.post('http://192.168.2.32:8000/user/getdynlistbycheckinfoid/', data, {
+            axios.post('http://127.0.0.1:8000/user/getdynlistbycheckinfoid/', data, {
               headers: {
                 "token": token
               }
             })
               .then(function (response) {
-                vm.check_info = response.data
-                console.log(response.data)
-                console.log(response)
+                vm.check_info = response.data;
+                console.log(vm.check_info)
               })
               .catch(function (error) {
                 console.log(error)
               })
+
           })
           .catch(function (error) {
             console.log(error)

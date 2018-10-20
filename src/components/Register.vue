@@ -5,40 +5,45 @@
       <div class="col-md-8">
 
       </div>
-      <div class="col-md-3 register-form">
-        <div class="first-line">
-          <span class="text-center">注册朝朝优选平台</span>
+      <div class="col-md-3 register-form my-input">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+          <div class="first-line">
+            <h2>注册朝朝优选平台</h2>
+          </div>
+          <div class="input-group">
+            <span class="input-group-addon"><p>手机号码:</p></span>
+            <input type="text" class=" form-control"  v-model.lazy="telephone">
+          </div>
+          <div class="input-group">
+            <span class="input-group-addon "><p>密&nbsp;&nbsp;码:</p></span>
+            <div><input type="password" class=" form-control"  v-model.lazy="password"></div>
+          </div>
+          <div class="input-group">
+            <span class="input-group-addon "><p>确认密码:</p></span>
+            <div><input type="password" class=" form-control" v-model.lazy="password_confirm"></div>
+          </div>
+          <div class="input-group ">
+            <button class="btn btn-lg btn-success text-center btn-message" :disabled="btn_flag" @click = get_messagecode>短信验证码</button>
+            <button class="btn btn-lg btn-success text-center btn-call" :disabled="btn_flag" @click = get_callcode>语音验证码</button>
+          </div>
+          <div class="input-group">
+            <span class="input-group-addon"><p>验证码:</p></span>
+            <input type="text" class=" form-control " v-model.lazy="message_code" style="width: 110px">
+            <input v-model="time_count" class="form-control" style="width: 50px" v-show="time_count">
+          </div>
+
+
+          <div class=" text-center">
+            <span v-text="err_message"></span>
+          </div>
+          <div class="input-group">
+            <button class="btn btn-lg btn-success col-md-6"  @click = regist()>注册</button>
+            <button class="btn btn-lg btn-default col-md-6" >有账号？去登录</button>
+          </div>
+
         </div>
-        <div class="second-line">
-          <div class="font-telephone"><span>手机号码:</span></div>
-          <div><input type="text" class="input-telephone" v-model.lazy="telephone"></div>
-        </div>
-        <div class="third-line">
-          <div class="font-password"><span>密&nbsp;&nbsp;码:</span></div>
-          <div><input type="password" class="input-password" v-model.lazy="password"></div>
-        </div>
-        <div class="fourth-line">
-          <div class="font-passwordconfirm"><span>确认密码:</span></div>
-          <div><input type="password" class="input-passwordconfirm" v-model.lazy="password_confirm"></div>
-        </div>
-        <div class="fifth-line">
-          <button class="btn btn-success text-center btn-message btn-lg" :disabled="btn_flag" @click = get_messagecode>获取短信验证码</button>
-            <span v-text="time_count" v-show="time_count"></span>
-          <button class="btn btn-success text-center btn-call btn-lg" :disabled="btn_flag" @click = get_callcode>获取语音验证码</button>
-        </div>
-        <div class="sixth-line">
-          <div class="font-message-code"><span>验证码:</span></div>
-          <div><input type="text" class="input-message-code" v-model.lazy="message_code"></div>
-        </div>
-        <div class="errinfo text-center">
-          <span v-text="err_message"></span>
-        </div>
-        <div class="seventh-line">
-          <button class="btn btn-lg btn-success" style="width: 50%;margin-left: 100px" @click = regist()>注册</button>
-        </div>
-        <div class="eighth-line">
-          <button class="btn btn-lg btn-default" style="width: 50%;margin-left: 100px">已有账号？去登录</button>
-        </div>
+        <div class="col-md-1"></div>
       </div>
     </div>
   </div>
@@ -154,59 +159,24 @@ export default {
     height: 750px;
   }
   .register-form{
-    border: 1px solid;
     height: 550px;
-    border-radius: 10px;
     background: rgba(255, 255, 255, 0.83)
   }
-  .first-line{
-    margin-top: 15px;
-    height: 60px;
-    font-size: 28px;
-    line-height: 60px;
-    text-align: center;
+  .input-group-addon {
+    margin: 0;
+    padding: 0;
+    width: 100px;
   }
-  .second-line,.third-line,.fourth-line,.sixth-line{
-    margin-top: 30px;
-    display: flex;
-    width: 100%;
+  .my-input input {
+    width: 200px;
   }
-  .font-telephone,.font-password,.font-passwordconfirm,.font-message-code{
-    height: 30px;
-    width: 150px;
-    border: 1px solid;
-    text-align: center;
-    line-height: 30px;
-    font-size: 20px;
+  .input-group{
+    margin-top: 25px;
   }
-  .input-telephone,.input-password,.input-passwordconfirm,.input-message-code{
-    margin-left: 30px;
-    height: 30px;
-    width: 250px;
-    border-radius: 10px;
-  }
-  .btn-message{
-    margin-top: 20px;
-    margin-left: 40px;
-  }
-  .btn-call{
-    margin-left:10px;
-    margin-top: 20px;
-  }
-  .errinfo{
+  .btn-lg{
+    width: 120px;
     height: 40px;
-    font-size: 20px;
-    line-height: 40px;
-    margin-top: 10px;
-    color: red;
-  }
-  .second-line,.eighth-line{
-    margin-top: 10px;
-  }
-  .fifth-line{
-    height: 60px;
-    line-height: 60px;
-    text-align: center;
-    font-size: 25px;
+    font-size: 14px;
+    margin: 5px;
   }
 </style>

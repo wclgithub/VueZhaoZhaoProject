@@ -88,11 +88,7 @@
             "sex":this.user_info.sex,
             "telephone":this.user_info.telephone,
           };
-          axios.post('http://127.0.0.1:8000/user/changeinfo/',data,{
-            headers:{
-              "token":token
-            }
-          })
+          axios.post('http://127.0.0.1:8000/user/changeinfo/',data,{headers:{"token":token}})
             .then(function (response) {
               if(response.data.code=='202'){
                 alert('保存成功');
@@ -120,11 +116,7 @@
       console.log(data['user_id']);
       console.log(typeof(data['user_id']));
       if(token){
-        axios.post('http://127.0.0.1:8000/user/getuserinfo/',data,{
-          headers:{
-            "token":token
-          }
-        })
+        axios.post('http://127.0.0.1:8000/user/getuserinfo/',data,{headers:{"token":token}})
           .then(function (response) {
             // config.headers.common['token']=token
             vm.user_info = response.data;

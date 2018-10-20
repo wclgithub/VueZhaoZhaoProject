@@ -22,7 +22,7 @@
             <div class="row my-coll-house mcoll" v-if="bhstate">
               <div class="col-sm-4 col-md-4 " v-for="b in bh_info">
                 <div class="thumbnail">
-                  <img src="../assets/images/det2.jpg" alt="...">
+                  <img src="../assets/images/det2.jpg" alt="..." :title=b.long_beadhouse__name>
                   <div class="caption">
                     <h4><strong v-text="b.beadhouse__name"></strong></h4>
                     <p>公寓</p>
@@ -115,6 +115,14 @@
               vm.bh_info = response.data;
               if(vm.bh_info.statuscode=='409'){
                 vm.bhstate=false;
+              }else {
+                for(let i of vm.bh_info){
+                  i.long_beadhouse__name=i.beadhouse__name;
+                  if (i.beadhouse__name.length>9){
+                    i.beadhouse__name=i.beadhouse__name.substring(0,9)+'...'
+                  }
+
+                }
               }
               console.log(vm.bh_info)
             })
@@ -217,21 +225,7 @@
               if (response.data.statuscode == '202') {
 
                 alert('取消成功')
-                axios.post('http://127.0.0.1:8000/beadhouse/gethousebyuserid/', data, {
-                  headers: {
-                    "token": token
-                  }
-                })
-                  .then(function (response) {
-                    vm.bh_info = response.data;
-                    if(vm.bh_info.statuscode=='409'){
-                      vm.bhstate=false;
-                    }
-                  })
-                  .catch(function (error) {
-                    console.log(error)
-                  })
-
+                vm.getBhInfo();
               } else {
                 vm.bhstate=false;
               }
@@ -261,20 +255,7 @@
             .then(function (response) {
               if (response.data.statuscode == '202') {
                 alert('取消成功');
-                axios.post('http://127.0.0.1:8000/beadhouse/getroombyuserid/', data, {
-                  headers: {
-                    "token": token
-                  }
-                })
-                  .then(function (response) {
-                    vm.room_info = response.data;
-                    if(vm.room_info.statuscode=='409'){
-                      vm.roomstate=false;
-                    }
-                  })
-                  .catch(function (error) {
-                    console.log(error)
-                  })
+                vm.getRoomInfo();
 
               } else {
                 vm.roomstate=false;
@@ -306,23 +287,8 @@
           })
             .then(function (response) {
               if (response.data.statuscode == '202') {
-
                 alert('取消成功')
-                axios.post('http://127.0.0.1:8000/article/getarticlebyuserid/', data, {
-                  headers: {
-                    "token": token
-                  }
-                })
-                  .then(function (response) {
-                    vm.art_info = response.data;
-                    if(vm.art_info.statuscode=='409'){
-                      vm.artstate=false;
-                    }
-                  })
-                  .catch(function (error) {
-                    console.log(error)
-                  })
-
+                vm.getArtInfo();
               } else {
                 vm.artstate=false;
               }
@@ -351,34 +317,7 @@
     },
 
     mounted() {
-      var vm = this;
-      var token = sessionStorage.getItem('token');
-      var user_id = sessionStorage.getItem('u_id');
-      var data = {
-        "user_id": user_id
-      }
-      if (token) {
-        axios.post('http://127.0.0.1:8000/beadhouse/gethousebyuserid/', data, {
-          headers: {
-            "token": token
-          }
-        })
-          .then(function (response) {
-            vm.bh_info = response.data;
-            if(vm.bh_info.statuscode=='409'){
-              vm.bhstate=false;
-            }
-            console.log(vm.bh_info)
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
-
-      }
-      else {
-        alert('请先登录！')
-        this.$router.push({path: "/login"});
-      }
+      this.getBhInfo();
 
     }
   }

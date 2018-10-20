@@ -14,6 +14,7 @@ import ChangePwd from '@/components/ChangePwd'
 import Modal from '@/components/Modal'
 import ApartInfo from '@/components/ApartInfo'
 import Details from '@/components/Details'
+import SetMeal from '@/components/SetMeal'
 
 import ArticleDetails from '@/components/ArticleDetails'
 
@@ -96,6 +97,11 @@ export default new Router({
       path: '/details',
       name: 'Details',
       component: Details,
+    },
+    {
+      path: '/setMeal',
+      name: 'SetMeal',
+      component: SetMeal,
     },
 
   ]
