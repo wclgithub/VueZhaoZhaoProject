@@ -12,7 +12,7 @@
             <div class="row">
               <div class="col-md-4 my-img-centet">
                 <!--头像(left)-->
-                <!--<img class="img-circle my-img" src="./images/mydad.png" alt="">-->
+                <img class="img-circle my-img" :src="old.img" alt="">
                 <button class="btn btn-danger ">修改头像</button>
               </div>
               <div class="col-md-8">
