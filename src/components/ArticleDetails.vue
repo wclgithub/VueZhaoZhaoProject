@@ -66,7 +66,7 @@
         <div class="m_re" >
           <div class="select-art" v-for="ac in all_comment" v-show="com_flag">
             <div class="select-art-left">
-              <img src="ac.user_img" alt="">
+              <img :src="ac.user_img" alt="">
               <p v-text="ac.user_name">天生丽质小可爱</p>
             </div>
             <div class="select-art-right">

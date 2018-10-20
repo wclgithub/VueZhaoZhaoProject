@@ -33,8 +33,9 @@
               <h4 class="col-md-6">机构性质:</h4>
               <p class="col-md-6" v-text="bh_all_info.property">民营机构</p>
             </div>
-            <div class="panel-body content last">
-              <div class="map"><img src="../assets/images/map.png" alt=""></div>
+            <!--这里是地图-->
+            <div class="panel-body content last" id="map_body">
+              <input id="value" value="青山湖区长春村" type="text">
             </div>
           </div>
           <div class="col-md-8">
@@ -63,11 +64,11 @@
   </div>
   <!--中间内容end-->
 
-  </div>
 </template>
-
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ULxwnQsUr1adHfHGRq4PoGrOBo8KmiYG"></script>
 <script>
   import axios from 'axios'
+
   export default {
 
     data() {
@@ -84,7 +85,7 @@
           "score":'',
           "staff":'',
           "introduce":'',
-        }
+        },
       }
     },
     methods: {
@@ -153,7 +154,7 @@
         else {
           alert('请先登录！')
         }
-      }
+      },
     },
     mounted() {
       var vm = this;
@@ -162,10 +163,59 @@
         .then(function (response) {
           vm.bh_all_info = response.data[0];
           console.log(vm.bh_all_info)
+          var value='';
+          var map = new BMap.Map("map_body");
+          map.centerAndZoom('北京市',10);
+          map.enableScrollWheelZoom();
+
+          var dw=function(){
+            //value=document.getElementById('value').value;
+            var local = new BMap.LocalSearch(map, {
+              renderOptions:{map: map}
+            });
+
+            local.setMarkersSetCallback(function(pois){
+              map.clearOverlays();//清除所有覆盖物后，在叠加第一个点
+              var marker = new BMap.Marker(pois[0].point);
+              map.addOverlay(marker);
+            });
+
+            local.search(value);
+            map.clearOverlays();
+
+          };
+          function getBoundary(){//获取边界
+            var bdary = new BMap.Boundary();
+            bdary.get(value, function(rs){       //获取行政区域
+              map.clearOverlays();        //清除地图覆盖物
+              var count = rs.boundaries.length; //行政区域的点有多少个
+              for(var i = 0; i < count; i++){
+                var ply = new BMap.Polygon(rs.boundaries[i], {
+                  strokeWeight: 1,
+                  strokeColor: "#ff0000"
+                }); //建立多边形覆盖物
+                map.addOverlay(ply);  //添加覆盖物
+                map.setViewport(ply.getPath());    //调整视野
+              }
+            });
+          }
+          var patter=/['省'|'市'|'区'|'县']$/;
+          var pd=function(){
+            value = vm.bh_all_info.address;
+            if(patter.test(value)==true){//关键字结尾是省市县区就调用下面方法
+              getBoundary();
+              if(/社区|小区$/.test(value)==true){//因为区后面结尾，会有小区和社区，即做了一个字方法
+                dw();
+              }
+            }else{//关键字结尾没有省市县区结尾就调用此方法
+              dw();
+            }
+          };
+          pd();
         })
         .catch(function (error) {
           console.log(error)
-        })
+        });
 
       //判断该公寓是否被收藏
       vm.user_id=sessionStorage.getItem('u_id');
@@ -243,9 +293,12 @@
   .glyphicon-star{
     background: orange;
   }
-  .map,.map img{
-    width: 270px;
-    height: 250px;
+  #map_body{
+    width: 300px;
+    height: 300px;
+    border: 1px solid;
+    margin-left: 50px;
+    margin-top: 20px;
   }
 
 </style>
