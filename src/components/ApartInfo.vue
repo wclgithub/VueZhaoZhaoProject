@@ -73,7 +73,7 @@
 
     data() {
       return{
-        flag:true,
+        flag:'',
         user_id:'',
         bh_id:'',
         bh_all_info:{
@@ -94,6 +94,7 @@
         sessionStorage.setItem('bhid',this.bh_id);
         this.$router.push({path: "/house"});
       },
+      //收藏公寓
       collBh:function () {
         var vm = this;
         vm.bh_id=sessionStorage.getItem('bhid');
@@ -124,6 +125,7 @@
           alert('请先登录！')
         }
       },
+      //取消收藏公寓
       delcollBh:function () {
         var vm = this;
         vm.bh_id=sessionStorage.getItem('bhid');
@@ -216,7 +218,6 @@
         });
 
       //判断该公寓是否被收藏
-      vm.bh_id=sessionStorage.getItem('bhid');
       vm.user_id=sessionStorage.getItem('u_id');
       if(vm.user_id){
         var token=sessionStorage.getItem('token')
@@ -228,6 +229,7 @@
             "token":token
           }})
           .then(function (response) {
+            console.log(response.data.collectstatus)
             if(response.data.collectstatus){
                 vm.flag=false;
             }else {

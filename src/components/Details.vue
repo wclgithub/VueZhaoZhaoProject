@@ -67,7 +67,7 @@
                     <!--<button type="button" class="btn center-block glyphicon glyphicon-star roombtnmargin">收藏</button>-->
                     <a href="#">
                       <button type="button"
-                              class="btn center-block glyphicon glyphicon-home roombtnmargin">公寓
+                              class="btn center-block glyphicon glyphicon-home roombtnmargin" @click="goToBh()">公寓
                       </button>
                     </a>
                   </div>
@@ -135,6 +135,8 @@
       }
     },
     methods:{
+
+      //下拉列表选择入住人
       select(item, index) {
         this.isShowSelect = false;
         console.log(item);
@@ -143,6 +145,7 @@
         this.unitName = item.name;
         this.unitId = item.id;
       },
+      //得到当前用户的所有入住人
       getname: function () {
          var user_id=sessionStorage.getItem('u_id')
 
@@ -178,6 +181,10 @@
       },
       arrowDown() {
         this.isShowSelect = !this.isShowSelect;
+      },
+      goToBh:function () {
+        var bh_id=sessionStorage.getItem('bhid');
+        this.$router.push({path: "/apartinfo"});
       },
     },
     mounted() {

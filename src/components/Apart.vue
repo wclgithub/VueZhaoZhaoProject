@@ -216,7 +216,6 @@
       },
       //跳转详情页
       saveBhId:function (id) {
-        alert(id);
         sessionStorage.setItem('bhid',id);
         this.$router.push({path: "/house"});
       },

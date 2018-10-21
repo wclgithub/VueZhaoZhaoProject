@@ -1,209 +1,241 @@
 <template>
-    <div class="col-md-9">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="panel panel-primary">
-            <div class="panel-heading">
-              <h3 class="panel-title glyphicon glyphicon-calendar">每日签到</h3>
-            </div>
-            <div class="panel-body my-every">
-              <div class="my-every-btn"><button class="btn bg-orange my-sign" @click="flag && Sign()" v-text="signtext">签到+1</button></div>
-              <!--<div class="my-every-btn"><button class="btn bg-orange history-sign">历史签到</button></div>-->
-            </div>
+  <div class="col-md-9">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title glyphicon glyphicon-calendar">每日签到</h3>
           </div>
-        </div>
-        <div class="col-md-6">
-          <div class="panel panel-primary">
-            <div class="panel-heading">
-              <h3 class="panel-title glyphicon glyphicon-euro">我的积分</h3>
+          <div class="panel-body my-every">
+            <div class="my-every-btn">
+              <button class="btn bg-orange my-sign" @click="flag && Sign()" v-text="signtext">签到+1</button>
             </div>
-            <div class="panel-body my-every">
-              <div class="my-every-btn"><button class="btn bg-orange user-socre" v-text="user_info.points">375</button></div>
-              <!--<div class="my-every-btn"><button class="btn bg-orange ">积分记录</button></div>-->
-            </div>
+            <!--<div class="my-every-btn"><button class="btn bg-orange history-sign">历史签到</button></div>-->
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-12">
-          <div class="panel panel-primary">
-            <div class="panel-heading">
-              <h3 class="panel-title glyphicon glyphicon-gift">每日奖励</h3>
+      <div class="col-md-6">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title glyphicon glyphicon-euro">我的积分</h3>
+          </div>
+          <div class="panel-body my-every">
+            <div class="my-every-btn">
+              <button class="btn bg-orange user-socre" v-text="user_info.points">375</button>
             </div>
-            <div class="panel-body">
-              <div class="row">
-                <div class="col-md-4  my-img-centet">
-                  <!--头像(left)-->
-                  <img class="img-circle my-img" v-bind:src="user_info.img" style="object-fit: cover;width: 150px;height: 150px;border: 1px solid">
-                  <form id="iconform">
-                    <button class="btn btn-danger my-img-btn">
-                      <p>选择头像</p>
-                      <input type="file" name="user_icon" id="user-pic" style="width: 30px">
-                    </button>
-                    <input name="usericonid" type="text"  v-show="false"  v-model.lazy="useridicon">
-                    <button class="btn btn-danger" v-on:click="upLoadIcon">修改头像</button>
-                  </form>
-                </div>
-                <div class="col-md-8">
-                  <!--头像right-->
-                  <h4 class="glyphicon glyphicon-user">
-                    <span class="user-name" v-text="user_info.user_name">可爱小宝贝</span> LV<span>2</span>
-                  </h4>
-                  <div class="progress">
-                    <div class="progress-bar progress-bar-warning active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
-                      <span class="sr-only">45% Complete</span>
-                    </div>
+            <!--<div class="my-every-btn"><button class="btn bg-orange ">积分记录</button></div>-->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title glyphicon glyphicon-gift">每日奖励</h3>
+          </div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-4  my-img-centet">
+                <!--头像(left)-->
+                <img class="img-circle my-img" v-bind:src="user_info.img"
+                     style="object-fit: cover;width: 150px;height: 150px;border: 1px solid">
+                <form id="iconform">
+                  <button class="btn btn-danger my-img-btn">
+                    <p>选择头像</p>
+                    <input type="file" name="user_icon" id="user-pic" style="width: 30px">
+                  </button>
+                  <input name="usericonid" type="text" v-show="false" v-model.lazy="useridicon">
+                  <button class="btn btn-danger" v-on:click="upLoadIcon">修改头像</button>
+                </form>
+              </div>
+              <div class="col-md-8">
+                <!--头像right-->
+                <h4 class="glyphicon glyphicon-user">
+                  <span class="user-name" v-text="user_info.user_name">可爱小宝贝</span> LV<span>2</span>
+                </h4>
+                <div class="progress">
+                  <div class="progress-bar progress-bar-warning active" role="progressbar" aria-valuenow="45"
+                       aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+                    <span class="sr-only">45% Complete</span>
                   </div>
-                  <div class="row">
-                    <div class="col-md-6"></div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6"></div>
 
-                    <div class="col-md-2 my-change"><a href="#"><button class="btn btn-danger" @click.prevent.stop="changeInfo()">修改信息</button></a></div>
-                    <div class="col-md-2"></div>
-                  </div>
+                  <div class="col-md-2 my-change"><a href="#">
+                    <button class="btn btn-danger" @click.prevent.stop="changeInfo()">修改信息</button>
+                  </a></div>
+                  <div class="col-md-2"></div>
                 </div>
-                <div class="col-md-12 list-btn">
-                  <div class="list-group">
-                    <button type="button" class="list-group-item" ><span class="badge" id="b2">2</span>积分成就奖励</button>
-                    <button type="button" class="list-group-item" ><span class="badge" id="b3">4</span>线上订购奖励</button>
-                    <button type="button" class="list-group-item" ><span class="badge" id="b4">4</span>线下公寓奖励</button>
-                    <button type="button" class="list-group-item" ><span class="badge" id="b5">1</span>其他奖励</button>
-                  </div>
+              </div>
+              <div class="col-md-12 list-btn">
+                <div class="list-group">
+                  <button type="button" class="list-group-item"><span class="badge" id="b2">2</span>积分成就奖励</button>
+                  <button type="button" class="list-group-item"><span class="badge" id="b3">4</span>线上订购奖励</button>
+                  <button type="button" class="list-group-item"><span class="badge" id="b4">4</span>线下公寓奖励</button>
+                  <button type="button" class="list-group-item"><span class="badge" id="b5">1</span>其他奖励</button>
+                </div>
 
-                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
 </template>
 
 <script>
   import axios from 'axios'
-    export default {
-        name: "",
-        data(){
-          return{
-            alldata: [],
-            signtext:'签到+1',
-            flag:'',
-            user_info:{
-            },
-            useridicon : sessionStorage.getItem('u_id')
-          }
+
+  export default {
+    name: "",
+    data() {
+      return {
+        alldata: [],
+        signtext: '签到+1',
+        flag: true,
+        user_info: {},
+        useridicon: sessionStorage.getItem('u_id')
+      }
     },
-      methods:{
-         // 签到
-         Sign:function () {
-           this.user_info.points+=1;
-           this.signtext='已签到';
-           this.flag=false;
-           localStorage.setItem('flag',this.flag);
-           let data={
-             "user_id":sessionStorage.getItem('u_id'),
-             "points":this.user_info.points
-           };
-           let token=sessionStorage.getItem('token');
-           let vm = this;
-           //更新积分
-           axios.post('http://127.0.0.1:8000/user/updatepoints/',data,{
-             headers:{
-               "token":token
-             }
-           })
-             .then(function (response) {
-               vm.state = response.data;
-               if(vm.state.code=='202'){
-                 alert('签到成功')
-               }
-               console.log(response.data)
-               console.log(response)
-             })
-             .catch(function (error) {
-               console.log(error)
-             })
-
-         },
-        changeInfo:function () {
-          this.$emit('changeinfoclick')
-
-        },
-        upLoadIcon:function () {
-          let formdata = new FormData(document.querySelector("#iconform"));
-          axios.post('http://127.0.0.1:8000/user/uploadicon/',formdata)
-            .then(function (response) {
-              if(response.data.statuscode=='202')
-                setTimeout(1);
-                axios.post('http://127.0.0.1:8000/user/getuserinfo/',data,{
-                  headers:{
-                    "token":token
-                  }
-                })
-                  .then(function (response) {
-                    // config.headers.common['token']=token
-                    vm.user_info = response.data;
-                    console.log(vm.user_info )
-                  })
-            })
-        }
-      },
-      mounted() {
-
-        let vm = this;
-        let token=sessionStorage.getItem('token');
-        let data={
-          "user_id":sessionStorage.getItem('u_id')
+    methods: {
+      // 签到
+      Sign: function () {
+        this.user_info.points += 1;
+        var token = sessionStorage.getItem('token');
+        var user_id = sessionStorage.getItem('u_id');
+        var data = {
+          "user_id": sessionStorage.getItem('u_id'),
+          "points": this.user_info.points
         };
-        if(token){
-          axios.post('http://127.0.0.1:8000/user/getuserinfo/',data,{
-            headers:{
-              "token":token
+        let vm = this;
+        //更新积分
+
+        //  更新签到状态
+        axios.post('http://127.0.0.1:8000/user/sign/', data, {
+          headers: {
+            "token": token
+          }
+        })
+          .then(function (response) {
+            vm.state = response.data;
+            if (vm.state.statuscode == '202') {
+              axios.post('http://127.0.0.1:8000/user/updatepoints/', data, {headers: {"token": token}})
+                .then(function (response) {
+                  vm.state = response.data;
+                  if (vm.state.code == '202') {
+                    alert('签到成功')
+                    vm.signtext = '已签到';
+                    vm.flag = false;
+                  }
+                  console.log(response)
+                })
+                .catch(function (error) {
+                  console.log(error)
+                })
+            }
+            console.log(response.data)
+            console.log(response)
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+
+      },
+      //跳转更改个人信息
+      changeInfo: function () {
+        this.$emit('changeinfoclick')
+
+      },
+      //修改头像
+      upLoadIcon: function () {
+        let formdata = new FormData(document.querySelector("#iconform"));
+        axios.post('http://127.0.0.1:8000/user/uploadicon/', formdata)
+          .then(function (response) {
+            if (response.data.statuscode == '202')
+              setTimeout(1);
+            axios.post('http://127.0.0.1:8000/user/getuserinfo/', data, {
+              headers: {
+                "token": token
+              }
+            })
+              .then(function (response) {
+                // config.headers.common['token']=token
+                vm.user_info = response.data;
+                console.log(vm.user_info)
+              })
+          })
+      }
+    },
+    mounted() {
+
+      let vm = this;
+      let token = sessionStorage.getItem('token');
+      let data = {
+        "user_id": sessionStorage.getItem('u_id')
+      };
+      if (token) {
+        axios.post('http://127.0.0.1:8000/user/getuserinfo/', data, {headers: {"token": token}})
+          .then(function (response) {
+            vm.user_info = response.data;
+            console.log(vm.user_info)
+          })
+          .catch(function (error) {
+            console.log(error)
+          });
+        axios.post('http://127.0.0.1:8000/user/checktest/', data, {headers: {"token": token}})
+          .then(function (response) {
+            // config.headers.common['token']=token
+            console.log(response.data)
+            if (response.data.check_result) {
+              vm.flag = true;
+              vm.signtext = '签到+1';
+            }
+            else {
+              vm.flag = false;
+              vm.signtext = '已签到';
+
+
             }
           })
-            .then(function (response) {
-              // config.headers.common['token']=token
-              vm.user_info = response.data;
-              console.log(vm.user_info )
-            })
-            .catch(function (error) {
-              console.log(error)
-            });
-          if(localStorage.getItem('flag')==null){
-            this.flag=1;
-          }else{
-            this.flag=false;
-            this.signtext='已签到';
-          }
-
-        }
-        else {
-          alert('请先登录！');
-          this.$router.push({path: "/login"});
-        }
-
+          .catch(function (error) {
+            console.log(error)
+          });
 
       }
+      else {
+        alert('请先登录！');
+        this.$router.push({path: "/login"});
+      }
+
+
     }
+  }
 </script>
 
 <style scoped>
-  .my-nav-img img{
+  .my-nav-img img {
     height: 65px;
 
   }
 
-  .my-nav a,.my-footer{
+  .my-nav a, .my-footer {
     color: white;
   }
-  .my-every{
+
+  .my-every {
     display: flex;
   }
+
   .my-every-btn {
     flex: 1;
     text-align: center;
   }
-  .my-every-btn button{
+
+  .my-every-btn button {
     color: white;
     width: 80px;
     height: 80px;
@@ -212,53 +244,59 @@
     box-shadow: #7b8099 2px 2px 2px;
   }
 
-  .bg-orange{
+  .bg-orange {
     background: #f0ad4e;
   }
-  .panel-primary > .panel-heading,.bg-green{
+
+  .panel-primary > .panel-heading, .bg-green {
     background: #40a170;
   }
+
   .nav > li > a:hover,
   .nav > li > a:focus {
     color: black;
   }
 
-
-  .my-change{
+  .my-change {
     margin-left: 15px;
   }
 
-  .my-input span p{
+  .my-input span p {
     margin: 0;
     padding: 0;
     width: 150px;
   }
-  .my-img-centet{
+
+  .my-img-centet {
     text-align: center;
   }
 
-  .my-active a{
+  .my-active a {
     color: white;
   }
 
-  .order-img img{
+  .order-img img {
     width: 100px;
     height: 60px;
   }
-  .my-nav-size ul li{
+
+  .my-nav-size ul li {
     font-size: 14px;
 
   }
-  #user-pic{
-    opacity:0;
-    filter:alpha(opacity=0);
+
+  #user-pic {
+    opacity: 0;
+    filter: alpha(opacity=0);
   }
-  .my-img-btn{
+
+  .my-img-btn {
     width: 85px;
     height: 35px;
   }
-  .my-img-btn p{
-    position:absolute;
+
+  .my-img-btn p {
+    position: absolute;
   }
 
 

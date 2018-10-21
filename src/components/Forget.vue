@@ -46,11 +46,13 @@ export default {
       if (reg.test(this.f_tel)) {
         var user = this.f_tel
         var that = this
-        axios.get('http://127.0.0.1:8000/user/sendmessage/'+user+'/')
+        console.log(user)
+        axios.get('http://127.0.0.1:8000/user/updatepwd/'+user+'/')
           .then(function (response) {
             // vm.list = response.data;
             console.log(response)
             if (response.data=='202') {
+              that.dis_flag=true;
               this.$options.methods.next()
             }
 
@@ -83,10 +85,17 @@ export default {
           "v_code":this.f_code,
           "telephone":this.f_tel
         }
+        var that=this
         axios.post('http://127.0.0.1:8000/user/forgetpassword/',user)
           .then(function (response) {
             // vm.list = response.data;
             console.log(response)
+            if (response.data.statuscode=='202'){
+              sessionStorage.setItem('token', response.headers.token);
+              that.$router.push({path: "/changepwd"});
+            }else {
+              that.f_err='验证码不正确';
+            }
 
           })
           .catch(function (error) {

@@ -19,7 +19,7 @@
             <div v-text="details.date">2018-10-14 17:37:58</div>
           </div>
           <div class="col-sm-8">
-            <p><a href="#">来源：小太阳养老公寓</a></p>
+            <p><a href="#" v-text="details.beadhouse__name">来源：小太阳养老公寓</a></p>
           </div>
           <div class="col-sm-1">
             <a href="#">举报</a>
@@ -64,7 +64,7 @@
           </form>
         </div>
         <div class="m_re" >
-          <div class="select-art" v-for="ac in all_comment" v-show="com_flag">
+          <div class="select-art" v-for="(ac,index) in all_comment" v-show="com_flag">
             <div class="select-art-left">
               <img :src="ac.user_img" alt="">
               <p v-text="ac.user_name">天生丽质小可爱</p>
@@ -73,10 +73,15 @@
               <p v-text="ac.comment_content">
                 自从健康喝水之后年轻了十岁。喝年轻了多喝水好，我都喝白了！喝年轻了多喝水好，我都喝白了！喝年轻了多喝水好，我都喝白了！喝年轻了多喝水好，我都喝白了！喝年轻了多喝水好，我都喝白了！喝年轻了多喝水好，我都喝白了！喝年轻了多喝水好，我都喝白了！喝年轻了！</p>
               <form action="">
-                <input type="submit" name="" value="赞" class="praise">
-                <input type="submit" name="" value="踩" class="tread">
-                <input type="text">
-                <input type="submit" name="" value="回复" class="replay">
+                <button class="praise" v-on:click.prevent="zan(ac.comment_id,ac.islike)"  key="ac.comment_id" v-if="ac.islike" >赞</button>
+                <input type="submit" name="" value="赞" class="liked" v-on:click.prevent="zan(ac.comment_id)" v-if="!ac.islike" key="ac.f_id" v-bind:disabled="dis_flag">
+                <div v-text="ac.likes" class="n_likes"></div>
+                <!--<input type="submit" name="" value="踩" class="tread">-->
+                <div class="huifu">
+                  <input type="text" ref='input1' >
+                  <input type="submit" name="" value="回复" class="replay" v-on:click="replay_comm(ac.comment_id,index)">
+                </div>
+
 
               </form>
             </div>
@@ -105,6 +110,8 @@
         art_id: 0,
         all_comment: {},
         com_flag: true,
+        dis_flag:true,
+        replay_comm_word:'',
       }
     },
     mounted: function () {
@@ -119,7 +126,7 @@
         axios.get('http://127.0.0.1:8000/article/getarticlebyid/' + that.art_id + '/')
           .then(function (response) {
             // vm.list = response.data;
-            // console.log(response)
+            console.log(response)
             that.details = response.data[0];
             // console.log(that.details)
 
@@ -133,7 +140,8 @@
         var u_id = sessionStorage.getItem('u_id')
         //如果用户登录
         if (u_id) {
-          //如果在登录前输入了文字
+
+          如果在登录前输入了文字
           if (this.comment) {
             var user = {
               "content": this.comment,
@@ -160,7 +168,7 @@
               })
 
           } else {
-            this.comment = '输入内容不能为空'
+            this.comment = '内容不能为空'
           }
         }
         //如果用户没有登录
@@ -186,25 +194,117 @@
       getallreplay: function () {
 
         var that = this
-        axios.get('http://127.0.0.1:8000/article/getcommentsbyarticleid/' + that.art_id + '/')
-          .then(function (response) {
-            // vm.list = response.data;
-            // console.log(response.data)
-            if (response.data.length != 0) {
+        var u_id=sessionStorage.getItem('u_id')
+        if (u_id){
+          axios.get('http://127.0.0.1:8000/article/getcommentsbyarticleid/' + that.art_id + '/'+u_id+'/')
+            .then(function (response) {
+              if (response.data.length != 0) {
+                console.log(response.data)
+                that.all_comment = response.data
+                console.log(that.all_comment)
+              }
+              else {
 
-              that.all_comment = response.data
-              console.log(that.all_comment)
+                that.com_flag = false
+              }
+
+
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        }else {
+          axios.get('http://127.0.0.1:8000/article/getcommentsbyarticleid/' + that.art_id + '/'+'/')
+            .then(function (response) {
+              if (response.data.length != 0) {
+                console.log(response.data)
+                that.all_comment = response.data
+                console.log(that.all_comment)
+              }
+              else {
+
+                that.com_flag = false
+              }
+
+
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        }
+
+      },
+      zan:function (c_id,islike) {
+        if (sessionStorage.getItem('u_id')) {
+          var user={
+            "comment_id":c_id,
+            "user_id":sessionStorage.getItem('u_id'),
+          }
+          var token = sessionStorage.getItem('token');
+          var that=this;
+
+          axios.post('http://127.0.0.1:8000/article/clickagree/', user, {
+            headers: {
+              "token": token
             }
-            else {
+          })
+            .then(function (response) {
+              console.log(response.data)
+              if (response.data.statuscode=='202') {
 
-              that.com_flag = false
+              }
+
+
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        }else {
+          sessionStorage.setItem('from','/articlelist');
+          this.$router.push({path: "/login"});
+        }
+
+      },
+      replay_comm:function (comment_id,index) {
+
+        if (sessionStorage.getItem('u_id')) {
+
+          // console.log(this.$refs.input1[0].value)
+          // console.log(this.$refs.input1)
+          if (this.$refs.input1[index].value){
+            var user={
+              "user_id":sessionStorage.getItem('u_id'),
+              "article_id":this.$route.query.article_id,
+              "content":this.$refs.input1[index].value,
+              "comment_id":comment_id
+
             }
+            axios.post('http://127.0.0.1:8000/article/replycomment/',user,{
+              headers:{
+                "token":sessionStorage.getItem('token')
+              }
+            })
+              .then(function (response) {
+                console.log(user)
+                // vm.list = response.data;
+                console.log(response)
+                if (response.data.statuscode=='202'){
+                  this.$refs.input1[index].value = ''
+                }
 
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+          }else {
+            this.$refs.input1[index].value = ''
+          }
 
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
+        }else {
+          sessionStorage.setItem('from', '/articlelist')
+          this.$router.push({path: "/login"});
+        }
+
       }
     }
   }

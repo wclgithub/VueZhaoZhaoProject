@@ -15,6 +15,7 @@
 </template>
 
 <script>
+  import axios from 'axios'
   export default {
     name: 'NavMain',
     data: function () {
@@ -40,20 +41,23 @@
               "password": this.new_pwd
             }
             var that = this;
-            alert(this.new_pwd)
-            // axios.post('http://127.0.0.1:8000/changepwd/', datas)
-            //     .then(function (response){
-            //         console.log(response.data)
-            //         if (response.data=='203'){
-            //             that.n_err='密码修改成功，即将为你跳转'
-            that.$router.push({path: "/login"});
-            //         }else {
-            //             that.n_err='密码修改失败，请稍后重试'
-            //         }
-            //     })
-            //     .catch(function (error) {
-            //         console.log(error)
-            //     })
+            axios.post('http://127.0.0.1:8000/user/changepassword/', datas, {
+              headers: {
+                "token": sessionStorage.getItem('token')
+              }
+            })
+              .then(function (response) {
+                console.log(response.data)
+                if (response.data.statuscode == '202') {
+                  that.n_err = '密码修改成功，即将为你跳转'
+                  that.$router.push({path: "/login"});
+                } else {
+                  that.n_err = '密码修改失败，请稍后重试'
+                }
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
           } else {
             this.n_err = '两次密码不一致'
           }
