@@ -28,7 +28,6 @@
               </div>
             </div>
             <ul class="list-group">
-
               <li class="list-group-item">
                 <div class="row">
                   <div class="col-md-1"><a href="javascript:void 0">价位</a></div>
@@ -36,14 +35,10 @@
                   </div>
                   <div class="col-md-2"><a href="javascript:void 0" data-min=0 data-max=1000 @click="getPrice($event)">1千元以下</a>
                   </div>
-                  <div class="col-md-2"><a href="javascript:void 0" data-min=1000 data-max=2000
-                                           @click="getPrice($event)">1-2千元</a></div>
-                  <div class="col-md-2"><a href="javascript:void 0" data-min=2000 data-max=3000
-                                           @click="getPrice($event)">2-3千元</a></div>
-                  <div class="col-md-2"><a href="javascript:void 0" data-min=3000 data-max=4000
-                                           @click="getPrice($event)">3-4千元</a></div>
-                  <div class="col-md-2"><a href="javascript:void 0" data-min=4000 data-max=50000
-                                           @click="getPrice($event)">5千元以上</a></div>
+                  <div class="col-md-2"><a href="javascript:void 0" data-min=1000 data-max=2000 @click="getPrice($event)">1-2千元</a></div>
+                  <div class="col-md-2"><a href="javascript:void 0" data-min=2000 data-max=3000 @click="getPrice($event)">2-3千元</a></div>
+                  <div class="col-md-2"><a href="javascript:void 0" data-min=3000 data-max=4000 @click="getPrice($event)">3-4千元</a></div>
+                  <div class="col-md-2"><a href="javascript:void 0" data-min=5000 data-max=50000 @click="getPrice($event)">5千元以上</a></div>
                 </div>
               </li>
               <li class="list-group-item">
@@ -84,7 +79,7 @@
                 <div class="col-md-8"></div>
               </div>
             </div>
-            <div class="panel-body bh-info" v-for="b in result_list" v-if="b.min_price>=min_price&&b.min_price<=max_price&&b.score>=min_score&&b.score<=max_score">
+            <div class="panel-body bh-info" v-for="b in result_list" >
               <div class="bh-border-bottom" :id="b.id">
                 <div class="row">
                   <div class="col-md-3 bhimg">
@@ -144,8 +139,9 @@
         sort_type_one:0,
         sort_type_two:0,
         page_index : 1,
-        page_size : 1,
-        result_list:[]
+        page_size : 0,
+        result_list:[],
+        new_result_list:[],
       }
     },
     methods: {
@@ -172,8 +168,8 @@
             console.log(error)
           });
       },
-      //价格筛选
-      getPrice: function (event) {
+      // 筛选价格
+      getPrice:function(event){
         var childrens = event.target.parentElement.parentElement.children;
         for (let c of childrens) {
           c.firstElementChild.style.background = 'white';
@@ -183,21 +179,8 @@
         event.target.style.color = 'white';
         this.min_price = event.target.dataset.min;
         this.max_price = event.target.dataset.max;
-        var min_max_price = {};
-        min_max_price["min_price"] = this.min_price,
-          min_max_price["max_price"] = this.max_price
-      },
-      //地区筛选
-      getAddress: function (event) {
-        var childrens = event.target.parentElement.parentElement.children;
-        for (let c of childrens) {
-          c.firstElementChild.style.background = 'white';
-          c.firstElementChild.style.color = '#269abc';
-        }
-        event.target.style.background = '#efac50';
-        event.target.style.color = 'white';
-        this.city_address = event.target.dataset.address;
-        // alert(this.city_address);
+        this.page_index = 1;
+        this.changeNewResultList();
       },
       //评分筛选
       getScore: function (event) {
@@ -210,10 +193,19 @@
         event.target.style.color = 'white';
         this.min_score = event.target.dataset.min;
         this.max_score = event.target.dataset.max;
-        var min_max_score = {};
-        min_max_score["min_score"] = this.min_score,
-          min_max_score["max_score"] = this.max_score
+        this.page_index = 1;
+        this.changeNewResultList();
       },
+      changeNewResultList:function(event){
+        this.new_result_list=[];
+        for(let beadhouse of this.bh_info){
+          if (beadhouse.score>=this.min_score && beadhouse.score<this.max_score && beadhouse.min_price>=this.min_price && beadhouse.min_price<this.max_price){
+            this.new_result_list.push(beadhouse)
+          }
+        }
+        this.showContent();
+      },
+
       //跳转详情页
       saveBhId:function (id) {
         sessionStorage.setItem('bhid',id);
@@ -230,10 +222,17 @@
       },
       showContent:function () {
         let start = (this.page_index-1) * 10;
-        let end = this.bh_info.length<=this.page_index*10-1?this.bh_info.length:this.page_index*10-1;
+        let end = this.new_result_list.length-1<=this.page_index*10-1?this.new_result_list.length-1:this.page_index*10-1;
         this.result_list = [];
-        for (let i = start;i<=end;i++){
-          this.result_list.push(this.bh_info[i]);
+        if (this.new_result_list.length>0){
+          for (let i = start;i<=end;i++){
+            this.result_list.push(this.new_result_list[i]);
+          }
+          if(this.new_result_list.length/10 == 0){
+            this.page_size = this.new_result_list.length/10;
+          } else{
+            this.page_size = Math.ceil(this.new_result_list.length/10);
+          }
         }
       },
       getIndex: function (i) {
@@ -266,13 +265,13 @@
       axios.get('http://127.0.0.1:8000/beadhouse/gethouseby//'+vm.search_data+'///')
         .then(function (response) {
           vm.bh_info = response.data;
+          vm.new_result_list = vm.bh_info;
           vm.showContent();
-          if(vm.bh_info.length/10 == 0){
-            vm.page_size = vm.bh_info.length/10;
+          if(vm.new_result_list.length/10 == 0){
+            vm.page_size = vm.new_result_list.length/10;
           } else{
-            vm.page_size = Math.ceil(vm.bh_info.length/10);
+            vm.page_size = Math.ceil(vm.new_result_list.length/10);
           }
-          console.log(vm.bh_info)
         })
         .catch(function (error) {
           console.log(error)

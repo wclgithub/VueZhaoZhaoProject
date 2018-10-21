@@ -189,7 +189,7 @@
         axios.post('http://127.0.0.1:8000/user/checktest/', data, {headers: {"token": token}})
           .then(function (response) {
             // config.headers.common['token']=token
-            console.log(response.data)
+            console.log(response.data.check_result)
             if (response.data.check_result) {
               vm.flag = true;
               vm.signtext = '签到+1';

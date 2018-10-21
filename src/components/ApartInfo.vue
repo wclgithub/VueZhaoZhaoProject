@@ -48,7 +48,7 @@
                     <p v-text="bh_all_info.introduce">南京易发红日养老院以温馨的居家氛围、个性化的服务和专业有爱心的团队，致力于让每位住户有尊严的享受健康愉悦及丰富多彩的生活，促进住户及员工家庭的幸福。南京易发红日养老院推行完全以住户为中心的照护计划。其核心理念是尊重每一位老人的个体差异，为住户提供符合他/她健康及生活习惯的个性化服务，实现高品质的老年生活。作为直营连锁的养老服务品牌，也是国内最早实践社会化养老的企业，南京易发红日养老院布局覆盖北京、上海、广东、浙江、海南等地区，居国内领先地位。恭和苑希望通过自身的实践与努力，成为中国养老服务行业的标杆</p>
                     <p class="height center-block">
                       <button class="btn btn-success glyphicon glyphicon-bed col-md-2" role="button" @click="saveBhId()">查看房间</button>
-                      <button class="btn btn-success glyphicon glyphicon-apple col-md-2" role="button">查看套餐</button>
+                      <button class="btn btn-success glyphicon glyphicon-apple col-md-2" role="button" @click="goMeal()">查看套餐</button>
                       <button class="btn btn-success glyphicon glyphicon-star-empty col-md-2" role="button" v-if="flag" @click="collBh()">收藏公寓</button>
                       <button class="btn btn-success glyphicon glyphicon-star col-md-2" role="button" v-if="!flag" @click="delcollBh()">已收藏</button>
                     </p>
@@ -124,6 +124,9 @@
         else {
           alert('请先登录！')
         }
+      },
+      goMeal:function(){
+        this.$router.push('/setmeal')
       },
       //取消收藏公寓
       delcollBh:function () {

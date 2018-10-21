@@ -26,38 +26,55 @@ export default {
     props :['page_size'],
     data () {
       return {
-        page_control:[1,2,3,4,5],
+        page_control:[],
         pageindex : 1,
       }
     },
     mounted () {
 
     },
+    watch:{
+      "page_size": function(newpage,oldpage) {
+        this.pageindex = 1;
+        this.changeIndex(this.pageindex)
+      },
+    deep:true,
+  },
     methods:{
       changeIndex:function(i){
-        this.page_control = [];
         this.pageindex = i;
-        if(i>=1 && i<4){
+        if(this.page_size<=5){
+          this.page_control = [];
+          for(let j = 1;j<=this.page_size;j++){
+            this.page_control.push(j)
+          }
+        }
+        else if(i>=1 && i<4){
           if(this.page_size<=5){
+            this.page_control = [];
             for(let j = 1;j<=this.page_size;j++){
               this.page_control.push(j)
             }
           }else {
+            this.page_control = [];
             for(let j = 1;j<=5;j++){
               this.page_control.push(j)
             }
           }
         }
         else if(i>=4 && i<=this.page_size-2) {
+          this.page_control = [];
           for(let j = i-2;j<=i+2;j++){
             this.page_control.push(j)
           }
         }else if(i+2>this.page_size){
+          this.page_control = [];
           for(let j = this.page_size-4;j<=this.page_size;j++){
             this.page_control.push(j)
           }
         }
         else {
+          this.page_control = [];
           for(let j = i-2;j<=this.page_size;j++){
             this.page_control.push(j)
           }
