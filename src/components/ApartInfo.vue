@@ -168,7 +168,7 @@
           console.log(vm.bh_all_info)
           var value='';
           var map = new BMap.Map("map_body");
-          map.centerAndZoom('北京市',10);
+          map.centerAndZoom('北京市',15);
           map.enableScrollWheelZoom();
 
           var dw=function(){
