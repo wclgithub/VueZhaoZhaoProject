@@ -5,7 +5,7 @@
       <router-link to="/"><div class="col-md-4 my-nav-img"><img src="../assets/images/nav-logo.png" alt=""></div></router-link>
       <div class="col-md-5">
         <ul class="nav nav-pills my-nav">
-          <li role="presentation">
+          <li role="presentation" v-show="true">
             <router-link to="./login"><a href="javascript:void 0">登录</a></router-link>
           </li>
           <li role="presentation">
@@ -24,10 +24,10 @@
             <router-link to="./cart"><a href="javascript:void 0">购物车</a></router-link>
           </li>
           <li role="presentation">
-            <router-link to="./personalcenter"><a href="javascript:void 0" >个人中心</a></router-link>
+            <router-link to="./personalcenter"><a href="javascript:void 0" v-show="true">个人中心</a></router-link>
           </li>
           <li role="presentation" v-show="true">
-            <a href="javascript:void 0" @click = logOut >退出</a>
+            <a href="javascript:void 0" @click="logOut" v-show="false">退出</a>
           </li>
         </ul>
       </div>
@@ -41,14 +41,20 @@ export default {
   name: 'NavMain',
   data () {
     return {
+      islogin:false
     }
   },
   mounted:function () {
+    let token = sessionStorage.getItem('token');
+    if (token){
+      this.islogin = true
+    }else
+      this.islogin = false
 
   },
   methods:{
     logOut:function () {
-      sessionStorage.clear();
+      this.islogin = false;
       this.$router.push({path:"/login"});
     }
   }

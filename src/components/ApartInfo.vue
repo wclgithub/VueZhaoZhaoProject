@@ -297,7 +297,6 @@
     width: 300px;
     height: 300px;
     border: 1px solid;
-    margin-left: 50px;
     margin-top: 20px;
   }
 
