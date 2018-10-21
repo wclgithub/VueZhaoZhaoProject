@@ -28,23 +28,7 @@
               </div>
             </div>
             <ul class="list-group">
-              <li class="list-group-item">
-                <div class="row">
-                  <div class="col-md-1"><a href="javascript:void 0">城市</a></div>
-                  <div class="col-md-1"><a href="javascript:void 0" data-address="不限" @click="getAddress($event)">不限</a>
-                  </div>
-                  <div class="col-md-2"><a href="javascript:void 0" data-address="北京" @click="getAddress($event)">北京</a>
-                  </div>
-                  <div class="col-md-2"><a href="javascript:void 0" data-address="上海" @click="getAddress($event)">上海</a>
-                  </div>
-                  <div class="col-md-2"><a href="javascript:void 0" data-address="深圳" @click="getAddress($event)">深圳</a>
-                  </div>
-                  <div class="col-md-2"><a href="javascript:void 0" data-address="广州" @click="getAddress($event)">广州</a>
-                  </div>
-                  <div class="col-md-2"><a href="javascript:void 0" data-address="大连" @click="getAddress($event)">大连</a>
-                  </div>
-                </div>
-              </li>
+
               <li class="list-group-item">
                 <div class="row">
                   <div class="col-md-1"><a href="javascript:void 0">价位</a></div>
