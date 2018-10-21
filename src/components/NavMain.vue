@@ -5,11 +5,11 @@
       <router-link to="/"><div class="col-md-4 my-nav-img"><img src="../assets/images/nav-logo.png" alt=""></div></router-link>
       <div class="col-md-5">
         <ul class="nav nav-pills my-nav">
-          <li role="presentation" v-show="true">
-            <router-link to="./login"><a href="javascript:void 0">登录</a></router-link>
+          <li role="presentation">
+            <router-link to="./login"><a href="javascript:void 0" v-show="!islogin">登录</a></router-link>
           </li>
           <li role="presentation">
-            <router-link to="./register"><a href="javascript:void 0">注册</a></router-link>
+            <router-link to="./register"><a href="javascript:void 0" v-show="!islogin">注册</a></router-link>
           </li>
           <li role="presentation">
             <router-link to="./apart"><a href="javascript:void 0">养老院</a></router-link>
@@ -24,10 +24,10 @@
             <router-link to="./cart"><a href="javascript:void 0">购物车</a></router-link>
           </li>
           <li role="presentation">
-            <router-link to="./personalcenter"><a href="javascript:void 0" v-show="true">个人中心</a></router-link>
+            <router-link to="./personalcenter"><a href="javascript:void 0" >个人中心</a></router-link>
           </li>
           <li role="presentation" v-show="true">
-            <a href="javascript:void 0" @click="logOut" v-show="false">退出</a>
+            <a href="javascript:void 0" @click = logOut v-show="islogin">退出</a>
           </li>
         </ul>
       </div>
@@ -45,16 +45,16 @@ export default {
     }
   },
   mounted:function () {
-    let token = sessionStorage.getItem('token');
-    if (token){
-      this.islogin = true
-    }else
-      this.islogin = false
-
+    var u_id=sessionStorage.getItem('u_id')
+    if (u_id){
+      this.islogin=true
+    }
+    window.location.reload()
   },
   methods:{
     logOut:function () {
-      this.islogin = false;
+      sessionStorage.clear();
+      this.islogin=false;
       this.$router.push({path:"/login"});
     }
   }
