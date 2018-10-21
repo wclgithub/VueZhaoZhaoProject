@@ -49,7 +49,6 @@ export default {
     if (u_id){
       this.islogin=true
     }
-    window.location.reload()
   },
   methods:{
     logOut:function () {
