@@ -39,7 +39,7 @@
           </div>
           <div class="input-group">
             <button class="btn btn-lg btn-success col-md-6"  @click = regist()>注册</button>
-            <button class="btn btn-lg btn-default col-md-6" >有账号？去登录</button>
+            <button class="btn btn-lg btn-default col-md-6" @click=goToLogin()>有账号？去登录</button>
           </div>
 
         </div>
@@ -144,6 +144,9 @@ export default {
         }
       },1000);
     },
+    goToLogin:function(){
+      this.$router.push({path: "/login"});
+    }
   }
 }
 

@@ -9,13 +9,12 @@
       <!--巨幕-->
       <div class="row">
         <div class="col-md-12 ">
-          <div class="jumbotron">
-            <div class="row">
-              <div class="col-md-7 title-img">
+          <div class="jumbotron title-img">
+            <div class="row" >
+              <div class="col-md-7 ">
               </div>
               <div class="col-md-5">
                 <span class="house-title">
-
                 </span>
                 <p>让您的父母得到最温暖的关怀！</p>
                 <div class="row">
@@ -23,7 +22,7 @@
                     <a class="btn btn-success btn-lg" href="#" role="button" @click="goToBhiInfo()">公寓简介</a>
                   </div>
                   <div class="col-md-6">
-                    <a class="btn btn-success btn-lg" href="#" role="button">增值套餐</a>
+                    <a class="btn btn-success btn-lg" href="#" role="button" @click="goToMealsList">增值套餐</a>
                   </div>
                 </div>
               </div>
@@ -72,38 +71,10 @@
         </div>
       </div>
       <!--房型end-->
-      <!--页码-->
-      <div class="row">
-        <div class="col-md-4"></div>
-        <div class="col-md-4">
-          <nav aria-label="Page navigation">
-            <ul class="pagination">
-              <li>
-                <a href="#" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                </a>
-              </li>
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
-              <li>
-                <a href="#" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-        <div class="col-md-4"></div>
-      </div>
-      <!--页码end-->
     </div>
     <!--中间内容end-->
   </div>
   <!--中间内容end-->
-  </div>
   <!--内容右end-->
 </template>
 
@@ -127,6 +98,10 @@
         goToDetails:function (roomid) {
           sessionStorage.setItem('roomid',roomid);
           this.$router.push({path: "/details"});
+        },
+        //跳转套餐列表页
+        goToMealsList:function () {
+          this.$router.push({path: "/setmeal"});
         },
       },
       mounted() {
@@ -222,6 +197,8 @@
   .my-img-btn p{
     position:absolute;
   }
-
+  .title-img{
+    background-image: url("../assets/images/room02.png");
+  }
 
 </style>

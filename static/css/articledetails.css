@@ -328,7 +328,7 @@ body,ul,li,h1,h2,h3,h4,p{
 .select-art{
   margin-top: 30px;
   display: flex;
-  height: 200px;
+  /*height: 200px;*/
 }
 .select-art-left{
   flex: 1;
@@ -353,6 +353,7 @@ body,ul,li,h1,h2,h3,h4,p{
 .select-art-right{
   /*margin-top: 30px;*/
   /*margin-bottom: 30px;*/
+  height: 100%;
   flex: 4;
   background: rgba(64, 161, 112, 0.21);
   padding: 20px;
@@ -416,7 +417,7 @@ body,ul,li,h1,h2,h3,h4,p{
   height: 70px;
 }
 .cart-goodsimg div{
-  height: 70px;
+  /*height: 70px;*/
   float: left;
   margin: auto 0;
 }
@@ -465,7 +466,7 @@ body,ul,li,h1,h2,h3,h4,p{
 .cart-groom-set-meal div{
   flex: 1;
   width: 200px;
-  height: 200px;
+  /*height: 200px;*/
   background: #e9fff8;
   box-sizing: border-box;
   /*border: white solid 3px;*/
@@ -600,5 +601,63 @@ body,ul,li,div{
   left: 80px;
   top: -23px;
   font-size: 20px;
+}
+.re-xian{
+  width: 730px;
+  height: 2px;
+  background: white;
+  margin-left: 20px;
+}
+.replay-replay{
+  float: none;
+  width: 780px;
+  height: 40px;
+  margin-top: 10px;
+  margin-left: 20px;
+}
+.m_re{
+  margin-bottom: 50px;
+}
+.r-c{
+  float: right;
+}
+.re-comm{
+  color: #40A170;
+  font-size: 20px;
+  font-weight: bold;
+  margin-left: 20px;
+  margin-top: 10px;
+}
+.art-cllo img{
+  width: 20px;
+  position: relative;
+  left: 8px;
+  top: -0.5px;
+
+}
+.art-cllo{
+  cursor:pointer;
+  color: white;
+  background:#40A170 ;
+  width: 60px;
+  height: 20px;
+  margin-right: 20px;
+  border-radius: 5px;
+}
+.a-art-cllo{
+  cursor:pointer;
+  color: white;
+  background:orange ;
+  width: 60px;
+  height: 20px;
+  margin-right: 20px;
+  border-radius: 5px;
+}
+.a-art-cllo img{
+  width: 20px;
+  position: relative;
+  left: 8px;
+  top: -0.5px;
+
 }
 
