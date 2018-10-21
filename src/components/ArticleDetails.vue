@@ -18,8 +18,14 @@
           <div class="col-sm-2">
             <div v-text="details.date">2018-10-14 17:37:58</div>
           </div>
-          <div class="col-sm-8">
+          <div class="col-sm-7">
             <p><a href="#" v-text="details.beadhouse__name">来源：小太阳养老公寓</a></p>
+          </div>
+          <div class="col-sm-1 art-cllo"  v-show="b_cllo" v-on:click="cllo_art">
+            <div>收藏<img src="../assets/images/b_c.png" alt=""></div>
+          </div>
+          <div class="col-sm-1 a-art-cllo" v-show="!b_cllo" v-on:click="canl_cllo_art">
+            <div>收藏<img src="../assets/images/a_c.png" alt=""></div>
           </div>
           <div class="col-sm-1">
             <a href="#">举报</a>
@@ -32,7 +38,8 @@
           <h2 class="col-lg-12 panel panel-success">专题推荐</h2>
           <div class="cccr-hot">
             <div class="cccr-hot-left panel-body">
-              <h4><a href="">健康生活，从喝水做起</a></h4>
+
+              <h4><a href="">青光眼的预防</a></h4>
               <div class="xian">
               </div>
             </div>
@@ -66,7 +73,7 @@
         <div class="m_re" >
           <div class="select-art" v-for="(ac,index) in all_comment" v-show="com_flag">
             <div class="select-art-left">
-              <img :src="ac.user_img" alt="">
+              <img src="ac.user_img" alt="">
               <p v-text="ac.user_name">天生丽质小可爱</p>
             </div>
             <div class="select-art-right">
@@ -76,15 +83,24 @@
                 <button class="praise" v-on:click.prevent="zan(ac.comment_id,ac.islike)"  key="ac.comment_id" v-if="ac.islike" >赞</button>
                 <input type="submit" name="" value="赞" class="liked" v-on:click.prevent="zan(ac.comment_id)" v-if="!ac.islike" key="ac.f_id" v-bind:disabled="dis_flag">
                 <div v-text="ac.likes" class="n_likes"></div>
+
                 <!--<input type="submit" name="" value="踩" class="tread">-->
                 <div class="huifu">
                   <input type="text" ref='input1' >
                   <input type="submit" name="" value="回复" class="replay" v-on:click="replay_comm(ac.comment_id,index)">
                 </div>
-
+                <div class="re-xian"></div>
+                <div class="re-comm">评论</div>
+                <div class="row replay-replay" v-for="r in ac.replys">
+                  <div class="col-md-1" v-text="r.user_name">用户名</div>
+                  <div class="col-md-8 " v-text="r.content">回复内容</div>
+                  <div class="col-md-2 r-c" v-text="r.time">时间</div>
+                </div>
 
               </form>
+
             </div>
+
           </div>
           <div v-show="!com_flag" class="no_one"><h3>还没有人发布评论</h3></div>
         </div>
@@ -112,16 +128,17 @@
         com_flag: true,
         dis_flag:true,
         replay_comm_word:'',
+        b_cllo:true
       }
     },
     mounted: function () {
       this.getart();
       this.getallreplay();
+      this.iscoll();
     },
     methods: {
       getart: function () {
         this.art_id = this.$route.query.article_id;
-        // alert(this.art_id)
         var that = this
         axios.get('http://127.0.0.1:8000/article/getarticlebyid/' + that.art_id + '/')
           .then(function (response) {
@@ -141,7 +158,7 @@
         //如果用户登录
         if (u_id) {
 
-          如果在登录前输入了文字
+          //如果在登录前输入了文字
           if (this.comment) {
             var user = {
               "content": this.comment,
@@ -159,7 +176,7 @@
                 // console.log(response.data)
                 if (response.data.statuscode == '202') {
                   that.comment = '';
-                  this.$options.methods.getallreplay()
+                  that.$options.methods.getallreplay()
                 }
 
               })
@@ -279,6 +296,7 @@
               "comment_id":comment_id
 
             }
+            var that=this
             axios.post('http://127.0.0.1:8000/article/replycomment/',user,{
               headers:{
                 "token":sessionStorage.getItem('token')
@@ -289,7 +307,7 @@
                 // vm.list = response.data;
                 console.log(response)
                 if (response.data.statuscode=='202'){
-                  this.$refs.input1[index].value = ''
+                  that.$refs.input1[index].value = ''
                 }
 
               })
@@ -305,7 +323,93 @@
           this.$router.push({path: "/login"});
         }
 
+      },
+      cllo_art:function () {
+        var u_id=sessionStorage.getItem('u_id')
+        if (u_id) {
+          var user={
+            "user_id":u_id,
+            "article_id":this.art_id
+          }
+          var that=this
+          axios.post('http://127.0.0.1:8000/article/collectarticle/',user,{
+            headers:{
+              "token":sessionStorage.getItem('token')
+            }
+          })
+            .then(function (response) {
+              console.log(response.data)
+              if(response.data.statuscode=='202'){
+                that.b_cllo=false
+              }else {
+
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        }else {
+          sessionStorage.setItem('from', '/articlelist')
+          this.$router.push({path: "/login"});
+        }
+
+      },
+      canl_cllo_art:function () {
+        var u_id=sessionStorage.getItem('u_id')
+        if (u_id) {
+          var user={
+            "user_id":u_id,
+            "article_id":this.art_id
+          }
+          var that=this
+          axios.post('http://127.0.0.1:8000/article/cancelarticlecollect/',user,{
+            headers:{
+              "token":sessionStorage.getItem('token')
+            }
+          })
+            .then(function (response) {
+              console.log(response.data)
+              if(response.data.statuscode=='202'){
+                that.b_cllo=true
+              }else {
+
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        }else {
+          sessionStorage.setItem('from', '/articlelist')
+          this.$router.push({path: "/login"});
+        }
+      },
+      iscoll:function () {
+        var u_id=sessionStorage.getItem('u_id')
+        if (u_id) {
+          var user={
+            "user_id":u_id,
+            "article_id":this.art_id
+          }
+          var that=this
+          axios.post('http://127.0.0.1:8000/article/isarticlecollect/',user,{
+            headers:{
+              "token":sessionStorage.getItem('token')
+            }
+          })
+            .then(function (response) {
+              console.log(response.data)
+              if(response.data.collectstatus){
+                that.b_cllo=false
+              }else {
+                that.b_cllo=true
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        }
       }
+
     }
   }
 </script>
