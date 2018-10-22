@@ -21,7 +21,7 @@
 
       <div class=" newlist  row">
         <div class="col-xs-6 col-md-3 mygoods" v-for="good in result_list ">
-          <a href="#" class="thumbnail"><img :src="'../../static/images/'+good.img"   :alt="good.name" :title="good.long_name"></a><br>
+          <a href="#" class="thumbnail"><img v-bind:src="good.img"  :alt="good.name" :title="good.long_name"></a><br>
           <a href="#" v-text="good.name" class="g_name"></a><br>
           <p v-text="good.introduce" class="g_intr"></p>
           <p style="font-size: 20px;color: #ff4d15" v-text="good.price" class="g_p"></p>

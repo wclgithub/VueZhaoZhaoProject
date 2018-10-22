@@ -21,17 +21,17 @@
                   <div class="col-md-10  my-info">
                     <div class="input-group my-input">
                       <span class="input-group-addon "><p>昵称：</p></span>
-                      <input type="text" class="form-control" id="user-name" placeholder="UserName：可爱小宝贝"
+                      <input type="text" class="form-control" id="user-name"
                              aria-describedby="basic-addon1" v-model="user_info.user_name">
                     </div>
                     <div class="input-group my-input">
                       <span class="input-group-addon "><p>性别：</p></span>
-                      <input type="text" class="form-control" id="user-sex" placeholder="Sex：女"
+                      <input type="text" class="form-control" id="user-sex"
                              aria-describedby="basic-addon1" v-model="user_info.sex">
                     </div>
                     <div class="input-group my-input">
                       <span class="input-group-addon "><p>手机号码：</p></span>
-                      <input type="text" class="form-control" id="user-tel" placeholder="Tel：18842421515"
+                      <input type="text" class="form-control" id="user-tel"
                              aria-describedby="basic-addon1" value="" v-model="user_info.telephone">
                     </div>
                   </div>
@@ -63,15 +63,7 @@
     name: "",
     data() {
       return{
-        user_info: {
-          "telephone": "18846463366",
-          "id": "1",
-          "register_time": "2018-09-15",
-          "sex": "女",
-          "user_name": "猫咪",
-          "img": "./images/user.png",
-          "points": 50
-        },
+        user_info: {},
       }
     },
     methods: {
@@ -113,19 +105,14 @@
       var data={
         "user_id":user_id
       };
-      console.log(data['user_id']);
-      console.log(typeof(data['user_id']));
       if(token){
         axios.post('http://127.0.0.1:8000/user/getuserinfo/',data,{headers:{"token":token}})
           .then(function (response) {
-            // config.headers.common['token']=token
             vm.user_info = response.data;
-            console.log(vm.user_info )
           })
           .catch(function (error) {
             console.log(error)
           })
-
       }
       else {
         alert('请先登录！');

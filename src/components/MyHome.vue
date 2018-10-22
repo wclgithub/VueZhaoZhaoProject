@@ -38,7 +38,7 @@
             <div class="row">
               <div class="col-md-4  my-img-centet">
                 <!--头像(left)-->
-                <img class="img-circle my-img" v-bind:src="user_info.img"
+                <img class="img-circle my-img" :src="user_info.img"
                      style="object-fit: cover;width: 150px;height: 150px;border: 1px solid">
                 <form id="iconform">
                   <button class="btn btn-danger my-img-btn">

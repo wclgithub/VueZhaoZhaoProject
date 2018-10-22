@@ -81,6 +81,8 @@ export default {
         axios.post('http://127.0.0.1:8000/user/register/',user).then(function (response) {
           if(response.headers.token){
             sessionStorage.setItem('token',response.headers.token);
+            sessionStorage.setItem('u_id',response.data.id);
+            alert(response.data.id);
             that.$router.push({path:"/"});
           }
           else {
