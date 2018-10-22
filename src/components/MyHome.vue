@@ -154,11 +154,9 @@
               headers: {
                 "token": token
               }
-            })
-              .then(function (response) {
-                // config.headers.common['token']=token
+            }).then(function (response) {
                 vm.user_info = response.data;
-              })
+            })
           })
       }
     },
