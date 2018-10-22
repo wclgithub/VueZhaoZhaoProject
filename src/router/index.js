@@ -15,6 +15,7 @@ import Modal from '@/components/Modal'
 import ApartInfo from '@/components/ApartInfo'
 import Details from '@/components/Details'
 import SetMeal from '@/components/SetMeal'
+import ModalCart from '@/components/ModalCart'
 
 import ArticleDetails from '@/components/ArticleDetails'
 
@@ -82,6 +83,11 @@ export default new Router({
       path: '/modal',
       name: 'Modal',
       component: Modal,
+    },
+    {
+      path: '/modal_cart',
+      name: 'modal-cart',
+      component: ModalCart,
     },
     {
       path: '/articledetails',
