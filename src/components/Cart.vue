@@ -30,10 +30,10 @@
           </datalist>
         </div>
         <div v-text="c.set_meal_price"></div>
-        <div class="cart-btn-operator">
-          <input type="button" value="-" @click="c.number-=1" :disabled="c.number<1">
+        <div class="cart-btn-operator" :id="c.id">
+          <input type="button" value="-" @click="countReduce($event),sumPrice()" :disabled="c.number<1">
           <input type="text" v-model.number="c.number">
-          <input type="button" value="+" @click="c.number+=1">
+          <input type="button" value="+" @click="countAdd($event),sumPrice()">
         </div>
         <div class="row-count" v-text="c.number*c.set_meal_price"></div>
         <div><a href="#" class="a-delete">删除</a></div>
@@ -83,7 +83,8 @@
             "bh_name": "南京易发红日养老院",
             "set_meal_price": 500,
             "number": 2
-          }, {
+          },
+          {
             "id": 3,
             "cart_set_id": 1,
             "ci_info_name": "小王八",
@@ -92,7 +93,17 @@
             "set_meal_price": 500,
             "number": 2
           },
+          {
+            "id": 4,
+            "cart_set_id": 1,
+            "ci_info_name": "小王八",
+            "set_meal_name": "标准营养套餐",
+            "bh_name": "南京易发红日养老院",
+            "set_meal_price": 500,
+            "number": 2
+          },
         ],
+        sum:0,
         checked: false,
         checkedBoxList: [],
       }
@@ -107,11 +118,37 @@
             this.checkedBoxList.push(item.id);
           });
         }
+      },
+      sumPrice:function () {
+        this.sum = 0;
+        for(let i of this.cart_info){
+          for (let j of this.checkedBoxList){
+            if (i.id === j){
+              this.sum+=i.set_meal_price * i.number
+            }
+          }
+        }
+      },
+      countAdd:function (event) {
+        let cart_id = event.target.parentNode.id;
+        for (let i of this.cart_info){
+          if(i.id == cart_id){
+            i.number++;
+          }
+        }
+      },
+      countReduce:function (event) {
+        let cart_id = event.target.parentNode.id;
+        for (let i of this.cart_info){
+          if(i.id == cart_id){
+            i.number--;
+          }
+        }
       }
     },
     watch:{
       "checkedBoxList": function() {
-        alert('ok');
+        this.sumPrice();
         if (this.checkedBoxList.length != this.cart_info.length) {
           this.checked = false
         }
@@ -122,14 +159,7 @@
       deep:true,
     },
     computed: {
-      sum() {
-        let sum = 0;
-        for (let i of this.cart_info) {
-          if (i.number > 0)
-            sum += i.set_meal_price * i.number;
-          }
-          return sum;
-        }
+
       },
   }
 </script>
