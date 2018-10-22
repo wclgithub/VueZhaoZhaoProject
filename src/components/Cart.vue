@@ -7,6 +7,7 @@
       </div>
       <div>商品</div>
       <div>公寓</div>
+      <div>入住人</div>
       <div>单价</div>
       <div>周期</div>
       <div>小计</div>
@@ -21,12 +22,16 @@
         <div v-text="c.set_meal_name"></div>
         <div v-text="c.bh_name"></div>
         <div class="cart-opt">
+          <input type="text" name="check_in" list="ci_info_name" required="required">
+          <datalist id="ci_info_name" >
+            <option  v-for="name in c.ci_info_name" :value="name['name']" v-text="name['id']"></option>
+          </datalist>
         </div>
         <div v-text="c.set_meal_price"></div>
-        <div class="cart-btn-operator">
-          <input type="button" value="-" @click="c.number-=1" :disabled="c.number<1">
+        <div class="cart-btn-operator" :id="c.id">
+          <input type="button" value="-" @click="countReduce($event),sumPrice()" :disabled="c.number<1">
           <input type="text" v-model.number="c.number">
-          <input type="button" value="+" @click="c.number+=1">
+          <input type="button" value="+" @click="countAdd($event),sumPrice()">
         </div>
         <div class="row-count" v-text="c.number*c.set_meal_price"></div>
         <div><a href="" class="a-delete" @click.prevent="delCart([c.cart_set_id,c.good_id])">删除</a></div>
@@ -34,8 +39,8 @@
     </div>
     <div class="cart-con-count">
       <button class="btn g_b" @click="showModal">请选择入住人</button>
+      <!--<input type="text" v-text="">-->
       <modal-cart v-show="isModalVisible" @close="closeModal"/>
-
       <div>总计:<span v-text="sum"></span>元<input type="submit" value="结算" @click.prevent="addOder(sum)"></div>
     </div>
 
@@ -51,7 +56,6 @@
         <div><img src="../assets/images/det2.jpg" alt="">
           <p>体检套餐</p></div>
       </div>
-
     </div>
   </div>
 </template>
@@ -68,6 +72,7 @@
         checkedBoxList: [],
         checkNames:[],
         isModalVisible: false,
+        cart_info_id:0
       }
     },
     // 钩子获取数据
@@ -167,8 +172,8 @@
           })
             .then(function (response) {
               let res = response.data['statuscode'];
-              if(res = '202'){
-                alert('删除成功！');
+              if(res == '202'){
+                // alert('购物车删除成功！');
                 axios.post('http://127.0.0.1:8000/cart/getcart/',data,{
                   headers:{
                     "token":token
@@ -201,34 +206,54 @@
       },
       //  定义结算方法 参数：总价；生成订单成功后跳转到付款页
       addOder:function (date) {
-
-        var vm = this;
-        var token=sessionStorage.getItem('token');
-        var user_id=sessionStorage.getItem('u_id');
-        // console.log(user_id);
-        // console.log(token);
-        var data={
-          "user_id":user_id,
-          "price":date,
-          "check_info_id":20,
-          "status_id":1,
-          "orders":this.cart_info,
-        };
-        if(token){
-          axios.post('http://127.0.0.1:8000/cart/deletecart/',data,{
-            headers:{
-              "token":token
-            }
-          })
-            .then(function (response) {
-              let res = response.data['statuscode'];
-              if(res = '202'){
-                console.log(res)
+        if(this.cart_info_id == 0){
+          alert('请选择入住人！')
+        }
+        else {
+          alert(this.cart_info_id);
+          var vm = this;
+          var token=sessionStorage.getItem('token');
+          var user_id=sessionStorage.getItem('u_id');
+          // console.log(user_id);
+          // console.log(token);
+          var data={
+            "user_id":user_id,
+            "price":date,
+            "check_info_id":this.cart_info_id,
+            "status_id":1,
+            "orders":this.cart_info,
+          };
+          if(token){
+            var than = vm;
+            axios.post('http://127.0.0.1:8000/order/addorder/',data,{
+              headers:{
+                "token":token
               }
             })
-            .catch(function (error) {
-              console.log(error)
-            })
+              .then(function (response) {
+                let res = response.data['statuscode'];
+                console.log(res);
+                if(res == '202'){
+                  // console.log('000000000');
+                  // 删除成功 删除购物车
+                  for (let item of than.cart_info){
+                    // console.log(item);
+                    let data2=[item['cart_set_id'],
+                      item['good_id']
+                    ];
+                    //  调用删除方法
+                    than.delCart(data2)
+                  }
+                }
+                else if (res == '403'){
+                  // console.log('99999999');
+                  alert('首次购买请先购买公寓房间！')
+                }
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+          }
         }
       },
       arrowDown() {
@@ -251,7 +276,10 @@
         this.isModalVisible = true
       },
       closeModal: function (state) {
-        if (state===0){
+        // alert(id);
+        if (state[0]===0){
+          this.cart_info_id=state[1];
+          alert('ok');
           this.isModalVisible = false
 
         } else {
@@ -259,10 +287,41 @@
         }
 
       },
+      sumPrice:function () {
+        this.sum = 0;
+        for(let i of this.cart_info){
+          for (let j of this.checkedBoxList){
+            if (i.id === j){
+              this.sum+=i.set_meal_price * i.number
+            }
+          }
+        }
+      },
+      countAdd:function (event) {
+        let cart_id = event.target.parentNode.id;
+        for (let i of this.cart_info){
+          if(i.id == cart_id){
+            i.number++;
+          }
+        }
+      },
+      countReduce:function (event) {
+        let cart_id = event.target.parentNode.id;
+        for (let i of this.cart_info){
+          if(i.id == cart_id){
+            i.number--;
+          }
+        }
+      },
+
+    //  获取入住人id
+    //   getcheckinfoid:function (data) {
+    //     alert(data[0]);
+    //   }
     },
     watch:{
       "checkedBoxList": function() {
-        alert('ok');
+        this.sumPrice();
         if (this.checkedBoxList.length != this.cart_info.length) {
           this.checked = false
         }
@@ -272,22 +331,11 @@
       },
       deep:true,
     },
-    computed: {
-      sum() {
-        let sum = 0;
-        for (let i of this.cart_info) {
-          if (i.number > 0)
-            sum += i.set_meal_price * i.number;
-        }
-        return sum;
-      }
-    },
-
   }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
   @import "../../static/css/Cart.css";
 </style>

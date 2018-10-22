@@ -72,6 +72,7 @@
 }
 
 .cart-con-count {
+  position: relative;
   background: #e7e7e7;
   height: 50px;
 }
@@ -118,4 +119,12 @@
   width: 200px;
   height: 130px;
   border-radius: 5px;
+}
+.btn{
+  background: #00cc66;
+  position: absolute;
+  top: 8px;
+  left: 45%;
+  text-align: center;
+
 }

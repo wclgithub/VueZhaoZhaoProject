@@ -39,7 +39,6 @@
 </template>
 <script>
   import axios from 'axios'
-
   export default {
     name: 'ModalCart',
     props: ['show','good_poins'],
@@ -54,12 +53,12 @@
 
         ],
         unitName: '请选择入住人',
-        unitId: 0,
         unitModel: '',
         nameList:[],
         // 下拉列表结束
         num:0,
         err_im:'',
+        unitNameId:'',
 
 
       }
@@ -75,11 +74,17 @@
             this.err_im='请选择入住人'
           }else {
             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!这里是已经拿到入住人的名字了！！！！！！！！！！！！！！
-            this.$emit('close',0);
+            let setData=[];
+            setData.push(0);
+            setData.push(this.unitNameId);
+            alert(setData);
+            // alert(this.unitName);
+            this.$emit('close',setData);
           //  这个0 是代表选择的按钮  0是确认  传给 Cart.vue中的closeModal方法
           }
       },
       close:function(){
+        let setData=[];
         this.$emit('close',1);
         //  这个1 是代表选择的按钮  0是确认，1是关闭
       },
@@ -104,7 +109,8 @@
         console.log(index);
         this.unitModel = index;
         this.unitName = item.name;
-        this.unitId = item.id;
+        this.unitNameId = item.id;
+        alert(this.unitNameId)
       //  ！！！！！！！！！！！！！在这里拿到被选择的入住人姓名，你可以在这里拿id
       },
       getname: function () {
@@ -122,12 +128,12 @@
             }
           })
             .then(function (response) {
-              console.log(response.data)
+              console.log(response.data);
               // config.headers.common['token']=token
               let res = response.data;
               response.data.forEach((item, index) => {
                 vm.nameList.push(item.ci_info_name[index])
-              })
+              });
               vm.nameList.forEach((item, index) => {
                 vm.dataList.push(item)
               })
