@@ -127,7 +127,7 @@
                 .then(function (response) {
                   vm.state = response.data;
                   if (vm.state.code == '202') {
-                    alert('签到成功')
+                    alert('签到成功');
                     vm.signtext = '已签到';
                     vm.flag = false;
                   }
@@ -137,8 +137,6 @@
                   console.log(error)
                 })
             }
-            console.log(response.data)
-            console.log(response)
           })
           .catch(function (error) {
             console.log(error)
@@ -165,7 +163,6 @@
               .then(function (response) {
                 // config.headers.common['token']=token
                 vm.user_info = response.data;
-                console.log(vm.user_info)
               })
           })
       }
@@ -189,7 +186,7 @@
         axios.post('http://127.0.0.1:8000/user/checktest/', data, {headers: {"token": token}})
           .then(function (response) {
             // config.headers.common['token']=token
-            console.log(response.data.check_result)
+            console.log(response.data.check_result);
             if (response.data.check_result) {
               vm.flag = true;
               vm.signtext = '签到+1';
