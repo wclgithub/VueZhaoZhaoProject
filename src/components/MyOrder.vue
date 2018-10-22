@@ -36,8 +36,11 @@
               <div class="col-md-1">操作</div>
             </div>
           </div>
+          <div class="panel-body" v-if="!show">
+            您还没有订单哦！
+          </div>
           <!--未付款订单-->
-          <div class="my-nopay-order or-model">
+          <div class="my-nopay-order or-model" v-if="show">
             <div class="panel-body my-every row my-order-room " v-if="(nopaystate||allstate)&&nopay.status_id==1"
                  v-for="nopay in user_order">
               <div class="col-md-1" v-text="nopay.id"></div>
@@ -55,7 +58,7 @@
             </div>
           </div>
           <!--预定中订单-->
-          <div class="my-ing-order or-model">
+          <div class="my-ing-order or-model" v-if="show">
             <div class="panel-body my-every row " v-if="(ingstate||allstate)&&ing.status_id==4"
                  v-for="ing in user_order">
               <div class="col-md-1" v-text="ing.id"></div>
@@ -71,7 +74,7 @@
             </div>
           </div>
           <!--已付款订单-->
-          <div class="my-success-order or-model">
+          <div class="my-success-order or-model" v-if="show">
             <div class="panel-body my-every row my-order-set " v-if="(successstate||allstate)&&success.status_id==2"
                  v-for="success in user_order">
               <div class="col-md-1" v-text="success.id">1232341466</div>
@@ -87,7 +90,7 @@
             </div>
           </div>
           <!--已失效订单-->
-          <div class="my-bad-order or-model">
+          <div class="my-bad-order or-model" v-if="show">
             <div class="panel-body my-every row my-order-set " v-if="(badstate||allstate)&&bad.status_id==3"
                  v-for="bad in user_order">
               <div class="col-md-1" v-text="bad.id">12364565126</div>
@@ -124,6 +127,7 @@
         successstate: false,
         badstate: false,
         user_order: [],
+        show:true
       }
     },
     methods: {
@@ -144,6 +148,9 @@
             .then(function (response) {
               //拿到所有订单
               vm.user_order = response.data;
+              if(vm.user_order.length<1){
+                vm.show=false
+              }
               console.log(vm.user_order)
 
               for (let o of vm.user_order) {

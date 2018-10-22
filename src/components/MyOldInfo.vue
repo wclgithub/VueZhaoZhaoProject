@@ -10,10 +10,10 @@
           <div class="panel-body old_info" v-for=" old in old_info" :id=old.id v-if="old.id||old.sex">
             <!--第1.1行-->
             <div class="row">
-              <div class="col-md-4 my-img-centet">
+              <div class="col-md-4  my-img-centet">
                 <!--头像(left)-->
-                <img class="img-circle my-img" :src="old.img" alt="">
-                <button class="btn btn-danger ">修改头像</button>
+                <img class="img-circle my-img" :src="old.img"
+                     style="object-fit: cover;width: 150px;height: 150px;border: 1px solid">
               </div>
               <div class="col-md-8">
                 <div class="row">
@@ -28,7 +28,7 @@
                     </div>
                     <div class="input-group my-input">
                       <span class="input-group-addon " id="basic-addon3"><p>出生日期：</p></span>
-                      <input type="text" class="form-control" placeholder="Birth：1998-7-7" v-model="old.birthday">
+                      <input type="text" class="form-control" placeholder="Birth：1998-7-7" v-model="old.birthday" @blur.prevent="checkBirth(old.birthday)">
                     </div>
                     <div class="input-group my-input">
                       <span class="input-group-addon " id="basic-addon4"><p>联系电话：</p></span>
@@ -38,7 +38,7 @@
                     <div class="input-group my-input">
                       <span class="input-group-addon " id="basic-addon5"><p>紧急联系人电话：</p></span>
                       <input type="text" class="form-control" placeholder="Ftel：18845454444"
-                             v-model="old.ec_telephone">
+                             v-model="old.ec_telephone" @blur.prevent="checkTel(old.ec_telephone)">
                     </div>
                     <div class="input-group my-input">
                       <span class="input-group-addon " id="basic-addon6"><p>紧急联系地址：</p></span>
@@ -81,7 +81,8 @@
     data() {
       return {
         old_info: [],
-        len:0
+        len:0,
+        oldidicon: sessionStorage.getItem('old_id'),
       }
     },
     methods: {
@@ -98,6 +99,7 @@
           })
             .then(function (response) {
               vm.old_info = response.data
+              sessionStorage.setItem('old_id',vm.old_info.id);
               console.log(response.data)
               console.log(response)
             })
@@ -234,6 +236,13 @@
           alert('手机号码格式错误！')
         }
       },
+      checkBirth: function (birth) {
+        var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
+        if (!reg.test(birth)) {
+          alert('日期格式错误！')
+        }
+      },
+
     },
     mounted() {
       this.getOldInfo();
@@ -246,23 +255,8 @@
     height: 65px;
 
   }
-
-  .my-nav {
-    height: 65px;
-    line-height: 40px;
-  }
-
   .my-nav a, .my-footer {
     color: white;
-  }
-
-  .my-every {
-    display: flex;
-  }
-
-  .my-every-btn {
-    flex: 1;
-    text-align: center;
   }
 
   .my-every-btn button {
@@ -273,19 +267,13 @@
     border-radius: 50%;
     box-shadow: #7b8099 2px 2px 2px;
   }
-
-  .my-index-center {
-    padding-top: 20px;
-    min-height: 600px;
-  }
-
   .my-img {
     width: 150px;
     height: 150px;
     margin: 5px;
   }
 
-  .panel-primary > .panel-heading, .bg-green {
+  .panel-primary > .panel-heading{
     background: #40a170;
   }
 
@@ -294,14 +282,6 @@
     color: black;
   }
 
-  .my-footer {
-    padding-top: 15px;
-    font-size: 13px;
-  }
-
-  .my-change {
-    margin-left: 15px;
-  }
 
   .my-input {
     margin-bottom: 10px;
@@ -334,6 +314,19 @@
   .my-nav-size ul li {
     font-size: 14px;
 
+  }
+
+  .my-img-btn p {
+    position: absolute;
+  }
+  #old-pic {
+    opacity: 0;
+    filter: alpha(opacity=0);
+  }
+
+  .my-img-btn {
+    width: 85px;
+    height: 35px;
   }
 
   .my-img-btn p {

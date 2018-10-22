@@ -9,11 +9,10 @@
           <div class="panel-body">
             <!--第1.1行-->
             <div class="row">
-              <div class="col-md-4 my-img-centet">
+              <div class="col-md-4  my-img-centet">
                 <!--头像(left)-->
-                <!--<img class="img-circle my-img" src="./images/user.png" alt="" id="user">-->
-                <button class="btn btn-danger my-img-btn"><p>修改头像</p><input type="file" id="xdaTanFileImg"
-                                                                            onchange="xmTanUploadImg(this)"></button>
+                <img class="img-circle my-img" :src="user_info.img"
+                     style="object-fit: cover;width: 150px;height: 150px;border: 1px solid">
               </div>
               <div class="col-md-8">
                 <div class="row">
@@ -21,17 +20,17 @@
                   <div class="col-md-10  my-info">
                     <div class="input-group my-input">
                       <span class="input-group-addon "><p>昵称：</p></span>
-                      <input type="text" class="form-control" id="user-name"
+                      <input type="text" class="form-control" id="user-name" placeholder="UserName：可爱小宝贝"
                              aria-describedby="basic-addon1" v-model="user_info.user_name">
                     </div>
                     <div class="input-group my-input">
                       <span class="input-group-addon "><p>性别：</p></span>
-                      <input type="text" class="form-control" id="user-sex"
+                      <input type="text" class="form-control" id="user-sex" placeholder="Sex：女"
                              aria-describedby="basic-addon1" v-model="user_info.sex">
                     </div>
                     <div class="input-group my-input">
                       <span class="input-group-addon "><p>手机号码：</p></span>
-                      <input type="text" class="form-control" id="user-tel"
+                      <input type="text" class="form-control" id="user-tel" placeholder="Tel：18842421515"
                              aria-describedby="basic-addon1" value="" v-model="user_info.telephone">
                     </div>
                   </div>
@@ -63,7 +62,9 @@
     name: "",
     data() {
       return{
-        user_info: {},
+        user_info: {
+        },
+        useridicon: sessionStorage.getItem('u_id'),
       }
     },
     methods: {
@@ -94,7 +95,8 @@
 
           console.log(this.user_info.telephone);
         }
-      }
+      },
+
     },
     mounted(){
       var vm = this;
@@ -105,14 +107,19 @@
       var data={
         "user_id":user_id
       };
+      console.log(data['user_id']);
+      console.log(typeof(data['user_id']));
       if(token){
         axios.post('http://127.0.0.1:8000/user/getuserinfo/',data,{headers:{"token":token}})
           .then(function (response) {
+            // config.headers.common['token']=token
             vm.user_info = response.data;
+            console.log(vm.user_info )
           })
           .catch(function (error) {
             console.log(error)
           })
+
       }
       else {
         alert('请先登录！');
@@ -182,8 +189,16 @@
     font-size: 14px;
 
   }
+  .my-img-btn {
+    width: 85px;
+    height: 35px;
+  }
 
-  #xdaTanFileImg {
+  .my-img-btn p {
+    position: absolute;
+  }
+
+  #user-pic {
     opacity: 0;
     filter: alpha(opacity=0);
   }
@@ -196,6 +211,5 @@
   .my-img-btn p {
     position: absolute;
   }
-
 
 </style>

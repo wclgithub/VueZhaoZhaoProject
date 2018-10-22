@@ -1,7 +1,8 @@
 <template>
-  <div class="col-md-9">
-    <div class="row">
-      <div class="col-md-12">
+
+  <div class="col-md-9" >
+    <div class="row" >
+      <div class="col-md-12 ">
         <!--报表1-->
         <div class="row">
           <h3 class=" col-md-8 panel-title">
@@ -20,10 +21,10 @@
               <span>饮食报表</span>
             </h3>
           </div>
-          <div class="panel-body">
+          <div class="panel-body" >
             <!--第1.1行-->
-
-            <div class="row">
+            <div v-if="!show||!eshow">还没有信息哦！</div>
+            <div class="row" v-if="show&&eshow">
               <div class="col-md-4 my-img-centet eat-img">
                 <!--头像(left)-->
                 <img class="img-circle my-img" :src="checked.check_info_img" alt="">
@@ -62,7 +63,8 @@
           </div>
           <div class="panel-body">
             <!--第1.1行-->
-            <div class="row">
+            <div v-if="!show||!mshow">还没有信息哦！</div>
+            <div class="row" v-if="show&&mshow">
               <div class="col-md-4 my-img-centet doctor-img">
                 <!--头像(left)-->
 
@@ -102,7 +104,8 @@
           </div>
           <div class="panel-body">
             <!--第1.1行-->
-            <div class="row">
+            <div v-if="!show||!ashow">还没有信息哦！</div>
+            <div class="row" v-if="show&&ashow">
               <div class="col-md-4 my-img-centet active-img">
                 <!--头像(left)-->
                 <!--<p v-text="checked.check_info_name">王小翠</p>-->
@@ -174,6 +177,10 @@
         eatflag:false,
         docflag:false,
         artflag:false,
+        show:true,
+        eshow:true,
+        mshow:true,
+        ashow:true,
       }
     },
     methods: {
@@ -241,7 +248,7 @@
           .catch(function (error) {
             console.log(error)
           })
-      }
+      },
     },
     mounted() {
       var vm = this;
@@ -260,6 +267,9 @@
         })
           .then(function (response) {
             vm.old_info = response.data
+            if(vm.old_info.length<1){
+              vm.show=false
+            }
             vm.checked.check_info_name = response.data[0].name;
             vm.checked.check_info_id = response.data[0].id;
             vm.checked.check_info_img= response.data[0].img;
@@ -276,6 +286,16 @@
             })
               .then(function (response) {
                 vm.check_info = response.data;
+                if(vm.check_info.eat_dyn.length<1){
+                  vm.eshow=false
+                }
+                if(vm.check_info.medicine_dyn.length<1){
+                  vm.mshow=false
+                }
+                if(vm.check_info.active_dyn.length<1){
+                  vm.ashow=false
+                }
+
                 console.log(vm.check_info)
               })
               .catch(function (error) {
@@ -326,9 +346,6 @@
     margin: 5px;
   }
 
-  .panel-primary > .panel-heading, .bg-green {
-    background: #40a170;
-  }
 
   .nav > li > a:hover,
   .nav > li > a:focus {

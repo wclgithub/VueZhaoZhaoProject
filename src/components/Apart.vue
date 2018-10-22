@@ -260,6 +260,7 @@
     mounted() {
       var vm = this;
       var already_searched=sessionStorage.getItem('already_searched');
+      sessionStorage.setItem('already_searched','');
       if(already_searched){
         vm.search_data=already_searched;
       }else {
@@ -317,7 +318,7 @@
 
   }
 
-  .my-nav a, .my-footer {
+  .my-nav a {
     color: white;
   }
 
@@ -333,10 +334,6 @@
   .my-index-center {
     padding-top: 20px;
     min-height: 600px;
-  }
-
-  .panel-primary > .panel-heading, .bg-green {
-    background: #40a170;
   }
 
   .nav > li > a:hover,
@@ -373,7 +370,7 @@
     border-radius: 2px;
     color: #269abc;
   }
-  .showinfo,.showinfo:visited{
+  .showinfo,.showinfo:visited,.showinfo:link{
     color: white;
   }
 </style>

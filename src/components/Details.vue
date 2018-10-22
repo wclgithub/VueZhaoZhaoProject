@@ -10,10 +10,7 @@
           <div class="panel panel-default">
             <!-- Default panel contents -->
             <div class="panel-heading">
-              <h4>豪华单人间</h4>
-            </div>
-            <div class="panel-body">
-              <p>地址:江苏省苏州市工业园区雪堂街328号</p>
+              <h4 v-text="room_name">豪华单人间</h4>
             </div>
             <!-- List group -->
             <ul class="list-group">
@@ -125,7 +122,8 @@
         unitId: '',
         flag: true,
         setmeal_id: [],
-        number:1
+        number:1,
+        room_name:''
       }
     },
     methods: {
@@ -234,16 +232,12 @@
 
     },
     mounted() {
-      var vm = this;
-      vm.room_id = sessionStorage.getItem('roomid');
-      vm.rooms_info = sessionStorage.getItem('rooms_info');
-      for (let r of vm.rooms_info) {
-        if (r.id == vm.room_id) {
-          //得到当前room信息
-          vm.rooms_info = r
-        }
-      }
+
+      this.room_id = sessionStorage.getItem('roomid');
+      this.room_name = sessionStorage.getItem('roomname');
+      this.rooms_info = sessionStorage.getItem('rooms_info');
       //得到所有的配置
+      var vm = this;
       axios.get('http://127.0.0.1:8000/beadhouse/getconfigbyid/' + vm.room_id + '/')
         .then(function (response) {
           vm.room_config = response.data;
