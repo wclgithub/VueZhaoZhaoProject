@@ -19,7 +19,7 @@
             <div class="row my-coll-all">
             </div>
             <!--公寓收藏内容-->
-            <div class="row panel-body" v-if="!bhstate&&!roomstate&&artstate|!bhstate">
+            <div class="row panel-body" v-if="!bhstate&!roomstate&!artstate">
               您还没有收藏哦！
             </div>
             <div class="row my-coll-house mcoll" v-if="bhstate">
@@ -39,6 +39,7 @@
 
             </div>
             <!--公寓收藏内容end-->
+
             <!--房间收藏内容-->
             <div class="row my-coll-room mcoll" v-if="roomstate">
               <div class="col-sm-4 col-md-4" v-for="r in room_info">

@@ -33,7 +33,8 @@
                       <div class="panel-heading">
                         <ul>
                           <h4>周期:
-                            <input type="number" class="input-month" oninput="if(value>12)value=12 ;if(value<1)value=1" v-model=number>
+                            <input type="number" class="input-month" oninput="if(value>12)value=12 ;if(value<1)value=1"
+                                   v-model=number>
                             月
                           </h4>
                         </ul>
@@ -44,7 +45,8 @@
                     </div>
                   </div>
                   <div class="col-md-2">
-                    <a href="http://service.weibo.com/share/share.php?appkey=&title=&url=&searchPic=false&style=simple" target="_blank">
+                    <a href="http://service.weibo.com/share/share.php?appkey=&title=&url=&searchPic=false&style=simple"
+                       target="_blank">
                       <button type="button"
                               class="btn center-block glyphicon glyphicon-share-alt roombtnmargin">分享
                       </button>
@@ -111,7 +113,7 @@
     name: "",
     data() {
       return {
-        room_id: '',
+        room_id: 0,
         room_config: [],
         rooms_info: [],
         dataList: [],
@@ -122,8 +124,8 @@
         unitId: '',
         flag: true,
         setmeal_id: [],
-        number:1,
-        room_name:''
+        number: 1,
+        room_name: ''
       }
     },
     methods: {
@@ -203,88 +205,125 @@
         if (vm.user_id) {
           var token = sessionStorage.getItem('token')
           var room_id = sessionStorage.getItem('roomid')
+          //房间0 套餐1
+          if (vm.setmeal_id) {
+            var data = {
+              "user_id": vm.user_id,
+              "good_list": [
+                {
+                  "id": vm.room_id,
+                  "number": vm.number,
+                  "type": 0
+                },
+              ]
+            };
+            for(let s in vm.setmeal_id){
+              data.good_list.push(
+                {
+                  "id": vm.setmeal_id[s],
+                  "number": vm.number,
+                  "type": 1
+                },
+              )
+            }
+
+          }
+          else {
+           var data = {
+              "user_id": vm.user_id,
+              "good_list": [
+                {
+                  "id": vm.room_id,
+                  "number": vm.number,
+                  "type": 0
+                },
+              ]
+            };
+          }
+            // var data = {
+            //   "user_id": vm.user_id,
+            //   "room_id": vm.room_id,
+            //   "number":vm.number,
+            //   "setmeal_id":vm.setmeal_id
+            // }
+            // alert(vm.room_id)
+            // alert(vm.setmeal_id)
+            axios.post('http://192.168.2.31:8000/cart/addcart/', data, {
+              headers: {
+                "token": token
+              }
+            })
+              .then(function (response) {
+                if (response.data.statuscode == '202') {
+                  alert("成功加入购物车!")
+                } else {
+                  alert("加入失败!")
+                }
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+          }
+          else {
+            alert('请先登录!')
+          }
+        }
+
+      },
+      mounted() {
+
+        this.room_id = parseInt(sessionStorage.getItem('roomid'));
+        this.room_name = sessionStorage.getItem('roomname');
+        this.rooms_info = sessionStorage.getItem('rooms_info');
+        //得到所有的配置
+        var vm = this;
+        axios.get('http://127.0.0.1:8000/beadhouse/getconfigbyid/' + vm.room_id + '/')
+          .then(function (response) {
+            vm.room_config = response.data;
+            for (let c of vm.room_config) {
+              c.srcd = "http://localhost:8000/media/pic/detc" + c.configtype_id + '.jpg'
+            }
+            console.log(vm.room_config)
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+        axios.get('http://127.0.0.1:8000/beadhouse/getmealbyroomid/' + vm.room_id + '/')
+          .then(function (response) {
+            vm.room_set = response.data;
+            console.log(vm.room_set)
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+        //判断房间是否被收藏
+        vm.user_id = sessionStorage.getItem('u_id');
+        if (vm.user_id) {
+          var token = sessionStorage.getItem('token')
+          var room_id = sessionStorage.getItem('roomid')
           var data = {
             "user_id": vm.user_id,
             "room_id": vm.room_id,
-            "number":vm.number,
-            "setmeal_id":vm.setmeal_id
           }
-          axios.post('http://127.0.0.1:8000/cart/addcart/', data, {
+          axios.post('http://127.0.0.1:8000/beadhouse/isroomcollect/', data, {
             headers: {
               "token": token
             }
           })
             .then(function (response) {
-              if (response.data.statuscode=='202') {
-                alert("成功加入购物车!")
+              console.log(response.data.collectstatus)
+              if (response.data.collectstatus) {
+                vm.flag = false;
               } else {
-                alert("加入失败!")
+                vm.flag = true;
               }
             })
             .catch(function (error) {
               console.log(error)
             })
         }
-        else {
-          alert('请先登录!')
-        }
-      }
-
-    },
-    mounted() {
-
-      this.room_id = sessionStorage.getItem('roomid');
-      this.room_name = sessionStorage.getItem('roomname');
-      this.rooms_info = sessionStorage.getItem('rooms_info');
-      //得到所有的配置
-      var vm = this;
-      axios.get('http://127.0.0.1:8000/beadhouse/getconfigbyid/' + vm.room_id + '/')
-        .then(function (response) {
-          vm.room_config = response.data;
-          for (let c of vm.room_config) {
-            c.srcd = "http://localhost:8000/media/pic/detc" + c.configtype_id + '.jpg'
-          }
-          console.log(vm.room_config)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
-      axios.get('http://127.0.0.1:8000/beadhouse/getmealbyroomid/' + vm.room_id + '/')
-        .then(function (response) {
-          vm.room_set = response.data;
-          console.log(vm.room_set)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
-      //判断房间是否被收藏
-      vm.user_id = sessionStorage.getItem('u_id');
-      if (vm.user_id) {
-        var token = sessionStorage.getItem('token')
-        var room_id = sessionStorage.getItem('roomid')
-        var data = {
-          "user_id": vm.user_id,
-          "room_id": vm.room_id,
-        }
-        axios.post('http://127.0.0.1:8000/beadhouse/isroomcollect/', data, {
-          headers: {
-            "token": token
-          }
-        })
-          .then(function (response) {
-            console.log(response.data.collectstatus)
-            if (response.data.collectstatus) {
-              vm.flag = false;
-            } else {
-              vm.flag = true;
-            }
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
       }
     }
-  }
 </script>
 
 <style scoped>
@@ -338,7 +377,6 @@
     border-radius: 2px;
     color: #269abc;
   }
-
 
   .text-orange {
     color: orange;
