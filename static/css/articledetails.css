@@ -610,8 +610,8 @@ body,ul,li,div{
 }
 .replay-replay{
   float: none;
-  width: 780px;
-  height: 40px;
+  width: 730px;
+  /*height: 40px;*/
   margin-top: 10px;
   margin-left: 20px;
 }
@@ -658,6 +658,24 @@ body,ul,li,div{
   position: relative;
   left: 8px;
   top: -0.5px;
+}
+.com-time{
+  /*float: left;*/
+  position: relative;
+  left: 680px;
+}
+.re-re-im img{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 
+}
+.re-re-im{
+  width: 45px;
+  height: 45px;
+  margin-right: 10px;
+}
+.re-re-com{
+  margin-top: 10px;
 }
 

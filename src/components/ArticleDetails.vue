@@ -73,10 +73,11 @@
         <div class="m_re" >
           <div class="select-art" v-for="(ac,index) in all_comment" v-show="com_flag">
             <div class="select-art-left">
-              <img src="ac.user_img" alt="">
+              <img :src="ac.user_img" alt="">
               <p v-text="ac.user_name">天生丽质小可爱</p>
             </div>
             <div class="select-art-right">
+              <div class="com-time"v-text="ac.time"></div>
               <p v-text="ac.comment_content">
                 自从健康喝水之后年轻了十岁。喝年轻了多喝水好，我都喝白了！喝年轻了多喝水好，我都喝白了！喝年轻了多喝水好，我都喝白了！喝年轻了多喝水好，我都喝白了！喝年轻了多喝水好，我都喝白了！喝年轻了多喝水好，我都喝白了！喝年轻了多喝水好，我都喝白了！喝年轻了！</p>
               <form action="">
@@ -91,10 +92,14 @@
                 </div>
                 <div class="re-xian"></div>
                 <div class="re-comm">评论</div>
-                <div class="row replay-replay" v-for="r in ac.replys">
-                  <div class="col-md-1" v-text="r.user_name">用户名</div>
-                  <div class="col-md-8 " v-text="r.content">回复内容</div>
-                  <div class="col-md-2 r-c" v-text="r.time">时间</div>
+                <div v-for="r in ac.replys" class="replay-replay">
+                  <div class="row" >
+                    <div class="col-md-1 re-re-im" ><img :src="r.user_img" alt=""></div>
+                    <div class="col-md-7 re-re-com" v-text="r.content">回复内容</div>
+                    <div class="col-md-2 r-c" v-text="r.time">时间</div>
+                  </div>
+                  <div class="row" v-text="r.user_name">用户名</div>
+
                 </div>
 
               </form>
@@ -122,6 +127,7 @@
     data: function () {
       return {
         details: {},
+        //评论文章的回复
         comment: '',
         art_id: 0,
         all_comment: {},
@@ -132,13 +138,15 @@
       }
     },
     mounted: function () {
+      this.art_id = this.$route.query.article_id;
+      sessionStorage.setItem('art_id',this.$route.query.article_id)
       this.getart();
       this.getallreplay();
       this.iscoll();
     },
     methods: {
       getart: function () {
-        this.art_id = this.$route.query.article_id;
+        // this.art_id = this.$route.query.article_id;
         var that = this
         axios.get('http://127.0.0.1:8000/article/getarticlebyid/' + that.art_id + '/')
           .then(function (response) {
@@ -175,8 +183,27 @@
               .then(function (response) {
                 // console.log(response.data)
                 if (response.data.statuscode == '202') {
+                  var u_id = sessionStorage.getItem('u_id')
+                  var art_id = sessionStorage.getItem('art_id')
+                  if (u_id) {
+                    axios.get('http://127.0.0.1:8000/article/getcommentsbyarticleid/' + art_id + '/' + u_id + '/')
+                      .then(function (response) {
+                        if (response.data.length != 0) {
+                          console.log(response.data)
+                          that.all_comment = response.data
+                          console.log(that.all_comment)
+                        }
+                        else {
+
+                          that.com_flag = false
+                        }
+                      })
+                      .catch(function (error) {
+                        console.log(error)
+                      })
                   that.comment = '';
-                  that.$options.methods.getallreplay()
+
+                  }
                 }
 
               })
@@ -212,8 +239,10 @@
 
         var that = this
         var u_id=sessionStorage.getItem('u_id')
+        var art_id=sessionStorage.getItem('art_id')
         if (u_id){
-          axios.get('http://127.0.0.1:8000/article/getcommentsbyarticleid/' + that.art_id + '/'+u_id+'/')
+          // this.art_id = this.$route.query.article_id;
+          axios.get('http://127.0.0.1:8000/article/getcommentsbyarticleid/' + art_id + '/'+u_id+'/')
             .then(function (response) {
               if (response.data.length != 0) {
                 console.log(response.data)
@@ -268,10 +297,24 @@
             .then(function (response) {
               console.log(response.data)
               if (response.data.statuscode=='202') {
+                var art_id=sessionStorage.getItem('art_id')
+                var u_id=sessionStorage.getItem('u_id')
+                axios.get('http://127.0.0.1:8000/article/getcommentsbyarticleid/' + art_id + '/' + u_id + '/')
+                  .then(function (response) {
+                    if (response.data.length != 0) {
+                      console.log(response.data)
+                      that.all_comment = response.data
+                      console.log(that.all_comment)
+                    }
+                    else {
 
+                      that.com_flag = false
+                    }
+                  })
+                  .catch(function (error) {
+                    console.log(error)
+                  })
               }
-
-
             })
             .catch(function (error) {
               console.log(error)
@@ -307,7 +350,29 @@
                 // vm.list = response.data;
                 console.log(response)
                 if (response.data.statuscode=='202'){
+                  var u_id = sessionStorage.getItem('u_id')
+                  var art_id = sessionStorage.getItem('art_id')
+                  if (u_id) {
+                    axios.get('http://127.0.0.1:8000/article/getcommentsbyarticleid/' + art_id + '/' + u_id + '/')
+                      .then(function (response) {
+                        if (response.data.length != 0) {
+                          console.log(response.data)
+                          that.all_comment = response.data
+                          console.log(that.all_comment)
+                        }
+                        else {
+
+                          that.com_flag = false
+                        }
+                      })
+                      .catch(function (error) {
+                        console.log(error)
+                      })
+                    that.comment = '';
+
+                  }
                   that.$refs.input1[index].value = ''
+
                 }
 
               })
@@ -327,6 +392,17 @@
       cllo_art:function () {
         var u_id=sessionStorage.getItem('u_id')
         if (u_id) {
+          if (sessionStorage.getItem('artid')){
+            var user={
+              "user_id":u_id,
+              "article_id":sessionStorage.getItem('artid')
+            }
+          } else {
+            var user={
+              "user_id":u_id,
+              "article_id":sessionStorage.getItem('artid')
+            }
+          }
           var user={
             "user_id":u_id,
             "article_id":this.art_id

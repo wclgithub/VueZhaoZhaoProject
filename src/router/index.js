@@ -19,7 +19,7 @@ import Developer from '@/components/Developer'
 
 import ArticleDetails from '@/components/ArticleDetails'
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [

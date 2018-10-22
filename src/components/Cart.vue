@@ -7,40 +7,50 @@
       </div>
       <div>商品</div>
       <div>公寓</div>
-      <div>入住人</div>
       <div>单价</div>
       <div>周期</div>
       <div>小计</div>
       <div>操作</div>
     </div>
-    <div class="cart-con-goods" v-for="c in cart_info" v-if="c.number>=0" :key="c.id">
-      <div class="cart-con-header cart-good-item" :id=c.id>
+    <div class="cart-con-goods" v-for="c in cart_info"  :key="c.id">
+      <div class="cart-con-header cart-good-item" :id=c.id >
         <div class="cart-goodsimg">
-          <input type="checkbox" :id=c.id :value=c.id v-model="checkedBoxList">
+          <input type="checkbox" :id=c.id :value=c.id v-model="checkedBoxList" :data-type="c.type" @click="">
           <a href="#"><img src="../assets/images/det2.jpg" alt=""></a>
         </div>
-        <div v-text="c.set_meal_name"></div>
-        <div v-text="c.bh_name"></div>
-        <div class="cart-opt">
-          <input type="text" name="check_in" list="ci_info_name" required="required">
-          <datalist id="ci_info_name">
-            <option value="妈妈">王小翠</option>
-            <option value="爸爸">刘大壮</option>
-            <option value="叔叔">李志远</option>
-          </datalist>
-        </div>
-        <div v-text="c.set_meal_price"></div>
+        <div v-text="c.name"></div>
+        <div v-text="c.beadhouse_name"></div>
+        <div v-text="c.price"></div>
         <div class="cart-btn-operator" :id="c.id">
           <input type="button" value="-" @click="countReduce($event),sumPrice()" :disabled="c.number<1">
           <input type="text" v-model.number="c.number">
           <input type="button" value="+" @click="countAdd($event),sumPrice()">
         </div>
-        <div class="row-count" v-text="c.number*c.set_meal_price"></div>
-        <div><a href="#" class="a-delete">删除</a></div>
+        <div class="row-count" v-text="c.number*c.price"></div>
+        <div><a href="" class="a-delete" @click.prevent="delGoods(c.good_id,c.type)">删除</a></div>
       </div>
     </div>
     <div class="cart-con-count">
-      <div>总计:<span v-text="sum"></span>元<input type="submit" value="结算"></div>
+      <ul>
+        <li class="f-l">
+          <div class="por">
+            <div class="selectBox" style="width: 400px;">
+              <div class="selectBox_show" v-on:click.stop="arrowDown">
+                <i class="icon icon_arrowDown"></i>
+                <a class="input-old" title="请选择" v-text="unitName" :id=unitId @click="getname()"></a>
+                <input type="hidden" name="unit" v-model="unitModel">
+              </div>
+              <div class="selectBox_list" v-show="isShowSelect"
+                   style="max-height: 240px; width: 398px; display: block;">
+                <div class="selectBox_listLi" v-for="(item, index) in dataList"
+                     @click.stop="select(item, index)" :id=item.id v-text="item.name">
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <div>总计:<span v-text="sum"></span>元<input type="submit" value="结算" @click.prevent="addOder(sum)"></div>
     </div>
 
     <div class="cart-groom panel panel-success">
@@ -55,60 +65,39 @@
         <div><img src="../assets/images/det2.jpg" alt="">
           <p>体检套餐</p></div>
       </div>
-
     </div>
   </div>
 </template>
 
+
 <script>
+  import axios from 'axios'
   export default {
     name: 'Cart',
     data() {
       return {
-        cart_info: [
-          {
-            "id": 1,
-            "cart_set_id": 1,
-            "ci_info_name": "王小八",
-            "set_meal_name": "标准营养套餐",
-            "bh_name": "南京易发红日养老院",
-            "set_meal_price": 500,
-            "number": 2
-          },
-          {
-            "id": 2,
-            "cart_set_id": 1,
-            "ci_info_name": "八小王",
-            "set_meal_name": "标准营养套餐",
-            "bh_name": "南京易发红日养老院",
-            "set_meal_price": 500,
-            "number": 2
-          },
-          {
-            "id": 3,
-            "cart_set_id": 1,
-            "ci_info_name": "小王八",
-            "set_meal_name": "标准营养套餐",
-            "bh_name": "南京易发红日养老院",
-            "set_meal_price": 500,
-            "number": 2
-          },
-          {
-            "id": 4,
-            "cart_set_id": 1,
-            "ci_info_name": "小王八",
-            "set_meal_name": "标准营养套餐",
-            "bh_name": "南京易发红日养老院",
-            "set_meal_price": 500,
-            "number": 2
-          },
-        ],
-        sum:0,
+        cart_info:[],
         checked: false,
         checkedBoxList: [],
+        checkNames:[],
+        isModalVisible: false,
+        cart_info_id:0,
+        dataList: [],
+        unitName: '请选择入住人',
+        unitModel: '',
+        room_set: [],
+        isShowSelect: false,
+        unitId:0,
+        sum:0,
       }
     },
+    // 钩子获取数据
+    mounted(){
+      this.getData();
+    },
+
     methods: {
+      // 全选与选项
       changeAllChecked: function () {
         if (this.checked) {//实现反选
           this.checkedBoxList = [];
@@ -119,12 +108,19 @@
           });
         }
       },
+      arrowDown() {
+        if (sessionStorage.getItem('u_points')) {
+          this.isShowSelect = !this.isShowSelect;
+        } else {
+          this.showinterl = '请先登录'
+        }
+      },
       sumPrice:function () {
         this.sum = 0;
         for(let i of this.cart_info){
           for (let j of this.checkedBoxList){
             if (i.id === j){
-              this.sum+=i.set_meal_price * i.number
+              this.sum+=i.price * i.number
             }
           }
         }
@@ -144,6 +140,107 @@
             i.number--;
           }
         }
+      },
+      select(item, index) {
+        this.isShowSelect = false;
+        this.unitModel = index;
+        this.unitName = item.name;
+        this.unitId = item.id;
+      },
+      getname: function () {
+        var user_id=sessionStorage.getItem('u_id')
+        if(user_id){
+          this.dataList=[]
+          var u_id = {
+            "user_id": user_id
+          };
+          var token = sessionStorage.getItem('token');
+          var that=this;
+          axios.post('http://127.0.0.1:8000/user/getcheckinfo/', u_id, {
+            headers: {
+              "token": token
+            }
+          })
+            .then(function (response) {
+              response.data.forEach((item, index) => {
+                that.dataList.push(item)
+              });
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        }
+        else{
+          alert('请登录！');
+        }
+      },
+      delGoods:function (good_id,good_type) {
+        let data = {
+          "user_id":sessionStorage.getItem('u_id'),
+          "good_id":parseInt(good_id),
+          "type":parseInt(good_type),
+        };
+        let that = this;
+        axios.post('http://127.0.0.1:8000/cart/deletecart/',data,{"headers":{"token":sessionStorage.getItem('token')}}).then(function (response) {
+          that.getData();
+        })
+      },
+      getData:function () {
+        var vm = this;
+        this.cart_info = [];
+        var token=sessionStorage.getItem('token');
+        var user_id=sessionStorage.getItem('u_id');
+        console.log(user_id);
+        var data={
+          "user_id":user_id
+        };
+        var that=this;
+        if(token){
+          axios.post('http://127.0.0.1:8000/cart/getcart/',data,{
+            headers:{
+              "token":token
+            }
+          })
+            .then(function (response) {
+              // config.headers.common['token']=token
+              let i = 0;
+              for(let room of response.data.room){
+                i += 1;
+                let json_room = {
+                  "id":i,
+                  "name": room.name,
+                  "price": room.price,
+                  "beadhouse_name": room.beadhouse_name,
+                  "number":room.number,
+                  "good_id":room.id,
+                  "type":0,
+                };
+                that.cart_info.push(json_room)
+              }
+              for(let meal of response.data.meal){
+                i += 1;
+                let json_meal = {
+                  "id":i,
+                  "name": meal.name,
+                  "price": meal.price,
+                  "beadhouse_name": meal.beadhouse_name,
+                  "number":meal.number,
+                  "good_id":meal.id,
+                  "type":1,
+                };
+                that.cart_info.push(json_meal)
+              }
+              console.log(that.cart_info)
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        }
+        else {
+          alert('请先登录！');
+          this.$router.push({path: "/login"});
+        }
+
       }
     },
     watch:{
@@ -158,10 +255,8 @@
       },
       deep:true,
     },
-    computed: {
-
-      },
   }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -193,7 +288,7 @@
   .cart-con-header div:nth-child(1), .good-item div:nth-child(1),
   .cart-con-header div:nth-child(2), .good-item div:nth-child(2),
   .cart-con-header div:nth-child(3), .good-item div:nth-child(3) {
-    flex: 2.5;
+    flex: 2.6;
   }
 
   .cart-good-item input {
@@ -219,13 +314,12 @@
     float: left;
     margin: auto 0;
   }
-
   .cart-btn-operator input {
     height: 20px;
     border: solid 1px grey;
     outline: none;
     box-sizing: border-box;
-    width: 40px;
+    width: 20px;
     text-align: center;
     line-height: 20px;
   }
@@ -240,6 +334,7 @@
   }
 
   .cart-con-count {
+    position: relative;
     background: #e7e7e7;
     height: 50px;
   }
@@ -286,7 +381,23 @@
     width: 200px;
     height: 130px;
     border-radius: 5px;
+  }
+  .btn{
+    background: #00cc66;
+    position: absolute;
+    top: 8px;
+    left: 45%;
+    text-align: center;
 
   }
-
+  .cart-btn-operator{
+    width: 100px;
+  }
+  ul li{
+    list-style: none;
+  }
+  .input-old{
+    padding: 5px 10px;
+    border: 1px solid gainsboro;
+  }
 </style>
