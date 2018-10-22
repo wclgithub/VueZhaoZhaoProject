@@ -221,6 +221,9 @@
         }
       },
       showContent:function () {
+        if (this.new_result_list.length<1){
+          this.page_size = 0;
+        }
         let start = (this.page_index-1) * 10;
         let end = this.new_result_list.length-1<=this.page_index*10-1?this.new_result_list.length-1:this.page_index*10-1;
         this.result_list = [];
