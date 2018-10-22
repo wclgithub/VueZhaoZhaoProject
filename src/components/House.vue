@@ -61,7 +61,7 @@
               <div class="col-md-2"><h4 class="houselineheight text-orange" v-text="r.price">500元/月</h4></div>
               <div class="col-md-2"><h4 class="houselineheight">20张</h4></div>
               <div class="col-md-2 houselineheight">
-              <button type="button" class="btn btn-sm btn-success" @click="goToDetails(r.id)">详情</button>
+              <button type="button" class="btn btn-sm btn-success" @click="goToDetails(r.id,r.name)">详情</button>
               </div>
               </div>
               </div>
@@ -95,8 +95,9 @@
           this.$router.push({path: "/apartinfo"});
         },
         //跳转房间详情页
-        goToDetails:function (roomid) {
+        goToDetails:function (roomid,roomname) {
           sessionStorage.setItem('roomid',roomid);
+          sessionStorage.setItem('roomname',roomname);
           this.$router.push({path: "/details"});
         },
         //跳转套餐列表页
