@@ -242,7 +242,7 @@
         .then(function (response) {
           vm.room_config = response.data;
           for (let c of vm.room_config) {
-            c.srcd = "../../static/images/detc" + c.configtype_id + '.jpg'
+            c.srcd = "http://localhost:8000/media/pic/detc" + c.configtype_id + '.jpg'
           }
           console.log(vm.room_config)
         })
