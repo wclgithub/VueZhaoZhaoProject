@@ -16,7 +16,6 @@ import ApartInfo from '@/components/ApartInfo'
 import Details from '@/components/Details'
 import SetMeal from '@/components/SetMeal'
 import Developer from '@/components/Developer'
-
 import ArticleDetails from '@/components/ArticleDetails'
 
 Vue.use(Router)
