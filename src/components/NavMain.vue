@@ -6,10 +6,10 @@
       <div class="col-md-5">
         <ul class="nav nav-pills my-nav">
           <li role="presentation">
-            <router-link to="./login"><a href="javascript:void 0" v-show="!islogin">登录</a></router-link>
+            <router-link to="./login"><a href="javascript:void 0" v-show="true">登录</a></router-link>
           </li>
           <li role="presentation">
-            <router-link to="./register"><a href="javascript:void 0" v-show="!islogin">注册</a></router-link>
+            <router-link to="./register"><a href="javascript:void 0" v-show="true">注册</a></router-link>
           </li>
           <li role="presentation">
             <router-link to="./apart"><a href="javascript:void 0">养老院</a></router-link>
@@ -45,7 +45,7 @@ export default {
     }
   },
   mounted:function () {
-    var u_id=sessionStorage.getItem('u_id')
+    var u_id=sessionStorage.getItem('u_id');
     if (u_id){
       this.islogin=true
     }

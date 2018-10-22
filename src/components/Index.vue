@@ -25,7 +25,7 @@
         </div>
         <div class="index-rooms-list row">
 
-          <div class="single-room col-lg-3" v-for="h in house_list">
+          <div class="single-room col-lg-3" v-for="h in house_list" v-on:click="toapartinfo(h.id)">
             <!--<a href="./house.html"></a>-->
             <router-link to="/house"><img src="../assets/images/room_pic.jpg" alt=""></router-link>
             <p class="room-p01">
@@ -61,25 +61,19 @@
     },
     mounted: function () {
       this.GetHouseData();
-
-
     },
     methods: {
       GetHouseData: function () {
         var that=this;
-        axios.get('http://127.0.0.1:8000/beadhouse/gethouseby///1/1/')
+        axios.get('http://192.168.2.32:8000/beadhouse/gethouseby///1/1/')
           .then(function (response) {
-            // console.log(response.data)
-            // console.log(response)
             response.data.forEach((item, index) => {
-
               if (item.score === 5) {
-                // console.log(item)
+                console.log(item)
                 that.house_list.push(item)
                 // console.log(this.house_list)
               }
             })
-
           })
           .catch(function (error) {
             console.log(error)
@@ -87,12 +81,14 @@
       },
       search: function () {
         if (this.ser_word) {
-          sessionStorage.setItem('already_searched', this.ser_word)
+          sessionStorage.setItem('already_searched', this.ser_word);
           this.$router.push({path: "/apart"});
-
         } else {
           this.$router.push({path: "/apart"});
         }
+      },
+      toapartinfo:function (id) {
+        sessionStorage.setItem('bhid',id);
       }
     }
   }

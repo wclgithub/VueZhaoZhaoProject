@@ -32,6 +32,7 @@
           <li><h4>加入我们</h4></li>
           <li>入住平台</li>
           <li>加盟</li>
+          <li @click="developer()"><a href="#" class="develop">开发者团队</a></li>
         </ul>
       </div>
       <div class="col-md-2"></div>
@@ -45,6 +46,11 @@ export default {
   data () {
     return {
       msg: 'Welcome to Your Vue.js App'
+    }
+  },
+  methods:{
+    developer:function () {
+      this.$router.push({path: "/developer"});
     }
   }
 }
@@ -102,5 +108,8 @@ export default {
     margin: 0;padding: 0;
     width: 100%;
 
+  }
+  .develop:hover,.develop:visited,.develop{
+    color: white;
   }
 </style>

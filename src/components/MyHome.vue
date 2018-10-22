@@ -38,7 +38,7 @@
             <div class="row">
               <div class="col-md-4  my-img-centet">
                 <!--头像(left)-->
-                <img class="img-circle my-img" v-bind:src="user_info.img"
+                <img class="img-circle my-img" :src="user_info.img"
                      style="object-fit: cover;width: 150px;height: 150px;border: 1px solid">
                 <form id="iconform">
                   <button class="btn btn-danger my-img-btn">
@@ -55,9 +55,9 @@
                   <span class="user-name" v-text="user_info.user_name">可爱小宝贝</span> LV<span>2</span>
                 </h4>
                 <div class="progress">
-                  <div class="progress-bar progress-bar-warning active" role="progressbar" aria-valuenow="45"
-                       aria-valuemin="0" aria-valuemax="100" style="width: 45%">
-                    <span class="sr-only">45% Complete</span>
+                  <div class="progress-bar progress-bar-warning active" role="progressbar" :aria-valuenow=myscore
+                       aria-valuemin="0" aria-valuemax="100" :style=myscorestyle>
+                    <span class="sr-only"></span>
                   </div>
                 </div>
                 <div class="row">
@@ -69,15 +69,7 @@
                   <div class="col-md-2"></div>
                 </div>
               </div>
-              <div class="col-md-12 list-btn">
-                <div class="list-group">
-                  <button type="button" class="list-group-item"><span class="badge" id="b2">2</span>积分成就奖励</button>
-                  <button type="button" class="list-group-item"><span class="badge" id="b3">4</span>线上订购奖励</button>
-                  <button type="button" class="list-group-item"><span class="badge" id="b4">4</span>线下公寓奖励</button>
-                  <button type="button" class="list-group-item"><span class="badge" id="b5">1</span>其他奖励</button>
-                </div>
 
-              </div>
             </div>
           </div>
         </div>
@@ -98,7 +90,9 @@
         signtext: '签到+1',
         flag: true,
         user_info: {},
-        useridicon: sessionStorage.getItem('u_id')
+        useridicon: sessionStorage.getItem('u_id'),
+        myscore:0,
+        myscorestyle:''
       }
     },
     methods: {
@@ -130,6 +124,7 @@
                     alert('签到成功')
                     vm.signtext = '已签到';
                     vm.flag = false;
+                    sessionStorage.setItem('u_points',  vm.user_info.points);
                   }
                   console.log(response)
                 })
@@ -165,7 +160,6 @@
               .then(function (response) {
                 // config.headers.common['token']=token
                 vm.user_info = response.data;
-                console.log(vm.user_info)
               })
           })
       }
@@ -181,6 +175,9 @@
         axios.post('http://127.0.0.1:8000/user/getuserinfo/', data, {headers: {"token": token}})
           .then(function (response) {
             vm.user_info = response.data;
+            vm.myscore=vm.user_info.points%100;
+            vm.myscorestyle='width:'+vm.myscore+'%';
+            console.log(vm.user_info)
             console.log(vm.user_info)
           })
           .catch(function (error) {
@@ -189,7 +186,7 @@
         axios.post('http://127.0.0.1:8000/user/checktest/', data, {headers: {"token": token}})
           .then(function (response) {
             // config.headers.common['token']=token
-            console.log(response.data)
+            console.log(response.data.check_result)
             if (response.data.check_result) {
               vm.flag = true;
               vm.signtext = '签到+1';
@@ -221,7 +218,6 @@
     height: 65px;
 
   }
-
   .my-nav a, .my-footer {
     color: white;
   }

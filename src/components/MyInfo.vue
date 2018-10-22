@@ -9,11 +9,10 @@
           <div class="panel-body">
             <!--第1.1行-->
             <div class="row">
-              <div class="col-md-4 my-img-centet">
+              <div class="col-md-4  my-img-centet">
                 <!--头像(left)-->
-                <!--<img class="img-circle my-img" src="./images/user.png" alt="" id="user">-->
-                <button class="btn btn-danger my-img-btn"><p>修改头像</p><input type="file" id="xdaTanFileImg"
-                                                                            onchange="xmTanUploadImg(this)"></button>
+                <img class="img-circle my-img" :src="user_info.img"
+                     style="object-fit: cover;width: 150px;height: 150px;border: 1px solid">
               </div>
               <div class="col-md-8">
                 <div class="row">
@@ -64,14 +63,8 @@
     data() {
       return{
         user_info: {
-          "telephone": "18846463366",
-          "id": "1",
-          "register_time": "2018-09-15",
-          "sex": "女",
-          "user_name": "猫咪",
-          "img": "./images/user.png",
-          "points": 50
         },
+        useridicon: sessionStorage.getItem('u_id'),
       }
     },
     methods: {
@@ -102,7 +95,8 @@
 
           console.log(this.user_info.telephone);
         }
-      }
+      },
+
     },
     mounted(){
       var vm = this;
@@ -195,8 +189,16 @@
     font-size: 14px;
 
   }
+  .my-img-btn {
+    width: 85px;
+    height: 35px;
+  }
 
-  #xdaTanFileImg {
+  .my-img-btn p {
+    position: absolute;
+  }
+
+  #user-pic {
     opacity: 0;
     filter: alpha(opacity=0);
   }
@@ -209,6 +211,5 @@
   .my-img-btn p {
     position: absolute;
   }
-
 
 </style>
