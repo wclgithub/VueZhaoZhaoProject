@@ -25,7 +25,7 @@
         </div>
         <div class="index-rooms-list row">
 
-          <div class="single-room col-lg-3" v-for="h in house_list">
+          <div class="single-room col-lg-3" v-for="h in house_list" v-on:click="toapartinfo(h.id)">
             <!--<a href="./house.html"></a>-->
             <router-link to="/house"><img src="../assets/images/room_pic.jpg" alt=""></router-link>
             <p class="room-p01">
@@ -69,7 +69,7 @@
           .then(function (response) {
             response.data.forEach((item, index) => {
               if (item.score === 5) {
-                // console.log(item)
+                console.log(item)
                 that.house_list.push(item)
                 // console.log(this.house_list)
               }
@@ -86,6 +86,9 @@
         } else {
           this.$router.push({path: "/apart"});
         }
+      },
+      toapartinfo:function (id) {
+        sessionStorage.setItem('bhid',id);
       }
     }
   }

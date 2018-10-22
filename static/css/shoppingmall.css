@@ -150,7 +150,7 @@ footer ul li{
   margin-top: 20px;
   width: 1200px;
   height: 800px;
-  background: url("../../src/assets/images/login_background.jpg");
+  background: url("/src/assets/images/login_background.jpg");
   background-size: cover;
 }
 /*登录界面*/

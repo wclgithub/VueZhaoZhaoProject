@@ -15,7 +15,8 @@ import Modal from '@/components/Modal'
 import ApartInfo from '@/components/ApartInfo'
 import Details from '@/components/Details'
 import SetMeal from '@/components/SetMeal'
-import Developer from '@/components/Developer'
+import ModalCart from '@/components/ModalCart'
+
 import ArticleDetails from '@/components/ArticleDetails'
 
 Vue.use(Router)
@@ -84,6 +85,11 @@ export default new Router({
       component: Modal,
     },
     {
+      path: '/modal_cart',
+      name: 'modal-cart',
+      component: ModalCart,
+    },
+    {
       path: '/articledetails',
       name: 'ArticleDetails',
       component: ArticleDetails,
@@ -102,11 +108,6 @@ export default new Router({
       path: '/setMeal',
       name: 'SetMeal',
       component: SetMeal,
-    },
-    {
-      path: '/developer',
-      name: 'Developer',
-      component: Developer,
     },
 
   ]
