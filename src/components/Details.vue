@@ -10,10 +10,7 @@
           <div class="panel panel-default">
             <!-- Default panel contents -->
             <div class="panel-heading">
-              <h4>豪华单人间</h4>
-            </div>
-            <div class="panel-body">
-              <p>地址:江苏省苏州市工业园区雪堂街328号</p>
+              <h4 v-text="room_name">豪华单人间</h4>
             </div>
             <!-- List group -->
             <ul class="list-group">
@@ -25,43 +22,41 @@
                   <div class="col-md-4">
                     <div class="panel panel-default">
                       <div class="panel-body ">
-                        <h4 v-for="rs in room_set"><input type="checkbox" name="set"><label  v-text="rs.name"></label>/<span v-text="rs.price" class="text-orange"></span>元</h4>
+                        <h4 v-for="rs in room_set">
+                          <input type="checkbox" :id=rs.id v-model="setmeal_id" :value=rs.id>
+                          <label :for=rs.id v-text="rs.name"></label>
+                          /
+                          <span v-text="rs.price" class="text-orange"></span>
+                          元
+                        </h4>
                       </div>
                       <div class="panel-heading">
                         <ul>
-                          <li class="f-l">
-                            <div class="por">
-                              <div class="selectBox" style="width: 400px;">
-                                <div class="selectBox_show" v-on:click.stop="arrowDown">
-                                  <i class="icon icon_arrowDown"></i>
-                                  <a title="请选择" v-text="unitName" :id=unitId @click="getname()"></a>
-                                  <input type="hidden" name="unit" v-model="unitModel">
-                                </div>
-                                <div class="selectBox_list" v-show="isShowSelect"
-                                     style="max-height: 240px; width: 398px; display: block;">
-                                  <div class="selectBox_listLi" v-for="(item, index) in dataList"
-                                       @click.stop="select(item, index)" :id=item.id v-text="item.name">
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </li>
+                          <h4>周期:
+                            <input type="number" class="input-month" oninput="if(value>12)value=12 ;if(value<1)value=1" v-model=number>
+                            月
+                          </h4>
                         </ul>
                       </div>
                       <div class="panel-body">
-                        <button type="button" class="btn btn-warning center-block">加入购物车</button>
+                        <button type="button" class="btn btn-warning center-block" @click="addCart()">加入购物车</button>
                       </div>
                     </div>
                   </div>
                   <div class="col-md-2">
-                    <a href="#">
+                    <a href="http://service.weibo.com/share/share.php?appkey=&title=&url=&searchPic=false&style=simple" target="_blank">
                       <button type="button"
                               class="btn center-block glyphicon glyphicon-share-alt roombtnmargin">分享
                       </button>
                     </a>
                     <a href="#">
                       <button type="button"
-                              class="btn center-block glyphicon glyphicon-star-empty roombtnmargin">收藏
+                              class="btn center-block glyphicon glyphicon-star-empty roombtnmargin" v-if="flag"
+                              @click="collRoom()">收藏房间
+                      </button>
+                      <button type="button"
+                              class="btn center-block glyphicon glyphicon-star roombtnmargin" v-if="!flag"
+                              @click="delCollRoom()">已收藏
                       </button>
                     </a>
                     <!--<button type="button" class="btn center-block glyphicon glyphicon-star roombtnmargin">收藏</button>-->
@@ -78,8 +73,9 @@
                   <div class="col-md-4">
                     <div class="panel panel-default room-other">
                       <div class="panel-body"><h3>房间设施</h3></div>
-                      <div class="panel-body" v-for="rc in room_config" ><img :src=rc.srcd ><span v-text="rc.configtype__name"></span></div>
-                     </div>
+                      <div class="panel-body" v-for="rc in room_config"><img :src=rc.srcd><span
+                        v-text="rc.configtype__name"></span></div>
+                    </div>
                   </div>
                   <div class="col-md-8">
                     <div class="panel panel-success" v-for="rs in room_set">
@@ -113,103 +109,147 @@
 
   export default {
     name: "",
-    data(){
-      return{
-        room_id:'',
-        room_config:[],
-        rooms_info:[],
-        dataList: [
-          // {key: -1, value: "请选择"},
-          // {key: 0, value: "苹果"},
-          // {key: 1, value: "香蕉"},
-          // {value: "请选择"},
-          // {value: "妈妈"},
-          // {value: "爸爸"}
-
-        ],
-        unitName: '请选择入住人',
+    data() {
+      return {
+        room_id: '',
+        room_config: [],
+        rooms_info: [],
+        dataList: [],
+        unitName: '未选择',
         unitModel: '',
         room_set: [],
         isShowSelect: false,
-        unitId:''
+        unitId: '',
+        flag: true,
+        setmeal_id: [],
+        number:1,
+        room_name:''
       }
     },
-    methods:{
-
-      //下拉列表选择入住人
-      select(item, index) {
-        this.isShowSelect = false;
-        console.log(item);
-        console.log(index);
-        this.unitModel = index;
-        this.unitName = item.name;
-        this.unitId = item.id;
+    methods: {
+      goToBh: function () {
+        var bh_id = sessionStorage.getItem('bhid');
+        this.$router.push({path: "/apartinfo"});
       },
-      //得到当前用户的所有入住人
-      getname: function () {
-         var user_id=sessionStorage.getItem('u_id')
-
-        // console.log(u_id)
-
-        if(user_id){
-          this.dataList=[]
-          var u_id = {
-            "user_id": user_id
-          };
-          var token = sessionStorage.getItem('token');
-          var that=this;
-          axios.post('http://127.0.0.1:8000/user/getcheckinfo/', u_id, {
+      //收藏房间
+      collRoom: function () {
+        var vm = this;
+        vm.room_id = sessionStorage.getItem('roomid');
+        vm.user_id = sessionStorage.getItem('u_id');
+        if (vm.user_id) {
+          var token = sessionStorage.getItem('token')
+          var data = {
+            "user_id": vm.user_id,
+            "room_id": vm.room_id,
+          }
+          axios.post('http://127.0.0.1:8000/beadhouse/collectroom/', data, {
             headers: {
               "token": token
             }
           })
             .then(function (response) {
-              // console.log(response.data[0])
-              response.data.forEach((item, index) => {
-                that.dataList.push(item)
-              })
-              console.log(that.dataList)
+              console.log(response.data)
+              if (response.data.statuscode == '202') {
+                vm.flag = false;
+                alert('收藏成功！')
+              } else {
+                vm.flag = true;
+              }
             })
             .catch(function (error) {
               console.log(error)
             })
         }
-        else{
-          alert('请登录！');
+        else {
+          alert('请先登录！')
         }
-
       },
-      arrowDown() {
-        this.isShowSelect = !this.isShowSelect;
+      //取消收藏房间
+      delCollRoom: function () {
+        var vm = this;
+        vm.room_id = sessionStorage.getItem('roomid');
+        vm.user_id = sessionStorage.getItem('u_id');
+        if (vm.user_id) {
+          var token = sessionStorage.getItem('token')
+          var data = {
+            "user_id": vm.user_id,
+            "room_id": vm.room_id,
+          }
+          axios.post('http://127.0.0.1:8000/beadhouse/cancelroomcollect/', data, {
+            headers: {
+              "token": token
+            }
+          })
+            .then(function (response) {
+              if (response.data.statuscode == '202') {
+                vm.flag = true;
+                alert('取消成功')
+              } else {
+                vm.flag = false;
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        }
+        else {
+          alert('请先登录！')
+        }
       },
-      goToBh:function () {
-        var bh_id=sessionStorage.getItem('bhid');
-        this.$router.push({path: "/apartinfo"});
-      },
-    },
-    mounted() {
-      var vm = this;
-      vm.room_id=sessionStorage.getItem('roomid');
-      vm.rooms_info=sessionStorage.getItem('rooms_info');
-      for(let r of vm.rooms_info){
-        if(r.id==vm.room_id){
-          //得到当前room信息
-          vm.rooms_info=r
+      //添加到购物车
+      addCart: function () {
+        var vm = this;
+        vm.user_id = sessionStorage.getItem('u_id');
+        if (vm.user_id) {
+          var token = sessionStorage.getItem('token')
+          var room_id = sessionStorage.getItem('roomid')
+          var data = {
+            "user_id": vm.user_id,
+            "room_id": vm.room_id,
+            "number":vm.number,
+            "setmeal_id":vm.setmeal_id
+          }
+          axios.post('http://127.0.0.1:8000/cart/addcart/', data, {
+            headers: {
+              "token": token
+            }
+          })
+            .then(function (response) {
+              if (response.data.statuscode=='202') {
+                alert("成功加入购物车!")
+              } else {
+                alert("加入失败!")
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        }
+        else {
+          alert('请先登录!')
         }
       }
+
+    },
+    mounted() {
+
+      this.room_id = sessionStorage.getItem('roomid');
+      this.room_name = sessionStorage.getItem('roomname');
+      this.rooms_info = sessionStorage.getItem('rooms_info');
       //得到所有的配置
-      axios.get('http://127.0.0.1:8000/beadhouse/getconfigbyid/'+vm.room_id+'/')
+      var vm = this;
+      axios.get('http://127.0.0.1:8000/beadhouse/getconfigbyid/' + vm.room_id + '/')
         .then(function (response) {
           vm.room_config = response.data;
-          for(let c of vm.room_config){
-            c.srcd="../../static/images/detc"+c.configtype_id+'.jpg'
+          for (let c of vm.room_config) {
+            c.srcd = "http://localhost:8000/media/pic/detc" + c.configtype_id + '.jpg'
           }
           console.log(vm.room_config)
         })
         .catch(function (error) {
           console.log(error)
         })
-      axios.get('http://192.168.2.32:8000/beadhouse/getmealbyroomid/'+vm.room_id+'/')
+      axios.get('http://127.0.0.1:8000/beadhouse/getmealbyroomid/' + vm.room_id + '/')
         .then(function (response) {
           vm.room_set = response.data;
           console.log(vm.room_set)
@@ -217,6 +257,32 @@
         .catch(function (error) {
           console.log(error)
         })
+      //判断房间是否被收藏
+      vm.user_id = sessionStorage.getItem('u_id');
+      if (vm.user_id) {
+        var token = sessionStorage.getItem('token')
+        var room_id = sessionStorage.getItem('roomid')
+        var data = {
+          "user_id": vm.user_id,
+          "room_id": vm.room_id,
+        }
+        axios.post('http://127.0.0.1:8000/beadhouse/isroomcollect/', data, {
+          headers: {
+            "token": token
+          }
+        })
+          .then(function (response) {
+            console.log(response.data.collectstatus)
+            if (response.data.collectstatus) {
+              vm.flag = false;
+            } else {
+              vm.flag = true;
+            }
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+      }
     }
   }
 </script>
@@ -229,12 +295,8 @@
   }
 
   .roombtnmargin {
+    width: 100px;
     margin: 10px 20px;
-  }
-
-  .roomcheckin {
-    border-radius: 5px;
-    border: #dcdcdc solid 1px;
   }
 
   .room-set-img img {
@@ -247,36 +309,9 @@
     height: 750px;
   }
 
-  .my-nav-img img {
-    height: 65px;
-
-  }
-
-  .my-nav a, .my-footer {
-    color: white;
-  }
-
-  .my-every-btn button {
-    color: white;
-    width: 80px;
-    height: 80px;
-    border: solid 0px black;
-    border-radius: 50%;
-    box-shadow: #7b8099 2px 2px 2px;
-  }
-
   .my-index-center {
     padding-top: 20px;
     min-height: 600px;
-  }
-
-  .panel-primary > .panel-heading, .bg-green {
-    background: #40a170;
-  }
-
-  .nav > li > a:hover,
-  .nav > li > a:focus {
-    color: black;
   }
 
   .my-input span p {
@@ -298,40 +333,27 @@
     font-size: 14px;
   }
 
-  .my-img-btn p {
-    position: absolute;
-  }
-
   .col-md-2 a, .col-md-1 a {
-    padding: 5px;
     text-decoration: none;
     border-radius: 2px;
     color: #269abc;
   }
 
-  .selectBox_show a{
-    text-decoration: none;
-    color: black;
-    font-size: 20px;
-    /*padding-left: 80px;*/
-  }
-  .por{
-    /*background: chocolate;*/
-    width: 300px;
-    margin-left: 40px;
-    margin-top: 50px;
-    cursor:pointer
-  }
-  .selectBox_listLi{
-    font-size: 15px;
-  }
 
-
-  .f-l{
-    list-style: none;
-  }
-  .text-orange{
+  .text-orange {
     color: orange;
+  }
+
+  .glyphicon-star {
+    background: orange;
+  }
+
+  .input-month {
+    width: 100px;
+  }
+
+  h4 {
+    margin: 10px 5px;
   }
 
 </style>

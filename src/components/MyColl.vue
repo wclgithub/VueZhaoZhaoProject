@@ -19,6 +19,9 @@
             <div class="row my-coll-all">
             </div>
             <!--公寓收藏内容-->
+            <div class="row panel-body" v-if="!bhstate&&!roomstate&&artstate|!bhstate">
+              您还没有收藏哦！
+            </div>
             <div class="row my-coll-house mcoll" v-if="bhstate">
               <div class="col-sm-4 col-md-4 " v-for="b in bh_info">
                 <div class="thumbnail">
@@ -44,7 +47,7 @@
                   <div class="caption">
                     <h4><strong v-text="r.room__name"></strong></h4>
                     <p v-text="r.room__beadhouse__name"></p>
-                    <p><a href="#" class="btn btn-success" role="button" @click="goToRoomInfo(r.room_id)">详情</a> <a href="#" class="btn btn-default"
+                    <p><a href="#" class="btn btn-success" role="button" @click="goToRoomInfo(r.room_id,r.room__name)">详情</a> <a href="#" class="btn btn-default"
                                                                                    role="button"
                                                                                    @click="delRoomColl(r.room_id)">取消</a>
                     </p>
@@ -62,7 +65,7 @@
                   <div class="caption">
                     <h4 :id=a.article_id><strong v-text="a.article__title"></strong></h4>
                     <p v-text="a.article__beadhouse__name" ></p>
-                    <p><a href="#" class="btn btn-success" role="button" @click="goToArtInfo(a.article_id)">详情</a> <a href="#" class="btn btn-default"
+                    <p><a href="#" class="btn btn-success" role="button" @click="goToArtiInfo(a.article_id)">详情</a> <a href="#" class="btn btn-default"
                                                                                    role="button"
                                                                                    @click="delArtColl(a.article_id)">取消</a>
                     </p>
@@ -304,15 +307,16 @@
       //跳转公寓详情页
       goToBhiInfo:function (bhid) {
         sessionStorage.setItem('bhid',bhid);
-        this.$router.push({path: "/house"});
+        this.$router.push({path: "/apartinfo"});
       },
-      goToRoomInfo:function (roomid) {
+      goToRoomInfo:function (roomid,roomname) {
         sessionStorage.setItem('roomid',roomid);
-        this.$router.push({path: "/house"});
+        sessionStorage.setItem('roomname',roomname);
+        this.$router.push({path: "/details"});
       },
       goToArtiInfo:function (artid) {
         sessionStorage.setItem('artid',artid);
-        this.$router.push({path: "/house"});
+        this.$router.push({path: "/articledetails"});
       }
     },
 
@@ -329,11 +333,6 @@
 
   }
 
-  .my-nav {
-    height: 65px;
-    line-height: 40px;
-  }
-
   .my-nav a, .my-footer {
     color: white;
   }
@@ -347,20 +346,6 @@
     box-shadow: #7b8099 2px 2px 2px;
   }
 
-  .my-index-center {
-    padding-top: 20px;
-    min-height: 600px;
-  }
-
-  .my-img {
-    width: 150px;
-    height: 150px;
-    margin: 5px;
-  }
-
-  .panel-primary > .panel-heading, .bg-green {
-    background: #40a170;
-  }
 
   .nav > li > a:hover,
   .nav > li > a:focus {

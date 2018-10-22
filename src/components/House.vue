@@ -9,13 +9,12 @@
       <!--巨幕-->
       <div class="row">
         <div class="col-md-12 ">
-          <div class="jumbotron">
-            <div class="row">
-              <div class="col-md-7 title-img">
+          <div class="jumbotron title-img">
+            <div class="row" >
+              <div class="col-md-7 ">
               </div>
               <div class="col-md-5">
                 <span class="house-title">
-
                 </span>
                 <p>让您的父母得到最温暖的关怀！</p>
                 <div class="row">
@@ -23,7 +22,7 @@
                     <a class="btn btn-success btn-lg" href="#" role="button" @click="goToBhiInfo()">公寓简介</a>
                   </div>
                   <div class="col-md-6">
-                    <a class="btn btn-success btn-lg" href="#" role="button">增值套餐</a>
+                    <a class="btn btn-success btn-lg" href="#" role="button" @click="goToMealsList">增值套餐</a>
                   </div>
                 </div>
               </div>
@@ -62,7 +61,7 @@
               <div class="col-md-2"><h4 class="houselineheight text-orange" v-text="r.price">500元/月</h4></div>
               <div class="col-md-2"><h4 class="houselineheight">20张</h4></div>
               <div class="col-md-2 houselineheight">
-              <button type="button" class="btn btn-sm btn-success" @click="goToDetails(r.id)">详情</button>
+              <button type="button" class="btn btn-sm btn-success" @click="goToDetails(r.id,r.name)">详情</button>
               </div>
               </div>
               </div>
@@ -96,9 +95,14 @@
           this.$router.push({path: "/apartinfo"});
         },
         //跳转房间详情页
-        goToDetails:function (roomid) {
+        goToDetails:function (roomid,roomname) {
           sessionStorage.setItem('roomid',roomid);
+          sessionStorage.setItem('roomname',roomname);
           this.$router.push({path: "/details"});
+        },
+        //跳转套餐列表页
+        goToMealsList:function () {
+          this.$router.push({path: "/setmeal"});
         },
       },
       mounted() {
@@ -194,6 +198,8 @@
   .my-img-btn p{
     position:absolute;
   }
-
+  .title-img{
+    background-image: url("../assets/images/room02.png");
+  }
 
 </style>

@@ -51,6 +51,7 @@
         <div><img src="../assets/images/det2.jpg" alt="">
           <p>体检套餐</p></div>
       </div>
+
     </div>
   </div>
 </template>
@@ -261,6 +262,7 @@
     },
     watch:{
       "checkedBoxList": function() {
+        alert('ok');
         if (this.checkedBoxList.length != this.cart_info.length) {
           this.checked = false
         }
