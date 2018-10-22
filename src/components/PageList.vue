@@ -8,7 +8,7 @@
               <span aria-hidden="true">&laquo;</span>
             </a>
           </li>
-          <li v-for="i in page_control"><a href="javascript:void 0" v-text="i" @click.prevent="getIndex(i)"></a></li>
+          <li v-show="is_show" v-for="i in page_control"><a href="javascript:void 0" v-text="i" @click.prevent="getIndex(i)"></a></li>
           <li>
             <a href="javascript:void 0" aria-label="Next" @click.prevent="nextPage">
               <span aria-hidden="true">&raquo;</span>
@@ -28,6 +28,7 @@ export default {
       return {
         page_control:[],
         pageindex : 1,
+        is_show : true
       }
     },
     mounted () {
@@ -37,6 +38,10 @@ export default {
       "page_size": function(newpage,oldpage) {
         this.pageindex = 1;
         this.changeIndex(this.pageindex)
+        if(this.page_size>1){
+          this.is_show = true;
+        }else
+          this.is_show = false;
       },
     deep:true,
   },
