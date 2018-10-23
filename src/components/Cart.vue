@@ -31,17 +31,17 @@
       </div>
     </div>
     <div class="cart-con-count">
-      <ul>
+      <ul class="col-md-9">
         <li class="f-l">
           <div class="por">
-            <div class="selectBox" style="width: 400px;">
+            <div class="selectBox" >
               <div class="selectBox_show" v-on:click.stop="arrowDown">
                 <i class="icon icon_arrowDown"></i>
                 <a class="input-old" title="请选择" v-text="unitName" :id=unitId @click="getname()"></a>
                 <input type="hidden" name="unit" v-model="unitModel">
               </div>
               <div class="selectBox_list" v-show="isShowSelect"
-                   style="max-height: 240px; width: 398px; display: block;">
+                   style="max-height: 100px; width: 80px; display: block;">
                 <div class="selectBox_listLi" v-for="(item, index) in dataList"
                      @click.stop="select(item, index)" :id=item.id v-text="item.name">
                 </div>
@@ -50,11 +50,15 @@
           </div>
         </li>
       </ul>
-      <div>总计:<span v-text="sum"></span>元<input type="submit" value="结算" @click.prevent="addOder(sum)"></div>
+      <div class="col-md-3">总计:<span v-text="sum"></span>元<input type="submit" value="结算" @click.prevent="addOrder"></div>
     </div>
 
     <div class="cart-groom panel panel-success">
-      <div class="cart-groom-title panel-heading"><h4>该公寓推荐套餐</h4></div>
+      <div class="cart-groom-title panel-heading">
+        <div class="row">
+        <h4 class="col-md-10"></h4 ><h4 class="col-md-2">公寓推荐套餐</h4>
+      </div>
+      </div>
       <div class="cart-groom-set-meal panel-body">
         <div><img src="../assets/images/det2.jpg" alt="">
           <p>标准套餐</p></div>
@@ -76,19 +80,19 @@
     name: 'Cart',
     data() {
       return {
-        cart_info:[],
+        cart_info:[],   // 用来显示所有商品
         checked: false,
-        checkedBoxList: [],
+        checkedBoxList: [],  // 用来控制全选和反选
         checkNames:[],
-        isModalVisible: false,
         cart_info_id:0,
         dataList: [],
         unitName: '请选择入住人',
         unitModel: '',
         room_set: [],
         isShowSelect: false,
-        unitId:0,
-        sum:0,
+        unitId:0, // 当前选中的入驻人id
+        sum:0,    // 用来显示总价
+        order_list:[] //订单列表用来存放添加到订单里的房间和套餐
       }
     },
     // 钩子获取数据
@@ -112,7 +116,6 @@
         if (sessionStorage.getItem('u_points')) {
           this.isShowSelect = !this.isShowSelect;
         } else {
-          this.showinterl = '请先登录'
         }
       },
       sumPrice:function () {
@@ -185,12 +188,12 @@
           that.getData();
         })
       },
+      // 用来获取购物车列表的函数
       getData:function () {
         var vm = this;
         this.cart_info = [];
         var token=sessionStorage.getItem('token');
         var user_id=sessionStorage.getItem('u_id');
-        console.log(user_id);
         var data={
           "user_id":user_id
         };
@@ -230,7 +233,6 @@
                 };
                 that.cart_info.push(json_meal)
               }
-              console.log(that.cart_info)
             })
             .catch(function (error) {
               console.log(error)
@@ -241,11 +243,56 @@
           this.$router.push({path: "/login"});
         }
 
-      }
+      },
+      // 结算函数
+      addOrder:function () {
+        this.order_list = [];
+        if (this.unitId==0){
+          alert('请选择入住人')
+        } else {
+          for(let good of this.cart_info){
+            if(this.checkedBoxList.indexOf(good.id) >= 0){
+              this.order_list.push(good)
+            }
+          }
+          if (this.order_list.length<=0)  // 判断商品有没有被选中
+            alert('您还未选中商品');
+          else {
+            let result = confirm("请支付订单金额"); //在页面上弹出对话框
+            let statusid = 2;
+            if (result==true)
+              statusid = 2;
+            else
+              statusid = 1;
+            console.log(this.order_list);
+            let data = {
+              "user_id":sessionStorage.getItem('u_id'),
+              "price":this.sum,
+              "check_info_id":this.unitId,
+              "good_list":this.order_list,
+              "status":statusid,
+            };
+            console.log(data);
+
+            let that = this;
+            axios.post('http://127.0.0.1:8000/order/addorder/',data,{
+              headers:{
+                "token":sessionStorage.getItem('token')
+              }
+            }).then(function (response) {
+              if (response.data.statuscode == '202')
+                alert('下单成功');
+                that.getData();
+            })
+          }
+        }
+        }
     },
     watch:{
       "checkedBoxList": function() {
+        // 每当checkedBoxList发生改变时，更新总价
         this.sumPrice();
+        // 如果checkedBoxList长度不等于购物车列表长度，全选状态为false
         if (this.checkedBoxList.length != this.cart_info.length) {
           this.checked = false
         }
@@ -371,7 +418,6 @@
     flex: 1;
     width: 200px;
     height: 150px;
-
     box-sizing: border-box;
     border: white solid 3px;
     text-align: center;
@@ -396,8 +442,13 @@
   ul li{
     list-style: none;
   }
-  .input-old{
-    padding: 5px 10px;
-    border: 1px solid gainsboro;
+  .selectBox{
+    width: 130px;
+    margin-top: 8px;
+    padding: 9px;
+    border: darkgray 1px solid;
+    background: white;
+    font-size: 16px;
   }
+
 </style>

@@ -162,11 +162,19 @@
         var vm = this;
         axios.get('http://127.0.0.1:8000/beadhouse/gethouseby/' + vm.search_city + '/' + vm.search_data + '/'+ vm.sort_type_one+'/'+ vm.sort_type_two+'/')
           .then(function (response) {
-            vm.result_list = response.data;
+            vm.bh_info = response.data;
+            vm.new_result_list = vm.bh_info;
+            vm.showContent();
+            vm.search_city='';
+            vm.search_data='';
+            vm.sort_type_one='';
+            vm.sort_type_two='';
+            vm.city='';
           })
           .catch(function (error) {
             console.log(error)
           });
+
       },
       // 筛选价格
       getPrice:function(event){

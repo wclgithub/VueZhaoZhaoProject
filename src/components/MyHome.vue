@@ -146,65 +146,60 @@
       //修改头像
       upLoadIcon: function () {
         let formdata = new FormData(document.querySelector("#iconform"));
+        let that = this;
         axios.post('http://127.0.0.1:8000/user/uploadicon/', formdata)
           .then(function (response) {
             if (response.data.statuscode == '202')
               setTimeout(1);
-            axios.post('http://127.0.0.1:8000/user/getuserinfo/', data, {
-              headers: {
-                "token": token
-              }
-            }).then(function (response) {
-                vm.user_info = response.data;
-            })
+            that.getUserInfo();
           })
+      },
+      getUserInfo:function () {
+        let vm = this;
+        let token = sessionStorage.getItem('token');
+        let data = {
+          "user_id": sessionStorage.getItem('u_id')
+        };
+        if (token) {
+          axios.post('http://127.0.0.1:8000/user/getuserinfo/', data, {headers: {"token": token}})
+            .then(function (response) {
+              vm.user_info = response.data;
+              vm.myscore=vm.user_info.points%100;
+              vm.myscorestyle='width:'+vm.myscore+'%';
+              console.log(vm.user_info)
+              console.log(vm.user_info)
+            })
+            .catch(function (error) {
+              console.log(error)
+            });
+          axios.post('http://127.0.0.1:8000/user/checktest/', data, {headers: {"token": token}})
+            .then(function (response) {
+              // config.headers.common['token']=token
+              console.log(response.data.check_result);
+              if (response.data.check_result) {
+                vm.flag = true;
+                vm.signtext = '签到+1';
+              }
+              else {
+                vm.flag = false;
+                vm.signtext = '已签到';
+
+
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+            });
+
+        }
+        else {
+          alert('请先登录！');
+          this.$router.push({path: "/login"});
+        }
       }
     },
     mounted() {
-
-      let vm = this;
-      let token = sessionStorage.getItem('token');
-      let data = {
-        "user_id": sessionStorage.getItem('u_id')
-      };
-      if (token) {
-        axios.post('http://127.0.0.1:8000/user/getuserinfo/', data, {headers: {"token": token}})
-          .then(function (response) {
-            vm.user_info = response.data;
-            vm.myscore=vm.user_info.points%100;
-            vm.myscorestyle='width:'+vm.myscore+'%';
-            console.log(vm.user_info)
-            console.log(vm.user_info)
-          })
-          .catch(function (error) {
-            console.log(error)
-          });
-        axios.post('http://127.0.0.1:8000/user/checktest/', data, {headers: {"token": token}})
-          .then(function (response) {
-            // config.headers.common['token']=token
-            console.log(response.data.check_result);
-            if (response.data.check_result) {
-              vm.flag = true;
-              vm.signtext = '签到+1';
-            }
-            else {
-              vm.flag = false;
-              vm.signtext = '已签到';
-
-
-            }
-          })
-          .catch(function (error) {
-            console.log(error)
-          });
-
-      }
-      else {
-        alert('请先登录！');
-        this.$router.push({path: "/login"});
-      }
-
-
+      this.getUserInfo();
     }
   }
 </script>
