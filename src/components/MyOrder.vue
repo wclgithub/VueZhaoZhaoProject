@@ -1,6 +1,25 @@
 <template>
   <div class="col-md-9">
     <div class="row">
+      <!-- 按钮触发模态框 -->
+      <!--<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">开始演示模态框</button>-->
+      <!-- 模态框（Modal） -->
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h2 class="modal-title text-center" id="myModalLabel" style="color: rgba(255,18,4,0.84);" v-text="err_message"></h2>
+            </div>
+            <div class="modal-body text-center"><span v-text="err_message"></span></div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+      </div>
+    </div>
+    <div class="row">
       <div class="col-md-12">
         <div class="my-nav-size">
           <h3 class="panel-title">
@@ -127,7 +146,8 @@
         successstate: false,
         badstate: false,
         user_order: [],
-        show:true
+        show:true,
+        err_message:'',
       }
     },
     methods: {
@@ -207,7 +227,8 @@
           .then(function (response) {
             if (response.data.statuscode) {
               if (response.data.statuscode == '202') {
-                alert('删除成功');
+                vm.err_message = '删除成功';
+                $('#myModal').modal();
                 vm.getOrder();
               }
             }

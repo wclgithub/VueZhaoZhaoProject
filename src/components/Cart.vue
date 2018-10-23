@@ -1,6 +1,26 @@
 <template>
   <div class="cart-container">
+    <div class="row">
+      <!-- 按钮触发模态框 -->
+      <!--<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">开始演示模态框</button>-->
+      <!-- 模态框（Modal） -->
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h2 class="modal-title text-center" id="myModalLabel" style="color: rgba(255,18,4,0.84);" v-text="err_message"></h2>
+            </div>
+            <div class="modal-body text-center"><span v-text="err_message"></span></div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+      </div>
+    </div>
     <div class=" panel panel-success">
+
       <div class="cart-con-header panel-heading ">
         <div>
           <input type="checkbox" id="checkbox" v-model="checked" @click="changeAllChecked">
@@ -63,7 +83,9 @@
 
 <script>
   import axios from 'axios'
-
+  import 'bootstrap/dist/css/bootstrap.min.css'
+  import 'jquery'
+  import 'bootstrap/dist/js/bootstrap.min'
   export default {
     name: 'Cart',
     data() {
@@ -80,7 +102,8 @@
         isShowSelect: false,
         unitId: 0, // 当前选中的入驻人id
         sum: 0,    // 用来显示总价
-        order_list: [] //订单列表用来存放添加到订单里的房间和套餐
+        order_list: [], //订单列表用来存放添加到订单里的房间和套餐
+        err_message:'',
       }
     },
     // 钩子获取数据
@@ -162,7 +185,8 @@
             })
         }
         else {
-          alert('请登录！');
+          this.err_message = '请登录';
+          $('#myModal').modal();
         }
       },
       delGoods: function (good_id, good_type) {
@@ -174,6 +198,8 @@
         let that = this;
         axios.post('http://127.0.0.1:8000/cart/deletecart/', data, {"headers": {"token": sessionStorage.getItem('token')}}).then(function (response) {
           that.getData();
+          that.err_message = '删除成功';
+          $('#myModal').modal();
         })
       },
       // 用来获取购物车列表的函数
@@ -227,8 +253,8 @@
             })
         }
         else {
-          alert('请先登录！');
-          this.$router.push({path: "/login"});
+          this.err_message = '请登录';
+          $('#myModal').modal();
         }
 
       },
@@ -236,15 +262,18 @@
       addOrder: function () {
         this.order_list = [];
         if (this.unitId == 0) {
-          alert('请选择入住人')
+          this.err_message='请选择入住人';
+          $('#myModal').modal();
         } else {
           for (let good of this.cart_info) {
             if (this.checkedBoxList.indexOf(good.id) >= 0) {
               this.order_list.push(good)
             }
           }
-          if (this.order_list.length <= 0)  // 判断商品有没有被选中
-            alert('您还未选中商品');
+          if (this.order_list.length <= 0){ // 判断商品有没有被选中
+            this.err_message = '请选择商品';
+            $('#myModal').modal();
+          }
           else {
             let result = confirm("请支付订单金额"); //在页面上弹出对话框
             let statusid = 2;
@@ -252,7 +281,6 @@
               statusid = 2;
             else
               statusid = 1;
-            console.log(this.order_list);
             let data = {
               "user_id": sessionStorage.getItem('u_id'),
               "price": this.sum,
@@ -260,17 +288,21 @@
               "good_list": this.order_list,
               "status": statusid,
             };
-            console.log(data);
-
             let that = this;
             axios.post('http://127.0.0.1:8000/order/addorder/', data, {
               headers: {
                 "token": sessionStorage.getItem('token')
               }
             }).then(function (response) {
-              if (response.data.statuscode == '202')
-                alert('下单成功');
-              that.getData();
+              if (response.data.statuscode == '202'){
+                that.err_message = '下单成功';
+                $('#myModal').modal();
+                that.getData();
+                that.checkedBoxList = []
+              }else {
+                that.err_message = '生成订单失败';
+                $('#myModal').modal();
+              }
             })
           }
         }
@@ -303,6 +335,7 @@
     margin: auto;
     margin-top: 20px;
     border-bottom: 2px solid gainsboro;
+    margin-bottom: 100px;
   }
 
   .cart-con-header {
@@ -418,7 +451,5 @@
     width: 80px;
     display: block;
   }
-  .bottom{
-    padding-bottom: 100px;
-  }
+
 </style>

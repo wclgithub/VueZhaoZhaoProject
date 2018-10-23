@@ -166,8 +166,7 @@
               vm.user_info = response.data;
               vm.myscore=vm.user_info.points%100;
               vm.myscorestyle='width:'+vm.myscore+'%';
-              console.log(vm.user_info)
-              console.log(vm.user_info)
+              console.log(vm.user_info);
             })
             .catch(function (error) {
               console.log(error)
