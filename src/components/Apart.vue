@@ -14,23 +14,26 @@
             <div class="panel-heading">
               <div class="row">
                 <div class="col-lg-4">
-                  <input class="city form-control inputkey" @click="toAddress" v-model="city" placeholder="请选择地区">
+                  <input class="city inputkey form-control" @click="toAddress" v-model="city" placeholder="请选择地区">
                   <v-distpicker type="mobile" @selected='selected' v-show="addInp">
                   </v-distpicker>
                 </div>
-                <div class="col-md-4"></div>
+                <div class="col-md-3"></div>
                 <div class="col-md-3">
-                  <input type="text" class="form-control inputkey" placeholder="请输入关键字" v-model="search_data">
+                  <input type="text" class="form-control" placeholder="请输入关键字" v-model="search_data">
+
                 </div>
-                <div class="col-lg-1">
-                  <button type="button" class="btn btn-sm btn-success" @click="Search()">搜索</button>
+                <div class="col-lg-2">
+                  <button type="button" class="btn btn-lg btn-success" @click="Search()">
+                    <span class="glyphicon glyphicon-search"></span>搜索
+                  </button>
                 </div>
               </div>
             </div>
             <ul class="list-group">
               <li class="list-group-item">
                 <div class="row">
-                  <div class="col-md-1"><a href="javascript:void 0">价位</a></div>
+                  <div class="col-md-1"><span class="glyphicon glyphicon-yen"></span><a href="javascript:void 0">价位</a></div>
                   <div class="col-md-1"><a href="javascript:void 0" data-min=0 data-max=50000 @click="getPrice($event)">不限</a>
                   </div>
                   <div class="col-md-2"><a href="javascript:void 0" data-min=0 data-max=1000 @click="getPrice($event)">1千元以下</a>
@@ -43,7 +46,7 @@
               </li>
               <li class="list-group-item">
                 <div class="row">
-                  <div class="col-md-1"><a href="javascript:void 0" data-min=0 data-max=50000>评分</a></div>
+                  <div class="col-md-1"><span class="glyphicon glyphicon-star"></span><a href="javascript:void 0" data-min=0 data-max=50000>评分</a></div>
                   <div class="col-md-1"><a href="javascript:void 0" data-min=0 data-max=5
                                            @click="getScore($event)">不限</a></div>
                   <div class="col-md-2"><a href="javascript:void 0" data-min=4 data-max=5
@@ -83,10 +86,13 @@
               <div class="bh-border-bottom" :id="b.id">
                 <div class="row">
                   <div class="col-md-3 bhimg">
-                    <img src="../assets/images/det2.jpg" alt="..." @click="getBhid()">
+                    <img src="../assets/images/room_pic.jpg" class="bigimg" alt="..." @click="getBhid()">
                   </div>
                   <div class="col-md-5">
-                    <h4 v-text="b.name" @click="saveBhId(b.id)">苏州小太阳养老公寓老年招待所等公寓</h4>
+                    <h4 @click="saveBhId(b.id)">
+                      <span class="glyphicon glyphicon-home"> </span>
+                      <span v-text="b.name">苏州小太阳养老公寓老年招待所等公寓</span>
+                    </h4>
                     <p v-text="b.address">地址:江苏省苏州市工业园区创意产业园产业园院院</p>
                     <p >人员规模:<span v-text="b.staff">120人</span></p>
                     <p v-text="b.property">机构类型:民营机构</p>
@@ -97,7 +103,7 @@
                   </div>
                   <div class="col-md-2 bh-border-left">
                     <h3>
-                      <a href="#" class="btn btn-warning showinfo" @click="saveBhId(b.id)">查看详情</a>
+                      <button class="btn btn-warning btn-lg showinfo " @click="saveBhId(b.id,b.name)">查看详情</button>
                     </h3>
                   </div>
                 </div>
@@ -215,8 +221,9 @@
       },
 
       //跳转详情页
-      saveBhId:function (id) {
+      saveBhId:function (id,name) {
         sessionStorage.setItem('bhid',id);
+        sessionStorage.setItem('bhname',name);
         this.$router.push({path: "/house"});
       },
       //排序
@@ -295,14 +302,14 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .bhimg img {
-    width: 230px;
+    width: 200px;
     height: 135px;
     border-radius: 5px;
   }
 
   .bh-price, .text-orange {
     color: #ffa500;
-    font-size: 20px;
+    font-size: 30px;
     font-weight: bold;
   }
 
@@ -325,7 +332,6 @@
     height: 65px;
 
   }
-
   .my-nav a {
     color: white;
   }
@@ -343,25 +349,8 @@
     padding-top: 20px;
     min-height: 600px;
   }
-
-  .nav > li > a:hover,
-  .nav > li > a:focus {
-    color: black;
-  }
-
-  .my-input span p {
-    margin: 0;
-    padding: 0;
-    width: 150px;
-  }
-
   .my-active a {
     color: white;
-  }
-
-  .order-img img {
-    width: 100px;
-    height: 60px;
   }
 
   .my-nav-size ul li {
@@ -371,7 +360,6 @@
   .my-img-btn p {
     position: absolute;
   }
-
   .col-md-2 a, .col-md-1 a {
     padding: 5px;
     text-decoration: none;
@@ -380,5 +368,16 @@
   }
   .showinfo,.showinfo:visited,.showinfo:link{
     color: white;
+  }
+  .glyphicon-home,.glyphicon-star,.glyphicon-yen{
+    color: orange;
+  }
+  .btn-lg{
+    width: 100px;
+    height:35px;
+    padding: 0px;
+  }
+  .bigimg:hover{
+    transform: scale(1.3);
   }
 </style>

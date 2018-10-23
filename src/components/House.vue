@@ -16,6 +16,7 @@
               <div class="col-md-5">
                 <span class="house-title">
                 </span>
+                <h2 v-text="bh_name"></h2>
                 <p>让您的父母得到最温暖的关怀！</p>
                 <div class="row">
                   <div class="col-md-4">
@@ -39,7 +40,7 @@
           <div class="panel panel-success">
             <div class="panel-heading">
               <div class="row">
-                <div class="col-md-4">房型</div>
+                <div class="col-md-4"><span class="glyphicon glyphicon-home"></span>房型</div>
                 <div class="col-md-2">床位数量</div>
                 <div class="col-md-2">价格</div>
                 <div class="col-md-2">剩余数量</div>
@@ -54,14 +55,29 @@
               <div class="col-md-6 houseimg">
               <img src="../assets/images/det2.jpg" alt="">
               </div>
-              <div class="col-md-6"><h4 class="houselineheight" v-text="r.name">标准豪华单人间</h4></div>
+              <div class="col-md-6">
+                <h4 class="houselineheight">
+                <span class="glyphicon glyphicon-bed"></span>
+                  <span v-text="r.name">标准豪华单人间</span>
+              </h4>
               </div>
               </div>
-              <div class="col-md-2"><h4 class="houselineheight" v-text="r.bednum">1张</h4></div>
-              <div class="col-md-2"><h4 class="houselineheight text-orange" v-text="r.price">500元/月</h4></div>
+              </div>
+              <div class="col-md-2">
+                <h4 class="houselineheight">
+                  <span v-text="r.bednum">1</span>
+                  <span>张</span>
+                </h4>
+              </div>
+              <div class="col-md-2">
+                <h4 class="houselineheight text-orange" >
+                <span class="price" v-text="r.price"></span>
+                <span>元/月</span>
+              </h4>
+              </div>
               <div class="col-md-2"><h4 class="houselineheight">20张</h4></div>
               <div class="col-md-2 houselineheight">
-              <button type="button" class="btn btn-sm btn-success" @click="goToDetails(r.id,r.name)">详情</button>
+              <button type="button" class="btn btn-lg btn-success" @click="goToDetails(r.id,r.name)">详情</button>
               </div>
               </div>
               </div>
@@ -86,7 +102,8 @@
           return{
             rooms_info : [
             ],
-            bh_id:''
+            bh_id:'',
+            bh_name:''
           }
       },
       methods:{
@@ -109,6 +126,7 @@
 
         var vm = this;
         vm.bh_id=sessionStorage.getItem('bhid');
+        vm.bh_name=sessionStorage.getItem('bhname');
         axios.get('http://127.0.0.1:8000/beadhouse/getroomsbyhouseid/'+vm.bh_id+'/')
           .then(function (response) {
             vm.rooms_info = response.data;
@@ -142,7 +160,7 @@
   }
   .jumbotron{
     color: white;
-    text-shadow:black 1px 1px ;
+    text-shadow: #c6c6c6 2px 2px ;
   }
 
   .house-title{
@@ -170,10 +188,6 @@
     padding-top: 20px;
     min-height: 600px;
   }
-
-  .panel-primary > .panel-heading,.bg-green{
-    background: #40a170;
-  }
   .nav > li > a:hover,
   .nav > li > a:focus {
     color: black;
@@ -200,6 +214,19 @@
   }
   .title-img{
     background-image: url("../assets/images/room02.png");
+  }
+  .glyphicon-bed{
+    color: orange;
+  }
+  .btn-lg{
+    width: 100px;
+    height: 40px;
+  }
+  .glyphicon-home{
+    color: orange;
+  }
+  .price{
+    font-size: 28px;
   }
 
 </style>
