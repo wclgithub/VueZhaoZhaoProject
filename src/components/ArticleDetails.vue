@@ -138,22 +138,19 @@
       }
     },
     mounted: function () {
-      this.art_id = this.$route.query.article_id;
-      sessionStorage.setItem('art_id',this.$route.query.article_id)
       this.getart();
       this.getallreplay();
       this.iscoll();
     },
     methods: {
       getart: function () {
-        // this.art_id = this.$route.query.article_id;
         var that = this
-        axios.get('http://127.0.0.1:8000/article/getarticlebyid/' + that.art_id + '/')
+          var art_id=sessionStorage.getItem('artid')
+          console.log(that.art_id)
+        axios.get('http://127.0.0.1:8000/article/getarticlebyid/' + art_id + '/')
           .then(function (response) {
-            // vm.list = response.data;
             console.log(response)
             that.details = response.data[0];
-            // console.log(that.details)
 
           })
           .catch(function (error) {
@@ -165,12 +162,12 @@
         var u_id = sessionStorage.getItem('u_id')
         //如果用户登录
         if (u_id) {
-
+            var art_id=sessionStorage.getItem('artid')
           //如果在登录前输入了文字
           if (this.comment) {
             var user = {
               "content": this.comment,
-              "article_id": this.art_id,
+              "article_id": art_id,
               "user_id": u_id,
             }
             var istoken = sessionStorage.getItem('token');
@@ -184,8 +181,9 @@
                 // console.log(response.data)
                 if (response.data.statuscode == '202') {
                   var u_id = sessionStorage.getItem('u_id')
-                  var art_id = sessionStorage.getItem('art_id')
+                    var art_id = sessionStorage.getItem('artid')
                   if (u_id) {
+
                     axios.get('http://127.0.0.1:8000/article/getcommentsbyarticleid/' + art_id + '/' + u_id + '/')
                       .then(function (response) {
                         if (response.data.length != 0) {
@@ -239,7 +237,8 @@
 
         var that = this
         var u_id=sessionStorage.getItem('u_id')
-        var art_id=sessionStorage.getItem('art_id')
+
+        var art_id = sessionStorage.getItem('artid')
         if (u_id){
           // this.art_id = this.$route.query.article_id;
           axios.get('http://127.0.0.1:8000/article/getcommentsbyarticleid/' + art_id + '/'+u_id+'/')
@@ -260,7 +259,10 @@
               console.log(error)
             })
         }else {
-          axios.get('http://127.0.0.1:8000/article/getcommentsbyarticleid/' + that.art_id + '/'+'/')
+
+            var art_id=sessionStorage.getItem('artid')
+
+          axios.get('http://127.0.0.1:8000/article/getcommentsbyarticleid/' + art_id + '/'+'/')
             .then(function (response) {
               if (response.data.length != 0) {
                 console.log(response.data)
@@ -297,7 +299,8 @@
             .then(function (response) {
               console.log(response.data)
               if (response.data.statuscode=='202') {
-                var art_id=sessionStorage.getItem('art_id')
+
+                  var art_id = sessionStorage.getItem('artid')
                 var u_id=sessionStorage.getItem('u_id')
                 axios.get('http://127.0.0.1:8000/article/getcommentsbyarticleid/' + art_id + '/' + u_id + '/')
                   .then(function (response) {
@@ -307,7 +310,6 @@
                       console.log(that.all_comment)
                     }
                     else {
-
                       that.com_flag = false
                     }
                   })
@@ -326,15 +328,13 @@
 
       },
       replay_comm:function (comment_id,index) {
-
         if (sessionStorage.getItem('u_id')) {
-
-          // console.log(this.$refs.input1[0].value)
-          // console.log(this.$refs.input1)
           if (this.$refs.input1[index].value){
+
+              var art_id = sessionStorage.getItem('artid')
             var user={
               "user_id":sessionStorage.getItem('u_id'),
-              "article_id":this.$route.query.article_id,
+              "article_id":art_id,
               "content":this.$refs.input1[index].value,
               "comment_id":comment_id
 
@@ -350,8 +350,9 @@
                 // vm.list = response.data;
                 console.log(response)
                 if (response.data.statuscode=='202'){
+
+                    var art_id = sessionStorage.getItem('artid')
                   var u_id = sessionStorage.getItem('u_id')
-                  var art_id = sessionStorage.getItem('art_id')
                   if (u_id) {
                     axios.get('http://127.0.0.1:8000/article/getcommentsbyarticleid/' + art_id + '/' + u_id + '/')
                       .then(function (response) {
@@ -369,9 +370,9 @@
                         console.log(error)
                       })
                     that.comment = '';
+                    that.$refs.input1[index].value = ''
 
                   }
-                  that.$refs.input1[index].value = ''
 
                 }
 
@@ -393,19 +394,20 @@
         var u_id=sessionStorage.getItem('u_id')
         if (u_id) {
           if (sessionStorage.getItem('artid')){
+              var art_id = sessionStorage.getItem('artid')
             var user={
               "user_id":u_id,
-              "article_id":sessionStorage.getItem('artid')
+              "article_id":art_id
             }
           } else {
             var user={
               "user_id":u_id,
-              "article_id":sessionStorage.getItem('artid')
+              "article_id":art_id
             }
           }
           var user={
             "user_id":u_id,
-            "article_id":this.art_id
+            "article_id":art_id
           }
           var that=this
           axios.post('http://127.0.0.1:8000/article/collectarticle/',user,{
@@ -433,9 +435,10 @@
       canl_cllo_art:function () {
         var u_id=sessionStorage.getItem('u_id')
         if (u_id) {
+            var art_id = sessionStorage.getItem('artid')
           var user={
             "user_id":u_id,
-            "article_id":this.art_id
+            "article_id": art_id
           }
           var that=this
           axios.post('http://127.0.0.1:8000/article/cancelarticlecollect/',user,{
@@ -462,9 +465,10 @@
       iscoll:function () {
         var u_id=sessionStorage.getItem('u_id')
         if (u_id) {
+            var art_id = sessionStorage.getItem('artid')
           var user={
             "user_id":u_id,
-            "article_id":this.art_id
+            "article_id":art_id
           }
           var that=this
           axios.post('http://127.0.0.1:8000/article/isarticlecollect/',user,{
