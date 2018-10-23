@@ -31,17 +31,17 @@
                     </div>
                     <div class="input-group my-input">
                       <span class="input-group-addon " id="basic-addon3"><p>出生日期：</p></span>
-                      <input type="text" class="form-control" placeholder="Birth：1998-07-07" v-model="old.birthday" @blur.prevent="checkBirth(old.birthday)">
+                      <input type="text" class="form-control" placeholder="Birth：1998-07-07" v-model="old.birthday">
                     </div>
                     <div class="input-group my-input">
                       <span class="input-group-addon " id="basic-addon4"><p>联系电话：</p></span>
-                      <input type="text" class="form-control" placeholder="Tel：18842421515"
-                             v-model="old.telephone" @blur.prevent="checkTel(old.telephone)">
+                      <input type="number" class="form-control" placeholder="Tel：18842421515"
+                             v-model="old.telephone"  >
                     </div>
                     <div class="input-group my-input">
                       <span class="input-group-addon " id="basic-addon5"><p>紧急联系人电话：</p></span>
-                      <input type="text" class="form-control" placeholder="Ftel：18845454444"
-                             v-model="old.ec_telephone" @blur.prevent="checkTel(old.ec_telephone)">
+                      <input type="number" class="form-control" placeholder="Ftel：18845454444"
+                             v-model="old.ec_telephone">
                     </div>
                     <div class="input-group my-input">
                       <span class="input-group-addon " id="basic-addon6"><p>紧急联系地址：</p></span>
@@ -123,9 +123,19 @@
       saveOldInfo: function () {
         this.show=false;
         var j = 0;
+        var reg1 = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
+        var reg2= /^1[3456789]\d{9}$/;
         for (let i of this.old_info) {
           if (i.name == '') {
             alert('姓名不能为空！');
+            break;
+          }
+          if (!reg2.test(i.telephone)||!reg2.test(i.ec_telephone)) {
+            alert('手机号码格式错误！')
+            break;
+          }
+          if (!reg1.test(i.birthday)) {
+            alert('日期格式错误！')
             break;
           }
           j++;
@@ -237,20 +247,6 @@
           this.$router.push({path: "/login"});
         }
       },
-      //验证手机号
-      checkTel: function (tel) {
-        var reg = /^1[3456789]\d{9}$/;
-        if (!reg.test(tel)) {
-          alert('手机号码格式错误！')
-        }
-      },
-      checkBirth: function (birth) {
-        var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
-        if (!reg.test(birth)) {
-          alert('日期格式错误！')
-        }
-      },
-
     },
     mounted() {
       this.getOldInfo();
@@ -263,7 +259,7 @@
     height: 65px;
 
   }
-  .my-nav a, .my-footer {
+  .my-nav a {
     color: white;
   }
 
@@ -327,15 +323,7 @@
   .my-img-btn p {
     position: absolute;
   }
-  #old-pic {
-    opacity: 0;
-    filter: alpha(opacity=0);
-  }
 
-  .my-img-btn {
-    width: 85px;
-    height: 35px;
-  }
 
   .my-img-btn p {
     position: absolute;
