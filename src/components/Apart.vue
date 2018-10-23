@@ -167,6 +167,11 @@
           .catch(function (error) {
             console.log(error)
           });
+        vm.search_city='';
+        vm.search_data='';
+        vm.sort_type_one='';
+        vm.sort_type_two='';
+        vm.city='';
       },
       // 筛选价格
       getPrice:function(event){

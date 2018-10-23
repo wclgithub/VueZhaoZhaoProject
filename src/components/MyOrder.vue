@@ -140,7 +140,7 @@
           var data = {
             "user_id": user_id
           }
-          axios.post('http://192.168.2.32:8000/order/getorder/', data, {
+          axios.post('http://127.0.0.1:8000/order/getorder/', data, {
             headers: {
               "token": token
             }

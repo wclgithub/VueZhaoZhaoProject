@@ -248,7 +248,7 @@
             // }
             // alert(vm.room_id)
             // alert(vm.setmeal_id)
-            axios.post('http://192.168.2.31:8000/cart/addcart/', data, {
+            axios.post('http://127.0.0.1:8000/cart/addcart/', data, {
               headers: {
                 "token": token
               }

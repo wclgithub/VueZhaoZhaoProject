@@ -7,6 +7,9 @@
             <h3 class="panel-title glyphicon glyphicon-user">我的信息</h3>
           </div>
           <!--第1个人的信息区-->
+          <div class="panel-body" v-if="show">
+            <p>您还没有添加入住人哦！</p>
+          </div>
           <div class="panel-body old_info" v-for=" old in old_info" :id=old.id v-if="old.id||old.sex">
             <!--第1.1行-->
             <div class="row">
@@ -28,7 +31,7 @@
                     </div>
                     <div class="input-group my-input">
                       <span class="input-group-addon " id="basic-addon3"><p>出生日期：</p></span>
-                      <input type="text" class="form-control" placeholder="Birth：1998-7-7" v-model="old.birthday" @blur.prevent="checkBirth(old.birthday)">
+                      <input type="text" class="form-control" placeholder="Birth：1998-07-07" v-model="old.birthday" @blur.prevent="checkBirth(old.birthday)">
                     </div>
                     <div class="input-group my-input">
                       <span class="input-group-addon " id="basic-addon4"><p>联系电话：</p></span>
@@ -82,6 +85,7 @@
       return {
         old_info: [],
         len:0,
+        show:false,
         oldidicon: sessionStorage.getItem('old_id'),
       }
     },
@@ -99,6 +103,9 @@
           })
             .then(function (response) {
               vm.old_info = response.data
+              if(vm.old_info.length<1){
+                vm.show=true;
+              }
               sessionStorage.setItem('old_id',vm.old_info.id);
               console.log(response.data)
               console.log(response)
@@ -114,6 +121,7 @@
       },
       //保存全部入住人信息
       saveOldInfo: function () {
+        this.show=false;
         var j = 0;
         for (let i of this.old_info) {
           if (i.name == '') {

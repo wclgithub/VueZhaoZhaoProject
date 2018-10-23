@@ -16,7 +16,7 @@ import ApartInfo from '@/components/ApartInfo'
 import Details from '@/components/Details'
 import SetMeal from '@/components/SetMeal'
 import Developer from '@/components/Developer'
-
+import Admin from '@/components/Admin'
 import ArticleDetails from '@/components/ArticleDetails'
 
 Vue.use(Router);
@@ -108,6 +108,11 @@ export default new Router({
       path: '/developer',
       name: 'Developer',
       component: Developer,
+    },
+    {
+      path: '/admin',
+      name: 'Admin',
+      component: Admin,
     },
 
   ]
