@@ -30,7 +30,7 @@
           <!--</button>-->
           <div id="app">
             <button type="button" class="btn g_b" @click="showModal(good.price)" >兑换</button>
-            <modal v-show="isModalVisible" @close="closeModal" :good_poins="fa_goodnum"/>
+            <modal v-show="isModalVisible"  @close="closeModal" :good_poins="fa_goodnum" :showinterl="myintergral"/>
           </div>
         </div>
       </div>
@@ -160,14 +160,63 @@
       },
       showModal: function (p) {
           this.fa_goodnum=p
+        setTimeout(() => {
+          var user = {
+            "user_id":sessionStorage.getItem('u_id')
+          }
+          var that=this
+          console.log(sessionStorage.getItem('token'))
+          axios.post('http://127.0.0.1:8000/user/getuserinfo/',user,{
+            headers:{
+              "token":sessionStorage.getItem('token')
+            }
+          })
+            .then(function (response) {
+              console.log('ok')
+              if (response.data.id) {
+                that.myintergral='我的积分：'+response.data.points
+                sessionStorage.setItem('u_points',response.data.points)
+                console.log('打开后的积分')
+                console.log(that.myintergral)
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
           this.isModalVisible = true
+        }, 600);
+          // this.isModalVisible = true
 
 
       },
       closeModal: function (state) {
+        //0 是确认兑换 1 是关闭
         if (state===0){
-          this.isModalVisible = false
-          this.$options.methods.islogin();
+          setTimeout(() => {
+            var user = {
+              "user_id":sessionStorage.getItem('u_id')
+            }
+            var that=this
+            console.log(sessionStorage.getItem('token'))
+            axios.post('http://127.0.0.1:8000/user/getuserinfo/',user,{
+              headers:{
+                "token":sessionStorage.getItem('token')
+              }
+            })
+              .then(function (response) {
+                console.log('ok')
+                if (response.data.id) {
+                  that.myintergral='我的积分：'+response.data.points
+                  sessionStorage.setItem('u_points',response.data.points)
+                  console.log('关闭后的积分')
+                  console.log(that.myintergral)
+                }
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+            this.isModalVisible = false
+          }, 900);
 
         } else {
           this.isModalVisible = false
@@ -178,7 +227,25 @@
         var istoken = sessionStorage.getItem('token');
         var that = this;
         if (istoken) {
-              that.myintergral = '我的积分：'+sessionStorage.getItem('u_points')
+          var user = {
+            "user_id":sessionStorage.getItem('u_id')
+          }
+          axios.post('http://127.0.0.1:8000/user/getuserinfo/',user,{
+            headers:{
+              "token":istoken
+            }
+          })
+            .then(function (response) {
+              console.log('ok1')
+              if (response.data.id) {
+                that.myintergral='我的积分：'+response.data.points
+                sessionStorage.setItem('u_points',response.data.points)
+                console.log(that.myintergral)
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
 
 
         } else {

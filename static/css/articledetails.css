@@ -211,8 +211,8 @@ body,ul,li,h1,h2,h3,h4,p{
 /*this comm*/
 
 .comm-content,.art-reply{
-  width: 1000px;
-  margin-left: 200px;
+  width: 1050px;
+  margin-left: 220px;
 
 }
 .select-art{
@@ -269,7 +269,9 @@ body,ul,li,h1,h2,h3,h4,p{
 .cccr-hot-left{
   flex: 3;
 }
-
+.cccr-hot-left a{
+  color:#00cc66;
+}
 .cccr-hot-right{
   flex: 2;
   height: 75px;
@@ -306,9 +308,7 @@ body,ul,li,h1,h2,h3,h4,p{
   text-indent:35px;
   line-height: 30px;
 }
-.art-reply{
-  border-top: solid #0BC165 1px;
-}
+
 .art-reply h2{
   padding: 10px;
 }
@@ -353,6 +353,7 @@ body,ul,li,h1,h2,h3,h4,p{
 .select-art-right{
   /*margin-top: 30px;*/
   /*margin-bottom: 30px;*/
+  width: 1000px;
   height: 100%;
   flex: 4;
   background: rgba(64, 161, 112, 0.21);
@@ -482,18 +483,20 @@ body,ul,li,div{
   margin: 0;
 }
 .act-header{
-  width: 1450px;
-  margin-left: 180px;
+  width: 950px;
+  /*background: chocolate;*/
+  /*width: 1450px;*/
+  margin-left: 220px;
   margin-top: 30px;
 }
 .art-from{
   width: 1000px;
-  margin-left: 70px;
+  margin-left: 60px;
   margin-top: 20px;
 }
 .art-cont{
-  width: 960px;
-  margin-left: 200px;
+  width: 930px;
+  margin-left: 270px;
   margin-top: 10px;
   margin-bottom: 10px;
   /*padding-left: 30px;*/
@@ -506,23 +509,25 @@ body,ul,li,div{
   font-size: 18px;
 }
 .right{
-  width: 230px;
+  /*background: chocolate;*/
+  width: 240px;
   float: right;
   margin-top: 0px;
-  margin-right: 90px;
+  margin-right: 70px;
 }
 .xian{
   width: 220px;
   height: 0.5px;
   border: solid 0.1px #b3b3b3;
   margin-top: 10px;
+  margin-bottom: 10px;
 }
 .h-xian{
   width: 930px;
   height: 0.5px;
   border: solid 0.1px #b3b3b3;
   margin-top: 10px;
-  margin-left: 220px;
+  margin-left: 240px;
 }
 .recommend{
   margin-right: 55px;
@@ -554,13 +559,16 @@ body,ul,li,div{
   color: white;
 }
 .tread,.praise{
+  cursor:pointer;
   width: 25px;
   height: 25px;
   margin-right: 5px;
   margin-left: 20px;
   border: none;
-  background: #40A170;
-  color: white;
+}
+.praise img{
+  width: 25px;
+  height: 25px;
 }
 .err_im{
   background: chocolate;
@@ -581,7 +589,6 @@ body,ul,li,div{
   margin-top: 100px;
 }
 .liked{
-  background: chocolate;
   width: 25px;
   height: 25px;
   margin-right: 5px;
@@ -589,16 +596,20 @@ body,ul,li,div{
   border: none;
   color: white;
 }
+.liked img{
+  width: 25px;
+  height: 25px;
+}
 .huifu{
   position: relative;
-  top: -55px;
-  left: 120px;
+  top: -25px;
+  left: 1px;
   width: 300px;
 }
 .n_likes{
   color:#40A170 ;
   position: relative;
-  left: 80px;
+  left: 60px;
   top: -23px;
   font-size: 20px;
 }
@@ -609,6 +620,7 @@ body,ul,li,div{
   margin-left: 20px;
 }
 .replay-replay{
+  /*background: chocolate;*/
   float: none;
   width: 730px;
   /*height: 40px;*/
@@ -678,4 +690,24 @@ body,ul,li,div{
 .re-re-com{
   margin-top: 10px;
 }
-
+.reply-title-xian{
+  position: relative;
+  left: -50px;
+  width: 1150px;
+  height: 2.5px;
+  background:#00cc66 ;
+  margin-bottom: 20px;
+  margin-top: 60px;
+}
+.re-form{
+  width: 835px;
+}
+.icon-replay{
+  position: relative;
+  left: 100px;
+  top: -50px;
+}
+.icon-replay img{
+  width: 20px;
+  height: 20px;
+}

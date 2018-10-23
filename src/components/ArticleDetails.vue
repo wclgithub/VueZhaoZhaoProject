@@ -38,8 +38,15 @@
           <h2 class="col-lg-12 panel panel-success">专题推荐</h2>
           <div class="cccr-hot">
             <div class="cccr-hot-left panel-body">
-
-              <h4><a href="">青光眼的预防</a></h4>
+              <h4><a  v-on:click="torecommend(10)">养生要从年轻开始</a></h4>
+              <div class="xian"></div>
+              <h4><a  v-on:click="torecommend(82)">哪些人需要做Hcy检查</a></h4>
+              <div class="xian"></div>
+              <h4><a  v-on:click="torecommend(64)">肠胃不好不适合吃哪些水果</a></h4>
+              <div class="xian"></div>
+              <h4><a  v-on:click="torecommend(30)">老人免疫力低下该怎么办</a></h4>
+              <div class="xian"></div>
+              <h4><a  v-on:click="torecommend(13)">秋季养生吃果蔬能预防中风</a></h4>
               <div class="xian">
               </div>
             </div>
@@ -60,6 +67,7 @@
 
 
       <div class="art-reply">
+        <div class="reply-title-xian"></div>
         <h2>参与互动</h2>
         <div class="art-reply-content">
           <form action="">
@@ -80,27 +88,37 @@
               <div class="com-time"v-text="ac.time"></div>
               <p v-text="ac.comment_content">
                 自从健康喝水之后年轻了十岁。喝年轻了多喝水好，我都喝白了！喝年轻了多喝水好，我都喝白了！喝年轻了多喝水好，我都喝白了！喝年轻了多喝水好，我都喝白了！喝年轻了多喝水好，我都喝白了！喝年轻了多喝水好，我都喝白了！喝年轻了多喝水好，我都喝白了！喝年轻了！</p>
-              <form action="">
-                <button class="praise" v-on:click.prevent="zan(ac.comment_id,ac.islike)"  key="ac.comment_id" v-if="ac.islike" >赞</button>
-                <input type="submit" name="" value="赞" class="liked" v-on:click.prevent="zan(ac.comment_id)" v-if="!ac.islike" key="ac.f_id" v-bind:disabled="dis_flag">
+              <form action="" class="re-form">
+                <div class="praise" v-on:click.prevent="zan(ac.comment_id,ac.islike)" v-if="ac.islike" >
+                  <img src="../assets/images/b_zan.png" alt="">
+                </div>
+                <div class="liked" v-on:click.prevent="zan(ac.comment_id)" v-if="!ac.islike" v-bind:disabled="dis_flag">
+                  <img src="../assets/images/a_zan.png" alt="">
+                </div>
                 <div v-text="ac.likes" class="n_likes"></div>
+                <div class="icon-replay">
+                  <img src="../assets/images/replay.png" alt="" v-on:click="getallreplay(ac.showreplay,index)">
+                </div>
 
                 <!--<input type="submit" name="" value="踩" class="tread">-->
-                <div class="huifu">
-                  <input type="text" ref='input1' >
-                  <input type="submit" name="" value="回复" class="replay" v-on:click="replay_comm(ac.comment_id,index)">
-                </div>
-                <div class="re-xian"></div>
-                <div class="re-comm">评论</div>
-                <div v-for="r in ac.replys" class="replay-replay">
-                  <div class="row" >
-                    <div class="col-md-1 re-re-im" ><img :src="r.user_img" alt=""></div>
-                    <div class="col-md-7 re-re-com" v-text="r.content">回复内容</div>
-                    <div class="col-md-2 r-c" v-text="r.time">时间</div>
+                <div v-show="ac.showreplay">
+                  <div class="huifu">
+                    <input type="text" ref='input1' >
+                    <input type="submit" name="" value="回复" class="replay" v-on:click="replay_comm(ac.comment_id,index)">
                   </div>
-                  <div class="row" v-text="r.user_name">用户名</div>
+                  <div class="re-xian"></div>
+                  <div class="re-comm">评论</div>
+                  <div v-for="r in ac.replys" class="replay-replay">
+                    <div class="row" >
+                      <div class="col-md-1 re-re-im" ><img :src="r.user_img" alt=""></div>
+                      <div class="col-md-7 re-re-com" v-text="r.content">回复内容</div>
+                      <div class="col-md-2 r-c" v-text="r.time">时间</div>
+                    </div>
+                    <div class="row" v-text="r.user_name">用户名</div>
 
+                  </div>
                 </div>
+
 
               </form>
 
@@ -134,7 +152,9 @@
         com_flag: true,
         dis_flag:true,
         replay_comm_word:'',
-        b_cllo:true
+        b_cllo:true,
+        showre:false,
+        want_replay:false,
       }
     },
     mounted: function () {
@@ -233,12 +253,13 @@
       m_reset: function () {
         this.comment = ''
       },
-      getallreplay: function () {
+      getallreplay: function (f,i) {
 
         var that = this
         var u_id=sessionStorage.getItem('u_id')
 
         var art_id = sessionStorage.getItem('artid')
+        // var ii=i
         if (u_id){
           // this.art_id = this.$route.query.article_id;
           axios.get('http://127.0.0.1:8000/article/getcommentsbyarticleid/' + art_id + '/'+u_id+'/')
@@ -246,6 +267,18 @@
               if (response.data.length != 0) {
                 console.log(response.data)
                 that.all_comment = response.data
+                that.all_comment.forEach((item, index) => {
+                  console.log(item)
+                  item.showreplay=false
+                })
+                if (!that.want_replay) {
+                  that.all_comment[i].showreplay = true
+                  that.want_replay=true;
+                }else {
+                  that.all_comment[i].showreplay = false
+
+                }
+                // console.log('看看状态加进来没')
                 console.log(that.all_comment)
               }
               else {
@@ -488,7 +521,29 @@
               console.log(error)
             })
         }
-      }
+      },
+      torecommend:function (id) {
+        sessionStorage.setItem('artid',id)
+        // alter(sessionStorage.getItem('artid'))
+        this.$router.push({path: "/articledetails"});
+        this.$router.go(0)
+      },
+      // show_re:function (i,index) {
+      //   alert(i)
+      //   alert(index)
+      //   alert(this.all_comment[index].user_id)
+      //   alert(i)
+        //
+        // if(this.all_comment[index].showreplay){
+        //   this.all_comment[index].showreplay=false
+        // }
+        // else {
+        //   this.all_comment[index].showreplay=true
+        //   alert(this.all_comment[index].showreplay)
+        //
+        // }
+
+
 
     }
   }

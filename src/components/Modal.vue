@@ -4,7 +4,7 @@
       <div class="modal" @click.stop>
         <div class="modal-header">
           <slot name="header" >
-            <p v-text="showinterl" class="f"></p>
+            <p v-text="showint" class="f"></p>
             <p class="t">商品所需积分:</p><p v-text="good_poins" class="s"></p>
             <!--<div class="d-btn-close">-->
               <!--<button type="button" class="btn-close" @click="close">x</button>-->
@@ -51,10 +51,11 @@
 
   export default {
     name: 'Modal',
-    props: ['show','good_poins'],
+    props: ['show','good_poins','showinterl'],
     data() {
       return {
-        showinterl: '',
+        // props:['showinterl'],
+        showint: this.showinterl,
         showgoodinterl: '',
         //下拉列表
         isShowSelect: false,
@@ -77,22 +78,48 @@
       }
     },
     mounted: function () {
+      //积分传过来了
+
       this.num=sessionStorage.getItem('good_intergral');
-      this.islogin();
+      setTimeout(() => {
+        console.log('看看积分传过来没')
+        console.log(this.showinterl)
+        this.islogin();
+      }, 4000);
+
       this.getname();
     },
     methods: {
       closetwo: function () {
-        var u_points=sessionStorage.getItem('u_points');
+        var u_points=this.showint.substring(5,);
+        console.log('看看积分有多少')
+        console.log(u_points)
         var int_points=parseInt(u_points)
         var int_good_points=parseInt(this.good_poins)
+        console.log(int_good_points)
         if (int_points>=int_good_points){
           if (this.unitName==='请选择入住人'){
             this.err_im='请选择入住人'
           }else {
             var now_points=int_points-int_good_points
-            sessionStorage.setItem('u_points',now_points)
-            this.$options.methods.changepoints(now_points);
+            // this.$options.methods.changepoints(now_points);
+            var user={
+              "user_id":sessionStorage.getItem('u_id'),
+              "points":now_points
+            }
+            var istoken = sessionStorage.getItem('token');
+            axios.post('http://127.0.0.1:8000/user/updatepoints/', user,{
+              headers: {
+                "token": istoken
+              }
+            })
+              .then(function (response) {
+                console.log('修改完啦')
+                // console.log(response)
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
             this.$emit('close',0);
           }
 
@@ -105,10 +132,15 @@
         this.$emit('close',1);
       },
       islogin:function(){
-        if (sessionStorage.getItem('u_points')) {
-          this.showinterl = '我的积分：'+sessionStorage.getItem('u_points')
+        if (sessionStorage.getItem('u_id')) {
+          console.log('看看积分传到islogin')
+          console.log(this.showinterl)
+          this.showint=this.showinterl
+          // 传到了
         } else {
-          this.showinterl = '请先登录'
+          this.showint = '请先登录'
+          // console.log('有没有登录啊')
+          // console.log(this.showint)
         }
       },
       arrowDown() {
@@ -152,22 +184,7 @@
 
       },
       changepoints:function (now_points) {
-        var user={
-          "user_id":sessionStorage.getItem('u_id'),
-          "points":now_points
-        }
-        var istoken = sessionStorage.getItem('token');
-        axios.post('http://127.0.0.1:8000/user/updatepoints/', user,{
-          headers: {
-                    "token": istoken
-                  }
-        })
-          .then(function (response) {
-            // console.log(response)
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
+
       }
     }
   }
