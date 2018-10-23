@@ -23,7 +23,7 @@
             <div class="article-body row" v-for="article in result_list" v-if="article.beadhouse__name==keyword||flag">
               <div class="article-info col-md-8 col-sm-8 col-xs-8" :key="result_list.id">
                 <div class="article-title" id="articlelist.id">
-                  <router-link :to="{path:'/articledetails',query:{article_id:article.id}}" v-text="article.title"></router-link>
+                  <a v-text="article.title" v-on:click="toarticledetails(article.id)"></a>
                 </div>
                 <div class="article-author" :id="result_list.beadhouse_id">
                   <a  v-text="article.beadhouse__name" v-on:click="toapaertinfo(article.beadhouse_id)"></a>
@@ -107,6 +107,10 @@
       },
       toapaertinfo:function (id) {
         sessionStorage.setItem('bhid',id)
+      },
+      toarticledetails:function (id) {
+        sessionStorage.setItem('artid',id)
+        this.$router.push({path: "/articledetails"});
       }
     },
     computed: {}
