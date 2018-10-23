@@ -30,7 +30,7 @@
       <div class="col-md-2">
         <ul class="list-unstyled">
           <li><h4>加入我们</h4></li>
-          <li>入住平台</li>
+          <li @click="admin()" ><a href="#"  class="develop">平台管理</a></li>
           <li>加盟</li>
           <li @click="developer()"><a href="#" class="develop">开发者团队</a></li>
         </ul>
@@ -51,6 +51,9 @@ export default {
   methods:{
     developer:function () {
       this.$router.push({path: "/developer"});
+    },
+    admin:function () {
+      this.$router.push({path: "/admin"});
     }
   }
 }

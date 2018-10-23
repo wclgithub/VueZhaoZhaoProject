@@ -71,10 +71,14 @@
       addCart:function (event) {
         if (sessionStorage.getItem('token')) {
           let meal = {
-            "setmeal_id":event.target.id,
-            "user_id":sessionStorage.getItem('u_id'),
-            "room_id":null,
-            "number":1,
+            "user_id": sessionStorage.getItem('u_id'),
+            "good_list": [
+              {
+                "id": event.target.id,
+                "number": 1,
+                "type": 1
+              },
+            ]
           };
           let token = sessionStorage.getItem('token');
           axios.post('http://127.0.0.1:8000/cart/addcart/', meal, {headers: {"token": token}})
