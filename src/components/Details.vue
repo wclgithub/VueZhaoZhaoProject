@@ -1,4 +1,24 @@
 <template>
+  <div>
+  <div class="row">
+    <!-- 按钮触发模态框 -->
+    <!--<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">开始演示模态框</button>-->
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h2 class="modal-title text-center" id="myModalLabel" style="color: rgba(255,18,4,0.84);" v-text="err_message"></h2>
+          </div>
+          <div class="modal-body text-center"><span v-text="err_message"></span></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal -->
+    </div>
+  </div>
   <div class="row my-index-center">
     <!--内容左空白-->
     <div class="col-md-2"></div>
@@ -104,6 +124,7 @@
     <!--内容右end-->
     <div class="col-md-2"></div>
   </div>
+  </div>
 </template>
 
 <script>
@@ -125,7 +146,8 @@
         flag: true,
         setmeal_id: [],
         number: 1,
-        room_name: ''
+        room_name: '',
+        err_message:'',
       }
     },
     methods: {
@@ -153,7 +175,8 @@
               console.log(response.data)
               if (response.data.statuscode == '202') {
                 vm.flag = false;
-                alert('收藏成功！')
+                vm.err_message = '收藏成功';
+                $('#myModal').modal();
               } else {
                 vm.flag = true;
               }
@@ -163,7 +186,8 @@
             })
         }
         else {
-          alert('请先登录！')
+          vm.err_message = '请登录';
+          $('#myModal').modal();
         }
       },
       //取消收藏房间
@@ -172,7 +196,7 @@
         vm.room_id = sessionStorage.getItem('roomid');
         vm.user_id = sessionStorage.getItem('u_id');
         if (vm.user_id) {
-          var token = sessionStorage.getItem('token')
+          var token = sessionStorage.getItem('token');
           var data = {
             "user_id": vm.user_id,
             "room_id": vm.room_id,
@@ -185,7 +209,8 @@
             .then(function (response) {
               if (response.data.statuscode == '202') {
                 vm.flag = true;
-                alert('取消成功')
+                vm.err_message = '取消成功';
+                $('#myModal').modal();
               } else {
                 vm.flag = false;
               }
@@ -195,7 +220,8 @@
             })
         }
         else {
-          alert('请先登录！')
+          vm.err_message = '请登录';
+          $('#myModal').modal();
         }
       },
       //添加到购物车
@@ -248,16 +274,18 @@
             // }
             // alert(vm.room_id)
             // alert(vm.setmeal_id)
-            axios.post('http://192.168.2.31:8000/cart/addcart/', data, {
+            axios.post('http://127.0.0.1:8000/cart/addcart/', data, {
               headers: {
                 "token": token
               }
             })
               .then(function (response) {
                 if (response.data.statuscode == '202') {
-                  alert("成功加入购物车!")
+                  vm.err_message = '成功加入购物车';
+                  $('#myModal').modal();
                 } else {
-                  alert("加入失败!")
+                  vm.err_message = '加入购物车失败'; 6
+                  $('#myModal').modal();
                 }
               })
               .catch(function (error) {
@@ -265,7 +293,8 @@
               })
           }
           else {
-            alert('请先登录!')
+          vm.err_message = '请登录';
+          $('#myModal').modal();
           }
         }
 

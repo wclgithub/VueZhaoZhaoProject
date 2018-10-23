@@ -21,7 +21,9 @@
           </div>
           <div class="panel-body my-every">
             <div class="my-every-btn">
-              <button class="btn bg-orange user-socre" v-text="user_info.points">375</button>
+              <button class="btn bg-orange user-socre">
+                <span v-text="user_info.points">375</span>
+                <span>分</span></button>
             </div>
             <!--<div class="my-every-btn"><button class="btn bg-orange ">积分记录</button></div>-->
           </div>
@@ -52,7 +54,7 @@
               <div class="col-md-8">
                 <!--头像right-->
                 <h4 class="glyphicon glyphicon-user">
-                  <span class="user-name" v-text="user_info.user_name">可爱小宝贝</span> LV<span>2</span>
+                  <span class="user-name" v-text="user_info.user_name">可爱小宝贝</span> LV<span v-text="level">2</span>
                 </h4>
                 <div class="progress">
                   <div class="progress-bar progress-bar-warning active" role="progressbar" :aria-valuenow=myscore
@@ -92,7 +94,8 @@
         user_info: {},
         useridicon: sessionStorage.getItem('u_id'),
         myscore:0,
-        myscorestyle:''
+        myscorestyle:'',
+        level:0
       }
     },
     methods: {
@@ -146,65 +149,60 @@
       //修改头像
       upLoadIcon: function () {
         let formdata = new FormData(document.querySelector("#iconform"));
+        let that = this;
         axios.post('http://127.0.0.1:8000/user/uploadicon/', formdata)
           .then(function (response) {
             if (response.data.statuscode == '202')
               setTimeout(1);
-            axios.post('http://127.0.0.1:8000/user/getuserinfo/', data, {
-              headers: {
-                "token": token
-              }
-            }).then(function (response) {
-                vm.user_info = response.data;
-            })
+            that.getUserInfo();
           })
+      },
+      getUserInfo:function () {
+        let vm = this;
+        let token = sessionStorage.getItem('token');
+        let data = {
+          "user_id": sessionStorage.getItem('u_id')
+        };
+        if (token) {
+          axios.post('http://127.0.0.1:8000/user/getuserinfo/', data, {headers: {"token": token}})
+            .then(function (response) {
+              vm.user_info = response.data;
+              vm.myscore=vm.user_info.points%100;
+              vm.myscorestyle='width:'+vm.myscore+'%';
+              vm.level=Math.ceil(vm.myscore/10);
+              console.log(vm.user_info);
+            })
+            .catch(function (error) {
+              console.log(error)
+            });
+          axios.post('http://127.0.0.1:8000/user/checktest/', data, {headers: {"token": token}})
+            .then(function (response) {
+              // config.headers.common['token']=token
+              console.log(response.data.check_result);
+              if (response.data.check_result) {
+                vm.flag = true;
+                vm.signtext = '签到+1';
+              }
+              else {
+                vm.flag = false;
+                vm.signtext = '已签到';
+
+
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+            });
+
+        }
+        else {
+          alert('请先登录！');
+          this.$router.push({path: "/login"});
+        }
       }
     },
     mounted() {
-
-      let vm = this;
-      let token = sessionStorage.getItem('token');
-      let data = {
-        "user_id": sessionStorage.getItem('u_id')
-      };
-      if (token) {
-        axios.post('http://127.0.0.1:8000/user/getuserinfo/', data, {headers: {"token": token}})
-          .then(function (response) {
-            vm.user_info = response.data;
-            vm.myscore=vm.user_info.points%100;
-            vm.myscorestyle='width:'+vm.myscore+'%';
-            console.log(vm.user_info)
-            console.log(vm.user_info)
-          })
-          .catch(function (error) {
-            console.log(error)
-          });
-        axios.post('http://127.0.0.1:8000/user/checktest/', data, {headers: {"token": token}})
-          .then(function (response) {
-            // config.headers.common['token']=token
-            console.log(response.data.check_result);
-            if (response.data.check_result) {
-              vm.flag = true;
-              vm.signtext = '签到+1';
-            }
-            else {
-              vm.flag = false;
-              vm.signtext = '已签到';
-
-
-            }
-          })
-          .catch(function (error) {
-            console.log(error)
-          });
-
-      }
-      else {
-        alert('请先登录！');
-        this.$router.push({path: "/login"});
-      }
-
-
+      this.getUserInfo();
     }
   }
 </script>

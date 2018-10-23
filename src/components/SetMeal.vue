@@ -50,7 +50,7 @@
     mounted: function () {
       this.beadhouse_id = sessionStorage.getItem('bhid');
       let that = this;
-      axios.get('http://192.168.2.32:8000/beadhouse/gethousebyid/' + this.beadhouse_id + '/').then(function (response) {
+      axios.get('http://127.0.0.1:8000/beadhouse/gethousebyid/' + this.beadhouse_id + '/').then(function (response) {
         that.beadhouse_name = response.data[0].name;
         that.getMeals();
       });
@@ -58,7 +58,7 @@
     methods: {
       getMeals: function () {
         let that = this;
-        axios.get('http://192.168.2.32:8000/beadhouse/getmealbyhouseid/' + this.beadhouse_id + '/').then(function (response) {
+        axios.get('http://127.0.0.1:8000/beadhouse/getmealbyhouseid/' + this.beadhouse_id + '/').then(function (response) {
           that.meal_list = response.data;
         })
       },
@@ -71,13 +71,17 @@
       addCart:function (event) {
         if (sessionStorage.getItem('token')) {
           let meal = {
-            "setmeal_id":event.target.id,
-            "user_id":sessionStorage.getItem('u_id'),
-            "room_id":null,
-            "number":1,
+            "user_id": sessionStorage.getItem('u_id'),
+            "good_list": [
+              {
+                "id": event.target.id,
+                "number": 1,
+                "type": 1
+              },
+            ]
           };
           let token = sessionStorage.getItem('token');
-          axios.post('http://192.168.2.32:8000/cart/addcart/', meal, {headers: {"token": token}})
+          axios.post('http://127.0.0.1:8000/cart/addcart/', meal, {headers: {"token": token}})
             .then(function (response) {
               if (response.data.statuscode === '202') {
                 alert('添加成功');

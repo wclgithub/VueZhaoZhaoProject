@@ -16,6 +16,7 @@ import PageList from './components/PageList'
 import Modal from './components/Modal'
 // 引用第三方模块
 import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.min.js'
 import $ from 'jquery'
 import VDistpicker from 'v-distpicker'
 Vue.config.productionTip = false;
