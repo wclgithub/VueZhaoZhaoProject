@@ -1,5 +1,6 @@
 <template>
   <div class="cart-container panel panel-success">
+
     <div class="cart-con-header panel-heading">
       <div>
         <input type="checkbox" id="checkbox" v-model="checked" @click="changeAllChecked">
@@ -50,7 +51,7 @@
           </div>
         </li>
       </ul>
-      <div class="col-md-3">总计:<span v-text="sum"></span>元<input type="submit" value="结算" @click.prevent="addOrder"></div>
+      <div class="col-md-3">总计:<span v-text="sum"></span>元<input type="submit" value="结算" @click.prevent="addOrder" data-toggle="modal" data-target="#myModal"></div>
     </div>
 
     <div class="cart-groom panel panel-success">
@@ -76,6 +77,9 @@
 
 <script>
   import axios from 'axios'
+  import 'bootstrap/dist/css/bootstrap.min.css'
+  import 'jquery'
+  import 'bootstrap/dist/js/bootstrap.min'
   export default {
     name: 'Cart',
     data() {
@@ -92,7 +96,8 @@
         isShowSelect: false,
         unitId:0, // 当前选中的入驻人id
         sum:0,    // 用来显示总价
-        order_list:[] //订单列表用来存放添加到订单里的房间和套餐
+        order_list:[], //订单列表用来存放添加到订单里的房间和套餐
+        err_message:'', // 存放错误信息
       }
     },
     // 钩子获取数据
@@ -248,7 +253,7 @@
       addOrder:function () {
         this.order_list = [];
         if (this.unitId==0){
-          alert('请选择入住人')
+          this.err_message = '请选择入住人'
         } else {
           for(let good of this.cart_info){
             if(this.checkedBoxList.indexOf(good.id) >= 0){
